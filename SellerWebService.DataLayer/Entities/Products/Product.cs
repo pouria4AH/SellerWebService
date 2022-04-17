@@ -1,5 +1,5 @@
 ﻿global using System.ComponentModel.DataAnnotations;
-global using _0_framework.Entities;
+using _0_framework.Entities;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {

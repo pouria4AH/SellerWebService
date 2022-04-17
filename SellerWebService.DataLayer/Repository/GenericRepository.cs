@@ -6,12 +6,12 @@ namespace SellerWebService.DataLayer.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly MainContext _context;
+        private readonly SellerContext _dbSellerContext;
         private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(MainContext context, DbSet<TEntity> dbSet)
+        public GenericRepository(SellerContext dbSellerContext, DbSet<TEntity> dbSet)
         {
-            _context = context;
+            _dbSellerContext = dbSellerContext;
             _dbSet = dbSet;
         }
 
@@ -65,7 +65,7 @@ namespace SellerWebService.DataLayer.Repository
 
         public void DeletePermanentEntities(List<TEntity> entities)
         {
-            _context.RemoveRange(entities);
+            _dbSellerContext.RemoveRange(entities);
         }
 
         public async Task DeletePermanent(long entityId)
@@ -76,13 +76,13 @@ namespace SellerWebService.DataLayer.Repository
 
         public async Task SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            await _dbSellerContext.SaveChangesAsync();
         }
         public async ValueTask DisposeAsync()
         {
-            if (_context != null)
+            if (_dbSellerContext != null)
             {
-                await _context.DisposeAsync();
+                await _dbSellerContext.DisposeAsync();
             }
         }
 

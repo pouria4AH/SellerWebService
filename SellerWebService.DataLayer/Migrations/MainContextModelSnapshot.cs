@@ -10,7 +10,7 @@ using SellerWebService.DataLayer.Context;
 
 namespace SellerWebService.DataLayer.Migrations
 {
-    [DbContext(typeof(MainContext))]
+    [DbContext(typeof(Context.SellerContext))]
     partial class MainContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

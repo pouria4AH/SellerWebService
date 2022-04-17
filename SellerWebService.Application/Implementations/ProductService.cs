@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
@@ -25,6 +20,19 @@ namespace SellerWebService.Application.Implementations
         #endregion
 
         #region  product feature category
+
+        //public async Task<List<CreateOurEditProductFeatureCategoryDto>> GetProductFeatureCategories()
+        //{
+        //    return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+        //        .Where(x=>!x.IsDelete)
+        //        .Select(x =>
+        //        new CreateOurEditProductFeatureCategoryDto
+        //        {
+        //            Id = x.Id,
+        //            Description = x.Description,
+        //            Name = x.Name
+        //        }).ToListAsync();
+        //}
 
         public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateOurEditProductFeatureCategoryDto featureCategory)
         {
@@ -49,7 +57,7 @@ namespace SellerWebService.Application.Implementations
         #region dipose
         public async ValueTask DisposeAsync()
         {
-            if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
+             await _productFeatureCategoryRepository.DisposeAsync();
         }
 
         #endregion

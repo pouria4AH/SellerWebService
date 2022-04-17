@@ -3,8 +3,12 @@ using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.DataLayer.Context
 {
-    public class MainContext : DbContext
+    public class SellerContext : DbContext
     {
+        public SellerContext(DbContextOptions<SellerContext> options) : base(options)
+        {
+
+        }
         #region products
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
@@ -13,18 +17,15 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         #endregion
 
-        public MainContext(DbContextOptions<MainContext> options) : base(options)
-        {
+     
 
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
-            base.OnModelCreating(modelBuilder);
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
+        //    {
+        //        relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        //    }
+        //    base.OnModelCreating(modelBuilder);
+        //}
     }
 }

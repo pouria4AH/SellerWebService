@@ -11,7 +11,7 @@ using SellerWebService.DataLayer.Context;
 
 namespace SellerWebService.DataLayer.Migrations
 {
-    [DbContext(typeof(MainContext))]
+    [DbContext(typeof(Context.SellerContext))]
     [Migration("20220417101558_EdirFeatureCategory")]
     partial class EdirFeatureCategory
     {

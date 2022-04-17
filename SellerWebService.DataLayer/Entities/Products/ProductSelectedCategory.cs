@@ -1,4 +1,6 @@
-﻿namespace SellerWebService.DataLayer.Entities.Products
+﻿using _0_framework.Entities;
+
+namespace SellerWebService.DataLayer.Entities.Products
 {
     public class ProductSelectedCategory : BaseEntity
     {

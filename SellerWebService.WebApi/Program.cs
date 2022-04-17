@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using SellerWebService.Application.Implementations;
+using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.Context;
+using SellerWebService.DataLayer.Entities.Products;
+using SellerWebService.DataLayer.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +13,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 #region config database
-builder.Services.AddDbContext<MainContext>(options =>
+builder.Services.AddDbContext<SellerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApiContext")));
 #endregion
+#region services
+
+builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IProductService, ProductService>();
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
