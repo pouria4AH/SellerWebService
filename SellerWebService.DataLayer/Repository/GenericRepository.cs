@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using _0_framework.Entities;
+using Microsoft.EntityFrameworkCore;
 using SellerWebService.DataLayer.Context;
 
 namespace SellerWebService.DataLayer.Repository

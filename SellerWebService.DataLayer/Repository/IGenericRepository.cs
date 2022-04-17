@@ -1,4 +1,6 @@
-﻿namespace SellerWebService.DataLayer.Repository
+﻿using _0_framework.Entities;
+
+namespace SellerWebService.DataLayer.Repository
 {
     public interface IGenericRepository<TEntity> : IAsyncDisposable where TEntity : BaseEntity
     {

@@ -1,14 +1,11 @@
-﻿global using _0_framework.Entities;
-global using System.ComponentModel.DataAnnotations;
+﻿global using System.ComponentModel.DataAnnotations;
+global using _0_framework.Entities;
 
-namespace SellerWebService.DataLayer.Entities.Product
+namespace SellerWebService.DataLayer.Entities.Products
 {
-    public class ProductCategory : BaseEntity
+    public class Product : BaseEntity
     {
         #region prop
-
-        public long? ParentId { get; set; }
-
         [Display(Name = "نام محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -19,11 +16,20 @@ namespace SellerWebService.DataLayer.Entities.Product
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string SeoTitle { get; set; }
 
+        [Display(Name = "قیمت پیش فرض")]
+        [Range(0,long.MaxValue)]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public long DefaultPrice { get; set; }
+
+        [Display(Name = "سایز پیش فرض")]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string Size { get; set; }
+
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Description { get; set; }
 
-        [Display(Name = "توضیحات")]
+        [Display(Name = "توضیحات کوتاه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ShortDescription { get; set; }
 
@@ -60,9 +66,7 @@ namespace SellerWebService.DataLayer.Entities.Product
         #region relations
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        public ProductCategory Parent { get; set; }
-
+        public ICollection<ProductFeature> ProductFeatures { get; set; }
         #endregion
-
     }
 }
