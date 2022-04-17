@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SellerWebService.Application.interfaces;
+using SellerWebService.DataLayer.DTOs.Products;
+using SellerWebService.DataLayer.Entities.Products;
+using SellerWebService.DataLayer.Repository;
+
+namespace SellerWebService.Application.Implementations
+{
+    public class ProductService : IProductService
+    {
+        #region ctor
+
+        private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
+
+        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository)
+        {
+            _productFeatureCategoryRepository = productFeatureCategoryRepository;
+        }
+
+        #endregion
+
+        #region  product feature category
+
+        public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateOurEditProductFeatureCategoryDto featureCategory)
+        {
+            if (featureCategory != null)
+            {
+                var checkExisted = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+                    .AnyAsync(x => x.Name == featureCategory.Name);
+                if (checkExisted) return CreateOurEditProductFeatureCategoryResult.IsExisted;
+
+                ProductFeatureCategory newfeatureCategory = new ProductFeatureCategory
+                {
+                    Name = featureCategory.Name,
+                    Description = featureCategory.Description
+                };
+                await _productFeatureCategoryRepository.AddEntity(newfeatureCategory);
+                await _productFeatureCategoryRepository.SaveChanges();
+                return CreateOurEditProductFeatureCategoryResult.Success;
+            }
+            return CreateOurEditProductFeatureCategoryResult.Error;
+        }
+        #endregion
+        #region dipose
+        public async ValueTask DisposeAsync()
+        {
+            if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
+        }
+
+        #endregion
+    }
+}

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SellerWebService.DataLayer.DTOs.Products;
 
 namespace SellerWebService.Application.interfaces
 {
-    internal interface IProductService : IAsyncDisposable
+    public interface IProductService : IAsyncDisposable
     {
+        #region product feature category
+        Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateOurEditProductFeatureCategoryDto featureCategory);
+        #endregion
     }
 }

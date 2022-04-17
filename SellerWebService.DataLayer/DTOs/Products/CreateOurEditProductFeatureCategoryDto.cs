@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SellerWebService.DataLayer.DTOs.Products
+﻿namespace SellerWebService.DataLayer.DTOs.Products
 {
     public class CreateOurEditProductFeatureCategoryDto
     {
@@ -16,6 +10,14 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Description { get; set; }
-        public bool IsActive { get; set; }
     }
+
+    public enum CreateOurEditProductFeatureCategoryResult
+    {
+        NotFound,
+        Success,
+        IsExisted,
+        Error
+    }
+
 }
