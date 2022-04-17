@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SellerWebService.DataLayer.Entities.Context;
+using SellerWebService.DataLayer.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

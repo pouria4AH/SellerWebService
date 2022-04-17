@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace SellerWebService.DataLayer.Entities.Context
+namespace SellerWebService.DataLayer.Context
 {
     public class MainContext : DbContext
     {
