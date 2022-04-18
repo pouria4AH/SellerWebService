@@ -1,9 +1,7 @@
 ﻿namespace SellerWebService.DataLayer.DTOs.Products
 {
-    public class CreateOurEditProductFeatureCategoryDto
+    public class CreateProductFeatureCategoryDto
     {
-        public long? Id { get; set; }
-
         [Display(Name = "نام ")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Name { get; set; }
