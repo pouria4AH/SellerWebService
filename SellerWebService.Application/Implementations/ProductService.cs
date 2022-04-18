@@ -8,58 +8,64 @@ namespace SellerWebService.Application.Implementations
 {
     public class ProductService : IProductService
     {
-        #region ctor
-
-        private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
-
-        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository)
+        public ProductService(IGenericRepository<Product> genericRepository)
         {
-            _productFeatureCategoryRepository = productFeatureCategoryRepository;
+            GenericRepository = genericRepository;
         }
 
-        #endregion
+        public IGenericRepository<Product> GenericRepository { get; set; }
+        //#region ctor
 
-        #region  product feature category
+        //private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
 
-        //public async Task<List<CreateOurEditProductFeatureCategoryDto>> GetProductFeatureCategories()
+        //public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository)
         //{
-        //    return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-        //        .Where(x=>!x.IsDelete)
-        //        .Select(x =>
-        //        new CreateOurEditProductFeatureCategoryDto
-        //        {
-        //            Id = x.Id,
-        //            Description = x.Description,
-        //            Name = x.Name
-        //        }).ToListAsync();
+        //    _productFeatureCategoryRepository = productFeatureCategoryRepository;
         //}
 
-        public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateOurEditProductFeatureCategoryDto featureCategory)
-        {
-            if (featureCategory != null)
-            {
-                var checkExisted = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-                    .AnyAsync(x => x.Name == featureCategory.Name);
-                if (checkExisted) return CreateOurEditProductFeatureCategoryResult.IsExisted;
+        //#endregion
 
-                ProductFeatureCategory newfeatureCategory = new ProductFeatureCategory
-                {
-                    Name = featureCategory.Name,
-                    Description = featureCategory.Description
-                };
-                await _productFeatureCategoryRepository.AddEntity(newfeatureCategory);
-                await _productFeatureCategoryRepository.SaveChanges();
-                return CreateOurEditProductFeatureCategoryResult.Success;
-            }
-            return CreateOurEditProductFeatureCategoryResult.Error;
-        }
-        #endregion
-        #region dipose
-        public async ValueTask DisposeAsync()
-        {
-             await _productFeatureCategoryRepository.DisposeAsync();
-        }
+        //#region  product feature category
 
-        #endregion
+        ////public async Task<List<CreateOurEditProductFeatureCategoryDto>> GetProductFeatureCategories()
+        ////{
+        ////    return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+        ////        .Where(x=>!x.IsDelete)
+        ////        .Select(x =>
+        ////        new CreateOurEditProductFeatureCategoryDto
+        ////        {
+        ////            Id = x.Id,
+        ////            Description = x.Description,
+        ////            Name = x.Name
+        ////        }).ToListAsync();
+        ////}
+
+        //public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateOurEditProductFeatureCategoryDto featureCategory)
+        //{
+        //    if (featureCategory != null)
+        //    {
+        //        var checkExisted = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+        //            .AnyAsync(x => x.Name == featureCategory.Name);
+        //        if (checkExisted) return CreateOurEditProductFeatureCategoryResult.IsExisted;
+
+        //        ProductFeatureCategory newfeatureCategory = new ProductFeatureCategory
+        //        {
+        //            Name = featureCategory.Name,
+        //            Description = featureCategory.Description
+        //        };
+        //        await _productFeatureCategoryRepository.AddEntity(newfeatureCategory);
+        //        await _productFeatureCategoryRepository.SaveChanges();
+        //        return CreateOurEditProductFeatureCategoryResult.Success;
+        //    }
+        //    return CreateOurEditProductFeatureCategoryResult.Error;
+        //}
+        //#endregion
+        //#region dipose
+        //public async ValueTask DisposeAsync()
+        //{
+        //     await _productFeatureCategoryRepository.DisposeAsync();
+        //}
+
+        //#endregion
     }
 }

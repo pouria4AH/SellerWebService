@@ -18,9 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SellerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApiContext")));
 #endregion
-#region services
 
-builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+#region services
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductService, ProductService>();
 #endregion
 
