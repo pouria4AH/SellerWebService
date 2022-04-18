@@ -11,10 +11,12 @@ namespace SellerWebService.Application.Implementations
         #region ctor
 
         private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
+        private readonly IGenericRepository<CountOfProduct> _countOfProductRepository;
 
-        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository)
+        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository, IGenericRepository<CountOfProduct> countOfProductRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
+            _countOfProductRepository = countOfProductRepository;
         }
 
         #endregion
@@ -56,17 +58,56 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory)
         {
-            if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error; 
+            if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error;
 
             var category = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
                 .SingleOrDefaultAsync(x => x.Id == featureCategory.Id && !x.IsDelete);
 
             if (category == null) return CreateOurEditProductFeatureCategoryResult.NotFound;
             category.Description = featureCategory.Description;
-            category.Name = featureCategory.Name;   
+            category.Name = featureCategory.Name;
             _productFeatureCategoryRepository.EditEntity(category);
             await _productFeatureCategoryRepository.SaveChanges();
             return CreateOurEditProductFeatureCategoryResult.Success;
+        }
+
+        #endregion
+
+        #region count of product
+        public async Task<CreateOurEditCountResult> CreateCount(CreateCountDto count)
+        {
+            if (count == null) return CreateOurEditCountResult.Error;
+            var checkExisted = await _countOfProductRepository.GetQuery().AsQueryable().AnyAsync(x => x.Count == count.Count && x.ProductId == count.ProductId);
+            if (checkExisted) return CreateOurEditCountResult.IsExisted;
+
+            var checkProductId = await _countOfProductRepository.GetQuery().AsQueryable()
+                .AnyAsync(x => x.ProductId == count.ProductId);
+            if (!checkProductId) return CreateOurEditCountResult.NotFound;
+
+            CountOfProduct newCount = new CountOfProduct
+            {
+                Name = count.Name,
+                ProductId = count.ProductId,
+                Count = count.Count
+            };
+            await _countOfProductRepository.AddEntity(newCount);
+            await _countOfProductRepository.SaveChanges();
+            return CreateOurEditCountResult.Success;
+        }
+        public async Task<List<EditCountDto>> GetAllCountForProduct(long productId)
+        {
+            if (productId == 0 || productId == null) return null;
+            var existed = await _countOfProductRepository.GetQuery().AsQueryable()
+                .AnyAsync(x => x.ProductId == productId);
+            if (!existed) return null;
+            return await _countOfProductRepository.GetQuery().AsQueryable()
+                .Where(x => x.ProductId == productId && !x.IsDelete)
+                .Select(x => new EditCountDto
+                {
+                    ProductId = productId,
+                    Name = x.Name,
+                    Count = x.Count
+                }).ToListAsync();
         }
 
         #endregion
