@@ -61,12 +61,22 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "لینک داخلی")]
         public string InternalLink { get; set; }
+
+        public CountState StateForCount { get; set; }
         #endregion
 
         #region relations
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<ProductFeature> ProductFeatures { get; set; }
+        public ICollection<CountOfProduct> CountOfProducts { get; set; }
         #endregion
+
+        public enum CountState
+        {
+            Single,
+            List,
+            Together
+        }
     }
 }
