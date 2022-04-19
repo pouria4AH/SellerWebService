@@ -1,13 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using _0_framework.Entities;
-
-namespace SellerWebService.DataLayer.Entities.Products
+﻿namespace SellerWebService.DataLayer.DTOs.Products
 {
-    public class ProductCategory : BaseEntity
+    public class CreateProductCategoryDto
     {
-        #region prop
-
-        public long? ParentId { get; set; } = null;
+        public long? ParentId { get; set; }
 
         [Display(Name = "نام دسته محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -15,7 +10,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         public string Name { get; set; }
 
         [Display(Name = "عنوان سٔو")]
-        [MaxLength(70, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string SeoTitle { get; set; }
 
@@ -24,22 +19,18 @@ namespace SellerWebService.DataLayer.Entities.Products
         public string Description { get; set; }
 
         [Display(Name = "توضیحات")]
-        [MaxLength(150, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ShortDescription { get; set; }
 
         [Display(Name = "ادرس عکس")]
-        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        //[Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string PictureAddress { get; set; }
 
         [Display(Name = "الت عکس")]
-        [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string PictureAlt { get; set; }
 
         [Display(Name = "عنوان عکس")]
-        [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string PictureTitle { get; set; }
 
@@ -47,12 +38,10 @@ namespace SellerWebService.DataLayer.Entities.Products
         public bool IsActive { get; set; }
 
         [Display(Name = "توضیحات متا")]
-        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string MetaDescription { get; set; }
 
         [Display(Name = "کیبورد")]
-        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Keywords { get; set; }
 
@@ -61,14 +50,15 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "لینک داخلی")]
         public string InternalLink { get; set; }
-        #endregion
+    }
 
-        #region relations
-
-        public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        public ProductCategory Parent { get; set; }
-
-        #endregion
+    public enum CreateOurEditProductCategoryResult
+    {
+        NotFound,
+        Success,
+        IsExisted,
+        Error,
+        ParentNotExisted,
 
     }
 }

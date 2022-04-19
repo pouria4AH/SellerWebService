@@ -15,5 +15,13 @@ namespace SellerWebService.Application.interfaces
         Task<List<EditCountDto>> GetAllCountForProduct(long productId);
         Task<CreateOurEditCountResult> CreateCount(CreateCountDto count);
         #endregion
+
+        #region product category
+
+        Task<CreateOurEditProductCategoryResult> CreateProductCategory(CreateProductCategoryDto productCategory);
+        //Task<EditProductCategoryDto> GetProductCategory(long productId);
+        Task<List<EditProductCategoryDto>> GetAllProductCategory();
+
+        #endregion
     }
 }
