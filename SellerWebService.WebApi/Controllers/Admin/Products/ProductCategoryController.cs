@@ -35,8 +35,8 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
                 {
                     case CreateOurEditProductCategoryResult.Error:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکلی پیش امده است دوباره تلاش کنید", null));
-                    case CreateOurEditProductCategoryResult.ParentNotExisted:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "سردسته ای با این مشخصات یافت نشد", null));
+                    //case CreateOurEditProductCategoryResult.ParentNotExisted:
+                    //    return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "سردسته ای با این مشخصات یافت نشد", null));
                     case CreateOurEditProductCategoryResult.IsExisted:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                             "دسته ای  با این نام وجود دارد", null));

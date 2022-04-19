@@ -120,15 +120,15 @@ namespace SellerWebService.Application.Implementations
             CreateProductCategoryDto productCategory)
         {
             //if (productCategory.ParentId == 0) return CreateOurEditProductCategoryResult.Error;
-            if (productCategory.ParentId != null && productCategory.ParentId != 0)
-            {
-                var check = await _productCategoryRepository.GetQuery().AsQueryable()
-                    .AnyAsync(x => x.ParentId == productCategory.ParentId);
-                if (!check) return CreateOurEditProductCategoryResult.ParentNotExisted;
-            }
+            //if (productCategory.ParentId != null && productCategory.ParentId != 0)
+            //{
+            //    var check = await _productCategoryRepository.GetQuery().AsQueryable()
+            //        .AnyAsync(x => x.ParentId == productCategory.ParentId);
+            //    if (!check) return CreateOurEditProductCategoryResult.ParentNotExisted;
+            //}
 
             var checkForExisted = await _productCategoryRepository.GetQuery().AsQueryable()
-                .AnyAsync(x => x.Name == productCategory.Name);
+                .AnyAsync(x => x.Name == productCategory.Name || x.SeoTitle == productCategory.SeoTitle);
             if (checkForExisted) return CreateOurEditProductCategoryResult.IsExisted;
             var newCategory = new ProductCategory
             {
@@ -146,7 +146,7 @@ namespace SellerWebService.Application.Implementations
                 ShortDescription = productCategory.ShortDescription,
                 IsActive = productCategory.IsActive
             };
-            if(productCategory.ParentId != null || productCategory.ParentId != 0) newCategory.ParentId = productCategory.ParentId;
+            //if(productCategory.ParentId != null || productCategory.ParentId != 0) newCategory.ParentId = productCategory.ParentId;
             await _productCategoryRepository.AddEntity(newCategory);
             await _productCategoryRepository.SaveChanges();
             return CreateOurEditProductCategoryResult.Success;
@@ -155,10 +155,11 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<List<EditProductCategoryDto>> GetAllProductCategory()
         {
-            return  await _productCategoryRepository.GetQuery().AsQueryable().Where(x=>!x.IsDelete)
-                .Select(x=> new EditProductCategoryDto
+            return await _productCategoryRepository.GetQuery().AsQueryable().Where(x => !x.IsDelete)
+                .Select(x => new EditProductCategoryDto
                 {
-                    ParentId = x.ParentId,
+                    //ParentId = x.ParentId,
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ExrernalLink = x.ExrernalLink,

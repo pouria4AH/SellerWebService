@@ -2,7 +2,7 @@
 {
     public class CreateProductCategoryDto
     {
-        public long? ParentId { get; set; }
+        //public long? ParentId { get; set; }
 
         [Display(Name = "نام دسته محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -58,7 +58,7 @@
         Success,
         IsExisted,
         Error,
-        ParentNotExisted,
+        //ParentNotExisted,
 
     }
 }
