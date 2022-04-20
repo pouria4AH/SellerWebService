@@ -25,6 +25,14 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
             return Ok(list);
         }
 
+        [HttpGet("get-product-category-by-{id}")]
+        public async Task<ActionResult<EditProductCategoryDto>> GetCategoryById(long id)
+        {
+            var category = await _productService.GetProductCategoryById(id);
+            if(category == null) return NotFound();
+            return Ok(category);
+        }
+
         [HttpPost("create-product-category")]
         public async Task<ActionResult<OperationResponse>> CreateProductCategory(CreateProductCategoryDto category)
         {

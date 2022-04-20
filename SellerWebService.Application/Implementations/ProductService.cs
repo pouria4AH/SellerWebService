@@ -14,33 +14,40 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<CountOfProduct> _countOfProductRepository;
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
 
-        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository, IGenericRepository<CountOfProduct> countOfProductRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<Product> productRepository)
+        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
+            IGenericRepository<CountOfProduct> countOfProductRepository,
+            IGenericRepository<ProductCategory> productCategoryRepository,
+            IGenericRepository<Product> productRepository, 
+            IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
             _countOfProductRepository = countOfProductRepository;
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
+            _productSelectedCategoryRepository = productSelectedCategoryRepository;
         }
 
         #endregion
 
-        #region  product feature category
+        #region product feature category
 
         public async Task<List<EditProductFeatureCategoryDto>> GetProductFeatureCategories()
         {
             return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
                 .Where(x => !x.IsDelete)
                 .Select(x =>
-                new EditProductFeatureCategoryDto
-                {
-                    Id = x.Id,
-                    Description = x.Description,
-                    Name = x.Name
-                }).ToListAsync();
+                    new EditProductFeatureCategoryDto
+                    {
+                        Id = x.Id,
+                        Description = x.Description,
+                        Name = x.Name
+                    }).ToListAsync();
         }
 
-        public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateProductFeatureCategoryDto featureCategory)
+        public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(
+            CreateProductFeatureCategoryDto featureCategory)
         {
             if (featureCategory != null)
             {
@@ -57,10 +64,12 @@ namespace SellerWebService.Application.Implementations
                 await _productFeatureCategoryRepository.SaveChanges();
                 return CreateOurEditProductFeatureCategoryResult.Success;
             }
+
             return CreateOurEditProductFeatureCategoryResult.Error;
         }
 
-        public async Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory)
+        public async Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(
+            EditProductFeatureCategoryDto featureCategory)
         {
             if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error;
 
@@ -78,10 +87,12 @@ namespace SellerWebService.Application.Implementations
         #endregion
 
         #region count of product
+
         public async Task<CreateOurEditCountResult> CreateCount(CreateCountDto count)
         {
             if (count == null) return CreateOurEditCountResult.Error;
-            var checkExisted = await _countOfProductRepository.GetQuery().AsQueryable().AnyAsync(x => x.Count == count.Count && x.ProductId == count.ProductId);
+            var checkExisted = await _countOfProductRepository.GetQuery().AsQueryable()
+                .AnyAsync(x => x.Count == count.Count && x.ProductId == count.ProductId);
             if (checkExisted) return CreateOurEditCountResult.IsExisted;
 
             var checkProductId = await _productRepository.GetQuery().AsQueryable()
@@ -98,6 +109,7 @@ namespace SellerWebService.Application.Implementations
             await _countOfProductRepository.SaveChanges();
             return CreateOurEditCountResult.Success;
         }
+
         public async Task<List<EditCountDto>> GetAllCountForProduct(long productId)
         {
             if (productId == 0 || productId == null) return null;
@@ -114,6 +126,26 @@ namespace SellerWebService.Application.Implementations
                 }).ToListAsync();
         }
 
+        #endregion
+
+
+        #region selected category
+
+        public async Task AddSelectedCategory(long productId, List<long> selectedCategories)
+        {
+            var productSelectedCategories = new List<ProductSelectedCategory>();
+            foreach (var categoryId in selectedCategories)
+            {
+                productSelectedCategories.Add(new ProductSelectedCategory
+                {
+                    ProductId = productId,
+                    ProductCategoryId = categoryId
+                });
+            }
+
+            await _productSelectedCategoryRepository.AddRangeEntities(productSelectedCategories);
+            await _productSelectedCategoryRepository.SaveChanges();
+        }
         #endregion
 
         #region product category
@@ -182,11 +214,8 @@ namespace SellerWebService.Application.Implementations
         public async Task<CreateOurEditProductCategoryResult> EditProductCategory(
             EditProductCategoryDto productCategory)
         {
-            var mainCategory = await _productCategoryRepository.GetQuery().AsQueryable()
-                .Where(x => !x.IsDelete)
-                .SingleOrDefaultAsync(x => x.Id == productCategory.Id);
-
-            if (mainCategory == null) return CreateOurEditProductCategoryResult.NotFound;
+            var mainCategory = await _productCategoryRepository.GetEntityById(productCategory.Id);
+            if (mainCategory == null || mainCategory.IsDelete) return CreateOurEditProductCategoryResult.NotFound;
 
             mainCategory.Keywords = productCategory.Keywords;
             mainCategory.MetaDescription = productCategory.MetaDescription;
@@ -207,12 +236,38 @@ namespace SellerWebService.Application.Implementations
             return CreateOurEditProductCategoryResult.Success;
 
         }
+
+        public async Task<EditProductCategoryDto> GetProductCategoryById(long id)
+        {
+            var category = await _productCategoryRepository.GetEntityById(id);
+            if(category == null || category.IsDelete) return null;
+            return new EditProductCategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                ExrernalLink = category.ExrernalLink,
+                InternalLink = category.InternalLink,
+                IsActive = category.IsActive,
+                Keywords = category.Keywords,
+                MetaDescription = category.MetaDescription,
+                PictureAddress = category.PictureAddress,
+                PictureAlt = category.PictureAlt,
+                PictureTitle = category.PictureTitle,
+                SeoTitle = category.SeoTitle,
+                ShortDescription = category.ShortDescription
+            };
+        }
         #endregion
 
         #region dipose
         public async ValueTask DisposeAsync()
         {
-            await _productFeatureCategoryRepository.DisposeAsync();
+           if(_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
+           if(_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
+           if(_countOfProductRepository != null) await _countOfProductRepository.DisposeAsync();
+           if(_productRepository != null) await _productRepository.DisposeAsync();
+           if(_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
         }
 
         #endregion
