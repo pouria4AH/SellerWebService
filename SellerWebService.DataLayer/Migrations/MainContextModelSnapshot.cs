@@ -53,7 +53,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CountOfProduct");
+                    b.ToTable("CountOfProduct", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.Product", b =>
@@ -104,11 +104,11 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PictureAddress")
+                    b.Property<string>("PictureAlt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PictureAlt")
+                    b.Property<string>("PictureName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -135,7 +135,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductCategory", b =>
@@ -185,15 +185,15 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PictureAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<string>("PictureAlt")
                         .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("PictureName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("PictureTitle")
                         .IsRequired()
@@ -212,7 +212,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeature", b =>
@@ -257,7 +257,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductFeatures");
+                    b.ToTable("ProductFeatures", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeatureCategory", b =>
@@ -287,7 +287,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductFeatureCategories");
+                    b.ToTable("ProductFeatureCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductSelectedCategory", b =>
@@ -319,7 +319,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSelectedCategories");
+                    b.ToTable("ProductSelectedCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.CountOfProduct", b =>

@@ -35,7 +35,7 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "ادرس عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string PictureAddress { get; set; }
+        public string PictureName { get; set; }
 
         [Display(Name = "الت عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

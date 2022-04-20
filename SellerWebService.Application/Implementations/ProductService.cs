@@ -181,7 +181,7 @@ namespace SellerWebService.Application.Implementations
                 //ParentId = productCategory.ParentId,
                 MetaDescription = productCategory.MetaDescription,
                 Description = productCategory.Description,
-                PictureAddress = productCategory.PictureAddress,
+                PictureName = productCategory.PictureAddress,
                 PictureAlt = productCategory.PictureAlt,
                 PictureTitle = productCategory.PictureTitle,
                 SeoTitle = productCategory.SeoTitle,
@@ -209,7 +209,7 @@ namespace SellerWebService.Application.Implementations
                     IsActive = x.IsActive,
                     Keywords = x.Keywords,
                     MetaDescription = x.MetaDescription,
-                    PictureAddress = x.PictureAddress,
+                    PictureAddress = x.PictureName,
                     PictureAlt = x.PictureAlt,
                     PictureTitle = x.PictureTitle,
                     SeoTitle = x.SeoTitle,
@@ -227,7 +227,7 @@ namespace SellerWebService.Application.Implementations
 
             mainCategory.Keywords = productCategory.Keywords;
             mainCategory.MetaDescription = productCategory.MetaDescription;
-            mainCategory.PictureAddress = productCategory.PictureAddress;
+            mainCategory.PictureName = productCategory.PictureAddress;
             mainCategory.PictureAlt = productCategory.PictureAlt;
             mainCategory.PictureTitle = productCategory.PictureTitle;
             mainCategory.SeoTitle = productCategory.SeoTitle;
@@ -259,7 +259,7 @@ namespace SellerWebService.Application.Implementations
                 IsActive = category.IsActive,
                 Keywords = category.Keywords,
                 MetaDescription = category.MetaDescription,
-                PictureAddress = category.PictureAddress,
+                PictureAddress = category.PictureName,
                 PictureAlt = category.PictureAlt,
                 PictureTitle = category.PictureTitle,
                 SeoTitle = category.SeoTitle,

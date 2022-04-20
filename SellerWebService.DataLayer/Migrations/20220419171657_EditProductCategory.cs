@@ -46,7 +46,7 @@ namespace SellerWebService.DataLayer.Migrations
                 oldType: "nvarchar(max)");
 
             migrationBuilder.AlterColumn<string>(
-                name: "PictureAddress",
+                name: "PictureName",
                 table: "ProductCategories",
                 type: "nvarchar(200)",
                 maxLength: 200,
@@ -113,7 +113,7 @@ namespace SellerWebService.DataLayer.Migrations
                 oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
-                name: "PictureAddress",
+                name: "PictureName",
                 table: "ProductCategories",
                 type: "nvarchar(max)",
                 nullable: false,

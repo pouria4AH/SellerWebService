@@ -34,6 +34,7 @@ namespace SellerWebService.Application.interfaces
         #region product
 
 
+
         #endregion
     }
 }
