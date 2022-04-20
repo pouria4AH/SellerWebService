@@ -21,6 +21,8 @@ namespace SellerWebService.Application.interfaces
         Task<CreateOurEditProductCategoryResult> CreateProductCategory(CreateProductCategoryDto productCategory);
         //Task<EditProductCategoryDto> GetProductCategory(long productId);
         Task<List<EditProductCategoryDto>> GetAllProductCategory();
+        Task<CreateOurEditProductCategoryResult> EditProductCategory(EditProductCategoryDto productCategory);
+
 
         #endregion
     }

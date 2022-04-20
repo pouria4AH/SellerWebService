@@ -177,6 +177,34 @@ namespace SellerWebService.Application.Implementations
 
         }
 
+        public async Task<CreateOurEditProductCategoryResult> EditProductCategory(
+            EditProductCategoryDto productCategory)
+        {
+            var mainCategory = await _productCategoryRepository.GetQuery().AsQueryable()
+                .Where(x => !x.IsDelete)
+                .SingleOrDefaultAsync(x => x.Id == productCategory.Id);
+
+            if (mainCategory == null) return CreateOurEditProductCategoryResult.NotFound;
+
+            mainCategory.Keywords = productCategory.Keywords;
+            mainCategory.MetaDescription = productCategory.MetaDescription;
+            mainCategory.PictureAddress = productCategory.PictureAddress;
+            mainCategory.PictureAlt = productCategory.PictureAlt;
+            mainCategory.PictureTitle = productCategory.PictureTitle;
+            mainCategory.SeoTitle = productCategory.SeoTitle;
+            mainCategory.ShortDescription = productCategory.ShortDescription;
+            mainCategory.Description = productCategory.Description;
+            mainCategory.ExrernalLink = productCategory.ExrernalLink;
+            mainCategory.InternalLink = productCategory.InternalLink;
+            mainCategory.Name = productCategory.Name;
+            mainCategory.IsActive = productCategory.IsActive;
+
+
+            _productCategoryRepository.EditEntity(mainCategory);
+            await _productCategoryRepository.SaveChanges();
+            return CreateOurEditProductCategoryResult.Success;
+
+        }
         #endregion
 
         #region dipose

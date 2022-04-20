@@ -49,5 +49,28 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
                 "اطلاعات را درست وارد کنید", null));
         }
+
+        [HttpPut("edit-product-category")]
+        public async Task<ActionResult<OperationResponse>> EditProductCategory(EditProductCategoryDto category)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.EditProductCategory(category);
+
+                switch (res)
+                {
+                    case CreateOurEditProductCategoryResult.NotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "گروهی با این مشخصات پیدا نشد", null));
+                    case CreateOurEditProductCategoryResult.Success:
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            "عملیات موفق امیز بود", category));
+                }
+
+            }
+
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                "مشکلی پیش امده است لطفا دوباره تلاش کنید", null));
+        }
     }
 }
