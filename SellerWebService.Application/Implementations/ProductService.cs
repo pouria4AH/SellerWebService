@@ -13,12 +13,14 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
         private readonly IGenericRepository<CountOfProduct> _countOfProductRepository;
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
+        private readonly IGenericRepository<Product> _productRepository;
 
-        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository, IGenericRepository<CountOfProduct> countOfProductRepository, IGenericRepository<ProductCategory> productCategoryRepository)
+        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository, IGenericRepository<CountOfProduct> countOfProductRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<Product> productRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
             _countOfProductRepository = countOfProductRepository;
             _productCategoryRepository = productCategoryRepository;
+            _productRepository = productRepository;
         }
 
         #endregion
@@ -82,8 +84,8 @@ namespace SellerWebService.Application.Implementations
             var checkExisted = await _countOfProductRepository.GetQuery().AsQueryable().AnyAsync(x => x.Count == count.Count && x.ProductId == count.ProductId);
             if (checkExisted) return CreateOurEditCountResult.IsExisted;
 
-            var checkProductId = await _countOfProductRepository.GetQuery().AsQueryable()
-                .AnyAsync(x => x.ProductId == count.ProductId);
+            var checkProductId = await _productRepository.GetQuery().AsQueryable()
+                .AnyAsync(x => x.Id == count.ProductId);
             if (!checkProductId) return CreateOurEditCountResult.NotFound;
 
             CountOfProduct newCount = new CountOfProduct
