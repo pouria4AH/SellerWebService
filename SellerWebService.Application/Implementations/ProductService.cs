@@ -146,6 +146,14 @@ namespace SellerWebService.Application.Implementations
             await _productSelectedCategoryRepository.AddRangeEntities(productSelectedCategories);
             await _productSelectedCategoryRepository.SaveChanges();
         }
+
+        public async Task RemoveSelectedCategory(long productId)
+        {
+            var selectedCategory = await _productSelectedCategoryRepository.GetQuery().AsQueryable()
+                .Where(x => x.ProductId == productId).ToListAsync();
+            _productSelectedCategoryRepository.DeletePermanentEntities(selectedCategory);
+        }
+
         #endregion
 
         #region product category

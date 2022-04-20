@@ -18,6 +18,7 @@ namespace SellerWebService.Application.interfaces
 
         #region selected category
         Task AddSelectedCategory(long productId, List<long> selectedCategoryId);
+        Task RemoveSelectedCategory(long productId);
         #endregion
 
         #region product category
