@@ -34,7 +34,7 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         }
 
         [HttpPost("create-product-category")]
-        public async Task<ActionResult<OperationResponse>> CreateProductCategory(CreateProductCategoryDto category)
+        public async Task<ActionResult<OperationResponse>> CreateProductCategory([FromForm] CreateProductCategoryDto category)
         {
             if (ModelState.IsValid)
             {
@@ -43,12 +43,13 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
                 {
                     case CreateOurEditProductCategoryResult.Error:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکلی پیش امده است دوباره تلاش کنید", null));
-                    //case CreateOurEditProductCategoryResult.ParentNotExisted:
-                    //    return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "سردسته ای با این مشخصات یافت نشد", null));
+                    case CreateOurEditProductCategoryResult.IsNotImage:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning, "لطفا تصویر را وارد کنید", null));
                     case CreateOurEditProductCategoryResult.IsExisted:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                             "دسته ای  با این نام وجود دارد", null));
                     case CreateOurEditProductCategoryResult.Success:
+                        category.Picture = null;
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
                             "عملیات موفق امیز بود", category));
 
@@ -79,6 +80,14 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
 
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                 "مشکلی پیش امده است لطفا دوباره تلاش کنید", null));
+        }
+
+        [HttpPatch("change-active-state-for-product-category-by-{id}")]
+        public async Task<ActionResult<OperationResponse>> ChangeActiveState(long id)
+        {
+            var res = await _productService.ChangeProductCategoryActiveState(id);
+            if (res) return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                "عملیات موفق امیز بود", null);
         }
     }
 }

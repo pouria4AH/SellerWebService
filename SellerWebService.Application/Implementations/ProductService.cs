@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using _0_framework.Extensions;
+using _0_framework.Utils;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
@@ -19,7 +22,7 @@ namespace SellerWebService.Application.Implementations
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
             IGenericRepository<CountOfProduct> countOfProductRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
-            IGenericRepository<Product> productRepository, 
+            IGenericRepository<Product> productRepository,
             IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
@@ -161,46 +164,45 @@ namespace SellerWebService.Application.Implementations
         public async Task<CreateOurEditProductCategoryResult> CreateProductCategory(
             CreateProductCategoryDto productCategory)
         {
-            //if (productCategory.ParentId == 0) return CreateOurEditProductCategoryResult.Error;
-            //if (productCategory.ParentId != null && productCategory.ParentId != 0)
-            //{
-            //    var check = await _productCategoryRepository.GetQuery().AsQueryable()
-            //        .AnyAsync(x => x.ParentId == productCategory.ParentId);
-            //    if (!check) return CreateOurEditProductCategoryResult.ParentNotExisted;
-            //}
 
             var checkForExisted = await _productCategoryRepository.GetQuery().AsQueryable()
                 .AnyAsync(x => x.Name == productCategory.Name || x.SeoTitle == productCategory.SeoTitle);
             if (checkForExisted) return CreateOurEditProductCategoryResult.IsExisted;
-            var newCategory = new ProductCategory
-            {
-                Name = productCategory.Name,
-                ExrernalLink = productCategory.ExrernalLink,
-                InternalLink = productCategory.InternalLink,
-                Keywords = productCategory.Keywords,
-                //ParentId = productCategory.ParentId,
-                MetaDescription = productCategory.MetaDescription,
-                Description = productCategory.Description,
-                PictureName = productCategory.PictureAddress,
-                PictureAlt = productCategory.PictureAlt,
-                PictureTitle = productCategory.PictureTitle,
-                SeoTitle = productCategory.SeoTitle,
-                ShortDescription = productCategory.ShortDescription,
-                IsActive = productCategory.IsActive
-            };
-            //if(productCategory.ParentId != null || productCategory.ParentId != 0) newCategory.ParentId = productCategory.ParentId;
-            await _productCategoryRepository.AddEntity(newCategory);
-            await _productCategoryRepository.SaveChanges();
-            return CreateOurEditProductCategoryResult.Success;
 
+            if (productCategory.Picture == null) return CreateOurEditProductCategoryResult.IsNotImage;
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productCategory.Picture.FileName);
+            var res = productCategory.Picture.AddImageToServer(imageName, PathExtension.ProductCategoryOriginServer, 150, 150,
+                PathExtension.ProductCategoryThumbServer);
+
+            if (res)
+            {
+                var newCategory = new ProductCategory
+                {
+                    Name = productCategory.Name,
+                    ExrernalLink = productCategory.ExrernalLink,
+                    InternalLink = productCategory.InternalLink,
+                    Keywords = productCategory.Keywords,
+                    MetaDescription = productCategory.MetaDescription,
+                    Description = productCategory.Description,
+                    PictureAddress = imageName,
+                    PictureAlt = productCategory.PictureAlt,
+                    PictureTitle = productCategory.PictureTitle,
+                    SeoTitle = productCategory.SeoTitle,
+                    ShortDescription = productCategory.ShortDescription,
+                    IsActive = productCategory.IsActive
+                };
+                await _productCategoryRepository.AddEntity(newCategory);
+                await _productCategoryRepository.SaveChanges();
+                return CreateOurEditProductCategoryResult.Success;
+            }
+            return CreateOurEditProductCategoryResult.Error;
         }
 
-        public async Task<List<EditProductCategoryDto>> GetAllProductCategory()
+        public async Task<List<ReadProductCategoryDto>> GetAllProductCategory()
         {
             return await _productCategoryRepository.GetQuery().AsQueryable().Where(x => !x.IsDelete)
-                .Select(x => new EditProductCategoryDto
+                .Select(x => new ReadProductCategoryDto
                 {
-                    //ParentId = x.ParentId,
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
@@ -209,7 +211,9 @@ namespace SellerWebService.Application.Implementations
                     IsActive = x.IsActive,
                     Keywords = x.Keywords,
                     MetaDescription = x.MetaDescription,
-                    PictureAddress = x.PictureName,
+                    PictureName =  x.PictureAddress,
+                    OriginAddress = PathExtension.ProductCategoryOrigin,
+                    ThumbAddress = PathExtension.ProductCategoryThumb,
                     PictureAlt = x.PictureAlt,
                     PictureTitle = x.PictureTitle,
                     SeoTitle = x.SeoTitle,
@@ -227,7 +231,7 @@ namespace SellerWebService.Application.Implementations
 
             mainCategory.Keywords = productCategory.Keywords;
             mainCategory.MetaDescription = productCategory.MetaDescription;
-            mainCategory.PictureName = productCategory.PictureAddress;
+            //mainCategory.PictureAddress = productCategory.Picture;
             mainCategory.PictureAlt = productCategory.PictureAlt;
             mainCategory.PictureTitle = productCategory.PictureTitle;
             mainCategory.SeoTitle = productCategory.SeoTitle;
@@ -245,11 +249,11 @@ namespace SellerWebService.Application.Implementations
 
         }
 
-        public async Task<EditProductCategoryDto> GetProductCategoryById(long id)
+        public async Task<ReadProductCategoryDto> GetProductCategoryById(long id)
         {
             var category = await _productCategoryRepository.GetEntityById(id);
-            if(category == null || category.IsDelete) return null;
-            return new EditProductCategoryDto
+            if (category == null || category.IsDelete) return null;
+            return new ReadProductCategoryDto
             {
                 Id = category.Id,
                 Name = category.Name,
@@ -259,23 +263,35 @@ namespace SellerWebService.Application.Implementations
                 IsActive = category.IsActive,
                 Keywords = category.Keywords,
                 MetaDescription = category.MetaDescription,
-                PictureAddress = category.PictureName,
+                PictureName = category.PictureAddress,
+                OriginAddress = PathExtension.ProductCategoryOrigin,
+                ThumbAddress = PathExtension.ProductCategoryThumb,
                 PictureAlt = category.PictureAlt,
                 PictureTitle = category.PictureTitle,
                 SeoTitle = category.SeoTitle,
                 ShortDescription = category.ShortDescription
             };
         }
+
+        public async Task<bool> ChangeProductCategoryActiveState(long id)
+        {
+            var productCategory = await _productCategoryRepository.GetEntityById(id);
+            if (!productCategory.IsDelete) return false;
+            if(productCategory == null) return false;
+            productCategory.IsActive = !productCategory.IsActive;
+            return true;
+        }
+
         #endregion
 
         #region dipose
         public async ValueTask DisposeAsync()
         {
-           if(_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
-           if(_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
-           if(_countOfProductRepository != null) await _countOfProductRepository.DisposeAsync();
-           if(_productRepository != null) await _productRepository.DisposeAsync();
-           if(_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
+            if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
+            if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
+            if (_countOfProductRepository != null) await _countOfProductRepository.DisposeAsync();
+            if (_productRepository != null) await _productRepository.DisposeAsync();
+            if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
         }
 
         #endregion

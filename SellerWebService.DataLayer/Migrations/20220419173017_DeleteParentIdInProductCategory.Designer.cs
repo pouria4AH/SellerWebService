@@ -106,7 +106,7 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PictureName")
+                    b.Property<string>("PictureAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -187,7 +187,7 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PictureName")
+                    b.Property<string>("PictureAddress")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");

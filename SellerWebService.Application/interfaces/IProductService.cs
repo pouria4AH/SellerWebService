@@ -1,4 +1,5 @@
-﻿using SellerWebService.DataLayer.DTOs.Products;
+﻿using Microsoft.AspNetCore.Http;
+using SellerWebService.DataLayer.DTOs.Products;
 
 namespace SellerWebService.Application.interfaces
 {
@@ -25,9 +26,10 @@ namespace SellerWebService.Application.interfaces
 
         Task<CreateOurEditProductCategoryResult> CreateProductCategory(CreateProductCategoryDto productCategory);
         //Task<EditProductCategoryDto> GetProductCategory(long productId);
-        Task<List<EditProductCategoryDto>> GetAllProductCategory();
+        Task<List<ReadProductCategoryDto>> GetAllProductCategory();
         Task<CreateOurEditProductCategoryResult> EditProductCategory(EditProductCategoryDto productCategory);
-        Task<EditProductCategoryDto> GetProductCategoryById(long id);
+        Task<ReadProductCategoryDto> GetProductCategoryById(long id);
+        Task<bool> ChangeProductCategoryActiveState(long id);
 
         #endregion
 

@@ -1,4 +1,6 @@
-﻿namespace SellerWebService.DataLayer.DTOs.Products
+﻿using Microsoft.AspNetCore.Http;
+
+namespace SellerWebService.DataLayer.DTOs.Products
 {
     public class CreateProductCategoryDto
     {
@@ -24,7 +26,7 @@
 
         [Display(Name = "ادرس عکس")]
         //[Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string PictureAddress { get; set; }
+        public IFormFile Picture { get; set; }
 
         [Display(Name = "الت عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -58,6 +60,7 @@
         Success,
         IsExisted,
         Error,
+        IsNotImage
         //ParentNotExisted,
 
     }
