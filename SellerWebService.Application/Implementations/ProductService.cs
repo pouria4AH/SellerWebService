@@ -131,7 +131,6 @@ namespace SellerWebService.Application.Implementations
 
         #endregion
 
-
         #region selected category
 
         public async Task AddSelectedCategory(long productId, List<long> selectedCategories)

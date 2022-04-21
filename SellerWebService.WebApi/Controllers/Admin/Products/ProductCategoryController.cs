@@ -60,7 +60,7 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         }
 
         [HttpPut("edit-product-category")]
-        public async Task<ActionResult<OperationResponse>> EditProductCategory([FromForm]EditProductCategoryDto category)
+        public async Task<ActionResult<OperationResponse>> EditProductCategory([FromForm] EditProductCategoryDto category)
         {
             if (ModelState.IsValid)
             {
@@ -72,6 +72,7 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                             "گروهی با این مشخصات پیدا نشد", null));
                     case CreateOurEditProductCategoryResult.Success:
+                        category.Picture = null;
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
                             "عملیات موفق امیز بود", category));
                 }
@@ -92,5 +93,6 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                  "عملیات ناموفق بود", null));
         }
+
     }
 }
