@@ -12,7 +12,7 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    [Migration("20220421105023_EditProductCategory2")]
+    [Migration("20220421125920_EditProductCategory2")]
     partial class EditProductCategory2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,7 +110,7 @@ namespace SellerWebService.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PictureAddress")
+                    b.Property<string>("PictureName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -192,7 +192,7 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<string>("PictureAddress")
+                    b.Property<string>("PictureName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");

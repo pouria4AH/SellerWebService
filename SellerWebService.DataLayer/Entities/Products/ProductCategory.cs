@@ -31,7 +31,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         [Display(Name = "ادرس عکس")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string PictureAddress { get; set; }
+        public string PictureName { get; set; }
 
         [Display(Name = "الت عکس")]
         [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]

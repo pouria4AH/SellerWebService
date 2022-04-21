@@ -29,7 +29,7 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         public async Task<ActionResult<EditProductCategoryDto>> GetCategoryById(long id)
         {
             var category = await _productService.GetProductCategoryById(id);
-            if(category == null) return NotFound();
+            if (category == null) return NotFound();
             return Ok(category);
         }
 
@@ -60,7 +60,7 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         }
 
         [HttpPut("edit-product-category")]
-        public async Task<ActionResult<OperationResponse>> EditProductCategory(EditProductCategoryDto category)
+        public async Task<ActionResult<OperationResponse>> EditProductCategory([FromForm]EditProductCategoryDto category)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,10 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         {
             var res = await _productService.ChangeProductCategoryActiveState(id);
             if (res) return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                "عملیات موفق امیز بود", null);
+                "عملیات موفق امیز بود", null));
+
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                 "عملیات ناموفق بود", null));
         }
     }
 }

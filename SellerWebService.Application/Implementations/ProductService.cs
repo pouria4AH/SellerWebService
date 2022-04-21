@@ -184,7 +184,7 @@ namespace SellerWebService.Application.Implementations
                     Keywords = productCategory.Keywords,
                     MetaDescription = productCategory.MetaDescription,
                     Description = productCategory.Description,
-                    PictureAddress = imageName,
+                    PictureName = imageName,
                     PictureAlt = productCategory.PictureAlt,
                     PictureTitle = productCategory.PictureTitle,
                     SeoTitle = productCategory.SeoTitle,
@@ -211,7 +211,7 @@ namespace SellerWebService.Application.Implementations
                     IsActive = x.IsActive,
                     Keywords = x.Keywords,
                     MetaDescription = x.MetaDescription,
-                    PictureName =  x.PictureAddress,
+                    PictureName = x.PictureName,
                     OriginAddress = PathExtension.ProductCategoryOrigin,
                     ThumbAddress = PathExtension.ProductCategoryThumb,
                     PictureAlt = x.PictureAlt,
@@ -229,9 +229,20 @@ namespace SellerWebService.Application.Implementations
             var mainCategory = await _productCategoryRepository.GetEntityById(productCategory.Id);
             if (mainCategory == null || mainCategory.IsDelete) return CreateOurEditProductCategoryResult.NotFound;
 
+            if (productCategory.Picture != null)
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productCategory.Picture.FileName);
+                var res = productCategory.Picture.AddImageToServer(imageName, PathExtension.ProductCategoryOriginServer, 150, 150,
+                    PathExtension.ProductCategoryThumbServer, mainCategory.PictureName);
+                if (res)
+                {
+                    mainCategory.PictureName = imageName;
+                }
+            }
+
             mainCategory.Keywords = productCategory.Keywords;
             mainCategory.MetaDescription = productCategory.MetaDescription;
-            //mainCategory.PictureAddress = productCategory.Picture;
+            //mainCategory.PictureName = productCategory.Picture;
             mainCategory.PictureAlt = productCategory.PictureAlt;
             mainCategory.PictureTitle = productCategory.PictureTitle;
             mainCategory.SeoTitle = productCategory.SeoTitle;
@@ -263,7 +274,7 @@ namespace SellerWebService.Application.Implementations
                 IsActive = category.IsActive,
                 Keywords = category.Keywords,
                 MetaDescription = category.MetaDescription,
-                PictureName = category.PictureAddress,
+                PictureName = category.PictureName,
                 OriginAddress = PathExtension.ProductCategoryOrigin,
                 ThumbAddress = PathExtension.ProductCategoryThumb,
                 PictureAlt = category.PictureAlt,
@@ -276,9 +287,11 @@ namespace SellerWebService.Application.Implementations
         public async Task<bool> ChangeProductCategoryActiveState(long id)
         {
             var productCategory = await _productCategoryRepository.GetEntityById(id);
-            if (!productCategory.IsDelete) return false;
-            if(productCategory == null) return false;
+            if (productCategory.IsDelete) return false;
+            if (productCategory == null) return false;
             productCategory.IsActive = !productCategory.IsActive;
+            _productCategoryRepository.EditEntity(productCategory);
+            await _productCategoryRepository.SaveChanges();
             return true;
         }
 
