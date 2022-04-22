@@ -1,6 +1,5 @@
 ﻿using _0_framework.Extensions;
 using _0_framework.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
@@ -14,19 +13,16 @@ namespace SellerWebService.Application.Implementations
         #region ctor
 
         private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
-        private readonly IGenericRepository<CountOfProduct> _countOfProductRepository;
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
 
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
-            IGenericRepository<CountOfProduct> countOfProductRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
             IGenericRepository<Product> productRepository,
             IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
-            _countOfProductRepository = countOfProductRepository;
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
             _productSelectedCategoryRepository = productSelectedCategoryRepository;
@@ -85,27 +81,6 @@ namespace SellerWebService.Application.Implementations
             _productFeatureCategoryRepository.EditEntity(category);
             await _productFeatureCategoryRepository.SaveChanges();
             return CreateOurEditProductFeatureCategoryResult.Success;
-        }
-
-        #endregion
-
-        #region count of product
-
-        public async Task CreateCount(long productId, IEnumerable<CreateCountDto> counts)
-        {
-            List<CountOfProduct> listCount = new List<CountOfProduct>();
-            foreach (var count in counts)
-            {
-                CountOfProduct newCount = new CountOfProduct
-                {
-                    //Name = count.Name,
-                    ProductId = productId,
-                    Count = count.Count
-                };
-                listCount.Add(newCount);
-            }
-            await _countOfProductRepository.AddRangeEntities(listCount);
-            await _countOfProductRepository.SaveChanges();
         }
 
         #endregion
@@ -285,6 +260,11 @@ namespace SellerWebService.Application.Implementations
                 x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
             if (isExisted) return CreateOurEditProductResult.IsExisted;
 
+            if (product.StateForCount != CountState.Single)
+            {
+                if (product.Counts == null || !product.Counts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
+            }
+
             if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
             var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
             var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
@@ -309,16 +289,14 @@ namespace SellerWebService.Application.Implementations
                 StateForCount = product.StateForCount,
             };
             if (product.Size != null) newProduct.Size = product.Size;
-            if (product.StateForCount != CountState.Single)
+
+            string countArray = "";
+            foreach (var count in product.Counts)
             {
-                if (product.Counts == null || !product.Counts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
-                string countArray = "";
-                foreach (var count in product.Counts)
-                {
-                    countArray += count.ToString() + ",";
-                }
-                newProduct.CountArray = countArray;
+                countArray += count.ToString() + ",";
             }
+
+            newProduct.CountArray = countArray;
 
             await _productRepository.AddEntity(newProduct);
             await _productRepository.SaveChanges();
@@ -341,7 +319,6 @@ namespace SellerWebService.Application.Implementations
         {
             if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
             if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
-            if (_countOfProductRepository != null) await _countOfProductRepository.DisposeAsync();
             if (_productRepository != null) await _productRepository.DisposeAsync();
             if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
         }
