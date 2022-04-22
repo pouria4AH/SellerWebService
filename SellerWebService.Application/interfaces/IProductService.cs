@@ -14,7 +14,7 @@ namespace SellerWebService.Application.interfaces
         #region Count of product
 
         Task<List<EditCountDto>> GetAllCountForProduct(long productId);
-        Task<CreateOurEditCountResult> CreateCount(CreateCountDto count);
+        Task CreateCount(long productId, List<CreateCountDto> counts);
         #endregion
 
         #region selected category
@@ -35,7 +35,7 @@ namespace SellerWebService.Application.interfaces
 
         #region product
 
-
+        Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product);
 
         #endregion
     }

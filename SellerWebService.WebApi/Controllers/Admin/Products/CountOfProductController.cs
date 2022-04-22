@@ -10,43 +10,43 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
     [ApiController]
     public class CountOfProductController : ControllerBase
     {
-        private readonly IProductService _productService;
+        //private readonly IProductService _productService;
 
-        public CountOfProductController(IProductService productService)
-        {
-            _productService = productService;
-        }
+        //public CountOfProductController(IProductService productService)
+        //{
+        //    _productService = productService;
+        //}
 
-        [HttpGet("get-counts-for-product")]
-        public async Task<ActionResult<List<EditCountDto>>> GetCounts(long productId)
-        {
-            var listCount = await _productService.GetAllCountForProduct(productId);
-            if (listCount == null) return NotFound();
-            return Ok(listCount);
-        }
+        //[HttpGet("get-counts-for-product")]
+        //public async Task<ActionResult<List<EditCountDto>>> GetCounts(long productId)
+        //{
+        //    var listCount = await _productService.GetAllCountForProduct(productId);
+        //    if (listCount == null) return NotFound();
+        //    return Ok(listCount);
+        //}
 
-        [HttpPost("create-count-for-product")]
-        public async Task<ActionResult<OperationResponse>> CreateCount([FromBody] CreateCountDto count)
-        {
-            if (ModelState.IsValid)
-            {
-                var res = await _productService.CreateCount(count);
-                switch (res)
-                {
-                    case CreateOurEditCountResult.Error:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکلی در ثبت پیش امد", null));
-                    case CreateOurEditCountResult.IsExisted:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning, "رکورد تکراری است", null));
-                    case CreateOurEditCountResult.NotFound:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,"محصولی با این مشخصات پیدا نشد", null));
-                    case CreateOurEditCountResult.Success:
-                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, "عملیات ثبت موفق امیز بود", count));
-                }
+        //[HttpPost("create-count-for-product")]
+        //public async Task<ActionResult<OperationResponse>> CreateCount([FromBody] CreateCountDto count)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var res = await _productService.CreateCount(count);
+        //        switch (res)
+        //        {
+        //            case CreateOurEditCountResult.Error:
+        //                return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکلی در ثبت پیش امد", null));
+        //            case CreateOurEditCountResult.IsExisted:
+        //                return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning, "رکورد تکراری است", null));
+        //            case CreateOurEditCountResult.NotFound:
+        //                return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,"محصولی با این مشخصات پیدا نشد", null));
+        //            case CreateOurEditCountResult.Success:
+        //                return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, "عملیات ثبت موفق امیز بود", count));
+        //        }
 
-            }
+        //    }
 
-            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکی پیش امده است",
-                null));
-        }
+        //    return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "مشکی پیش امده است",
+        //        null));
+        //}
     }
 }

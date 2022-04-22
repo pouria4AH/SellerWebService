@@ -51,6 +51,14 @@
 
         public static string ProductCategoryThumb = "ImageUploader/Content/Images/ProductCategory/Thumb/";
         public static string  ProductCategoryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductCategory/Thumb/");
+        #endregion  
+        #region product 
+
+        public static string ProductOrigin = "ImageUploader/Content/Images/Product/origin/";
+        public static string ProductOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/Product/origin/");
+
+        public static string ProductThumb = "ImageUploader/Content/Images/Product/Thumb/";
+        public static string  ProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/Product/Thumb/");
         #endregion
     }
 }

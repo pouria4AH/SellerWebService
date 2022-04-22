@@ -1,11 +1,10 @@
-﻿global using System.ComponentModel.DataAnnotations;
-using _0_framework.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using SellerWebService.DataLayer.Entities.Products;
 
-namespace SellerWebService.DataLayer.Entities.Products
+namespace SellerWebService.DataLayer.DTOs.Products
 {
-    public class Product : BaseEntity
+    public class CreateProductDto
     {
-        #region prop
         [Display(Name = "نام محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -17,13 +16,13 @@ namespace SellerWebService.DataLayer.Entities.Products
         public string SeoTitle { get; set; }
 
         [Display(Name = "قیمت پیش فرض")]
-        [Range(0,long.MaxValue)]
+        [Range(0, long.MaxValue)]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long DefaultPrice { get; set; }
 
         [Display(Name = "سایز پیش فرض")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string Size { get; set; }
+        public string? Size { get; set; }
 
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -35,7 +34,7 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "ادرس عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string PictureName { get; set; }
+        public IFormFile Picture { get; set; }
 
         [Display(Name = "الت عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -54,30 +53,23 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "کیبورد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string Keywords { get; set; }
+        public string? Keywords { get; set; }
 
         [Display(Name = "لینک خارجی")]
-        public string ExrernalLink { get; set; }
+        public string? ExrernalLink { get; set; }
 
         [Display(Name = "لینک داخلی")]
         public string InternalLink { get; set; }
 
         public CountState StateForCount { get; set; }
-        #endregion
-
-        #region relations
-
-        public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        public ICollection<ProductFeature> ProductFeatures { get; set; }
-        public ICollection<CountOfProduct> CountOfProducts { get; set; }
-        #endregion
-
+        public List<CreateCountDto>? CreateCounts { get; set; }
+        public List<long> selectedCategories { get; set; }
     }
-    public enum CountState
-    {
-        Single,
-        List,
-        Together,
-
-    }
+   public enum CreateOurEditProductResult{
+        Error,
+        Success,
+        IsNotImage,
+        IsExisted,
+        CountListIsNotExisted
+   }
 }
