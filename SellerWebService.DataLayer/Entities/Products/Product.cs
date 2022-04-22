@@ -67,6 +67,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         [Display(Name = "لینک داخلی")]
         public string? InternalLink { get; set; }
 
+        public string CountArray { get; set; }
         public CountState StateForCount { get; set; }
         #endregion
 
@@ -74,7 +75,7 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<ProductFeature> ProductFeatures { get; set; }
-        public ICollection<CountOfProduct> CountOfProducts { get; set; }
+        //public ICollection<CountOfProduct> CountOfProducts { get; set; }
         #endregion
 
     }

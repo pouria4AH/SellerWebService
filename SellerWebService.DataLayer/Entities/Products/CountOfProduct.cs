@@ -8,7 +8,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         public string Name { get; set; }
         public long Count { get; set; }
 
-        public Product Product { get; set; }
+        //public Product Product { get; set; }
 
     }
 }

@@ -281,47 +281,52 @@ namespace SellerWebService.Application.Implementations
         {
             //try
             //{
-                bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
-                    x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
-                if (isExisted) return CreateOurEditProductResult.IsExisted;
+            bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
+                x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
+            if (isExisted) return CreateOurEditProductResult.IsExisted;
 
-                if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
-                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
-                var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-                    PathExtension.ProductThumbServer);
-                if (!res) return CreateOurEditProductResult.IsNotImage;
+            if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
+            var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                PathExtension.ProductThumbServer);
+            if (!res) return CreateOurEditProductResult.IsNotImage;
 
-                var newProduct = new Product
+            var newProduct = new Product
+            {
+                Name = product.Name,
+                SeoTitle = product.SeoTitle,
+                Description = product.Description,
+                DefaultPrice = product.DefaultPrice,
+                ShortDescription = product.ShortDescription,
+                ExrernalLink = product.ExrernalLink,
+                InternalLink = product.InternalLink,
+                Keywords = product.Keywords,
+                MetaDescription = product.MetaDescription,
+                PictureAlt = product.PictureAlt,
+                PictureTitle = product.PictureTitle,
+                PictureName = imageName,
+                IsActive = product.IsActive,
+                StateForCount = product.StateForCount,
+            };
+            if (product.Size != null) newProduct.Size = product.Size;
+            if (product.StateForCount != CountState.Single)
+            {
+                if (product.Counts == null || !product.Counts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
+                string countArray = "";
+                foreach (var count in product.Counts)
                 {
-                    Name = product.Name,
-                    SeoTitle = product.SeoTitle,
-                    Description = product.Description,
-                    DefaultPrice = product.DefaultPrice,
-                    ShortDescription = product.ShortDescription,
-                    ExrernalLink = product.ExrernalLink,
-                    InternalLink = product.InternalLink,
-                    Keywords = product.Keywords,
-                    MetaDescription = product.MetaDescription,
-                    PictureAlt = product.PictureAlt,
-                    PictureTitle = product.PictureTitle,
-                    PictureName = imageName,
-                    IsActive = product.IsActive,
-                    StateForCount = product.StateForCount,
-                };
-                if (product.Size != null) newProduct.Size = product.Size;
-
-                await _productRepository.AddEntity(newProduct);
-                //await _productRepository.SaveChanges();
-
-                if (product.StateForCount != CountState.Single)
-                {
-                    if (product.CreateCounts == null || !product.CreateCounts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
-                    //await CreateCount(newProduct.Id, product.CreateCounts);
+                    countArray += count.ToString() + ",";
                 }
+                newProduct.CountArray = countArray;
+            }
 
-                if (product.selectedCategories.Any()) await AddSelectedCategory(newProduct.Id, product.selectedCategories);
+            await _productRepository.AddEntity(newProduct);
+            await _productRepository.SaveChanges();
 
-                return CreateOurEditProductResult.Success;
+
+            if (product.selectedCategories.Any()) await AddSelectedCategory(newProduct.Id, product.selectedCategories);
+
+            return CreateOurEditProductResult.Success;
             //}
             //catch (Exception e)
             //{

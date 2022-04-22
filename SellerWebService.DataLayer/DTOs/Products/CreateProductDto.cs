@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.DataLayer.DTOs.Products
@@ -62,7 +64,7 @@ namespace SellerWebService.DataLayer.DTOs.Products
         public string? InternalLink { get; set; }
 
         public CountState StateForCount { get; set; }
-        public IEnumerable<CreateCountDto> CreateCounts { get; set; }
+        public List<long> Counts { get; set; }
         public List<long> selectedCategories { get; set; }
     }
     public enum CreateOurEditProductResult
