@@ -91,23 +91,14 @@ namespace SellerWebService.Application.Implementations
 
         #region count of product
 
-         public async Task CreateCount(long productId, List<CreateCountDto> counts)
+        public async Task CreateCount(long productId, IEnumerable<CreateCountDto> counts)
         {
-            //if (counts == null || !counts.Any()) return false;
-            //var checkExisted = await _countsOfProductRepository.GetQuery().AsQueryable()
-            //    .AnyAsync(x => x.Count == counts.Count && x.ProductId == counts.ProductId);
-            //if (checkExisted) return CreateOurEditCountResult.IsExisted;
-
-            //var checkProductId = await _productRepository.GetQuery().AsQueryable()
-            //    .AnyAsync(x => x.Id == productId);
-            //if (!checkProductId) return false;
-
             List<CountOfProduct> listCount = new List<CountOfProduct>();
             foreach (var count in counts)
             {
                 CountOfProduct newCount = new CountOfProduct
                 {
-                    Name = count.Name,
+                    //Name = count.Name,
                     ProductId = productId,
                     Count = count.Count
                 };
@@ -115,24 +106,7 @@ namespace SellerWebService.Application.Implementations
             }
             await _countOfProductRepository.AddRangeEntities(listCount);
             await _countOfProductRepository.SaveChanges();
-            //return true;
         }
-
-        //public async Task<List<EditCountDto>> GetAllCountForProduct(long productId)
-        //{
-        //    if (productId == 0 || productId == null) return null;
-        //    var existed = await _countOfProductRepository.GetQuery().AsQueryable()
-        //        .AnyAsync(x => x.ProductId == productId);
-        //    if (!existed) return null;
-        //    return await _countOfProductRepository.GetQuery().AsQueryable()
-        //        .Where(x => x.ProductId == productId && !x.IsDelete)
-        //        .Select(x => new EditCountDto
-        //        {
-        //            ProductId = productId,
-        //            Name = x.Name,
-        //            Count = x.Count
-        //        }).ToListAsync();
-        //}
 
         #endregion
 
@@ -305,44 +279,54 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product)
         {
-            bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
-                x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
-            if (isExisted) return CreateOurEditProductResult.IsExisted;
+            //try
+            //{
+                bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
+                    x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
+                if (isExisted) return CreateOurEditProductResult.IsExisted;
 
+                if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
+                var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                    PathExtension.ProductThumbServer);
+                if (!res) return CreateOurEditProductResult.IsNotImage;
 
-            if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
-            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
-            var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-                PathExtension.ProductThumbServer);
-            if (!res) return CreateOurEditProductResult.IsNotImage;
+                var newProduct = new Product
+                {
+                    Name = product.Name,
+                    SeoTitle = product.SeoTitle,
+                    Description = product.Description,
+                    DefaultPrice = product.DefaultPrice,
+                    ShortDescription = product.ShortDescription,
+                    ExrernalLink = product.ExrernalLink,
+                    InternalLink = product.InternalLink,
+                    Keywords = product.Keywords,
+                    MetaDescription = product.MetaDescription,
+                    PictureAlt = product.PictureAlt,
+                    PictureTitle = product.PictureTitle,
+                    PictureName = imageName,
+                    IsActive = product.IsActive,
+                    StateForCount = product.StateForCount,
+                };
+                if (product.Size != null) newProduct.Size = product.Size;
 
-            var newProduct = new Product
-            {
-                Name = product.Name,
-                SeoTitle = product.SeoTitle,
-                Description = product.Description,
-                DefaultPrice = product.DefaultPrice,
-                ShortDescription = product.ShortDescription,
-                ExrernalLink = product.ExrernalLink,
-                InternalLink = product.InternalLink,
-                Keywords = product.Keywords,
-                MetaDescription = product.MetaDescription,
-                PictureAlt = product.PictureAlt,
-                PictureTitle = product.PictureTitle,
-                PictureName = imageName,
-                IsActive = product.IsActive,
-                StateForCount = product.StateForCount,
-            };
-            if (product.Size != null) newProduct.Size = product.Size;
-            await _productRepository.AddEntity(newProduct);
-            await _productRepository.SaveChanges();
-            if (product.StateForCount != CountState.Single)
-            {
-                if (product.CreateCounts == null || !product.CreateCounts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
-                await CreateCount(newProduct.Id, product.CreateCounts);
-            }
+                await _productRepository.AddEntity(newProduct);
+                //await _productRepository.SaveChanges();
 
-            return CreateOurEditProductResult.Success;
+                if (product.StateForCount != CountState.Single)
+                {
+                    if (product.CreateCounts == null || !product.CreateCounts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
+                    //await CreateCount(newProduct.Id, product.CreateCounts);
+                }
+
+                if (product.selectedCategories.Any()) await AddSelectedCategory(newProduct.Id, product.selectedCategories);
+
+                return CreateOurEditProductResult.Success;
+            //}
+            //catch (Exception e)
+            //{
+            //    return CreateOurEditProductResult.Error;
+            //}
         }
 
         #endregion

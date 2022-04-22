@@ -23,7 +23,7 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "سایز پیش فرض")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string Size { get; set; }
+        public string? Size { get; set; }
 
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -31,6 +31,7 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "توضیحات کوتاه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string ShortDescription { get; set; }
 
         [Display(Name = "ادرس عکس")]
@@ -39,10 +40,12 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "الت عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string PictureAlt { get; set; }
 
         [Display(Name = "عنوان عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string PictureTitle { get; set; }
 
         [Display(Name = "فعال / غیر فعال")]
@@ -50,17 +53,19 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         [Display(Name = "توضیحات متا")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string MetaDescription { get; set; }
 
         [Display(Name = "کیبورد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Keywords { get; set; }
 
         [Display(Name = "لینک خارجی")]
-        public string ExrernalLink { get; set; }
+        public string? ExrernalLink { get; set; }
 
         [Display(Name = "لینک داخلی")]
-        public string InternalLink { get; set; }
+        public string? InternalLink { get; set; }
 
         public CountState StateForCount { get; set; }
         #endregion

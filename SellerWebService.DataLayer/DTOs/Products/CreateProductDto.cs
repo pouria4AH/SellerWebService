@@ -53,23 +53,24 @@ namespace SellerWebService.DataLayer.DTOs.Products
 
         [Display(Name = "کیبورد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string? Keywords { get; set; }
+        public string Keywords { get; set; }
 
         [Display(Name = "لینک خارجی")]
         public string? ExrernalLink { get; set; }
 
         [Display(Name = "لینک داخلی")]
-        public string InternalLink { get; set; }
+        public string? InternalLink { get; set; }
 
         public CountState StateForCount { get; set; }
-        public List<CreateCountDto>? CreateCounts { get; set; }
+        public IEnumerable<CreateCountDto> CreateCounts { get; set; }
         public List<long> selectedCategories { get; set; }
     }
-   public enum CreateOurEditProductResult{
+    public enum CreateOurEditProductResult
+    {
         Error,
         Success,
         IsNotImage,
         IsExisted,
         CountListIsNotExisted
-   }
+    }
 }

@@ -12,9 +12,7 @@ namespace SellerWebService.Application.interfaces
         #endregion
 
         #region Count of product
-
-        Task<List<EditCountDto>> GetAllCountForProduct(long productId);
-        Task CreateCount(long productId, List<CreateCountDto> counts);
+        Task CreateCount(long productId, IEnumerable<CreateCountDto> counts);
         #endregion
 
         #region selected category
