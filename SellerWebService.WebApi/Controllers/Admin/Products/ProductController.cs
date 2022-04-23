@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
-using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.WebApi.Controllers.Admin.Products
 {
@@ -21,6 +19,12 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
         public async Task<IEnumerable<ReadProductDto>> GetAllProducts()
         {
             return await _productService.GetAllProduct();
+        }
+
+        [HttpGet("get-product-by-{id}")]
+        public async Task<ReadProductDto> GetProduct(long id)
+        {
+            return await _productService.GetProductById(id);
         }
 
         [HttpPost("create-product")]
@@ -54,6 +58,35 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
                 "لطفا اطلاعات را درست وارد کنید", null));
         }
 
+        [HttpPut("edit-product")]
+        public async Task<ActionResult<OperationResponse>> EditProduct([FromForm] EditProductDto product)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.EditProduct(product);
+                switch (res)
+                {
+                    case CreateOurEditProductResult.IsNotImage:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "لطفا عکس را درست وارد کنید", null));
+                    case CreateOurEditProductResult.Error:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                                "مشکلی پیش امد دوباره تلاش کنید", null));
+                    case CreateOurEditProductResult.CountListIsNotExisted:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "لیست تیراژ را وارد کنید", null));
+                    case CreateOurEditProductResult.NotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "محصول مورد نظر یافت نشد", null));
+                    case CreateOurEditProductResult.Success:
+                        product.Picture = null;
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            "عملیات موفق امیز بود", product));
+                }
+            }
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                "مشکلی پیش امد دوباره تلاش کنید", null));
+        }
     }
 
 }

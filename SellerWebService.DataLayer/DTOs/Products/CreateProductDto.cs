@@ -73,6 +73,7 @@ namespace SellerWebService.DataLayer.DTOs.Products
         Success,
         IsNotImage,
         IsExisted,
-        CountListIsNotExisted
+        CountListIsNotExisted,
+        NotFound
     }
 }

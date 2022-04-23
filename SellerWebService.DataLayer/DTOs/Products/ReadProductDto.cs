@@ -4,6 +4,8 @@ namespace SellerWebService.DataLayer.DTOs.Products
 {
     public class ReadProductDto
     {
+        public long Id { get; set; }
+
         [Display(Name = "نام")]
         public string Name { get; set; }
 
