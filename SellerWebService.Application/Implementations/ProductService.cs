@@ -5,6 +5,7 @@ using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Repository;
+using SixLabors.ImageSharp.ColorSpaces;
 
 namespace SellerWebService.Application.Implementations
 {
@@ -254,75 +255,104 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product)
         {
-            //try
-            //{
-            bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
+            try
+            {
+                bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
                 x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
-            if (isExisted) return CreateOurEditProductResult.IsExisted;
+                if (isExisted) return CreateOurEditProductResult.IsExisted;
 
-            if (product.StateForCount != CountState.Single)
-            {
-                if (product.Counts == null || !product.Counts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
+                if (product.StateForCount != CountState.Single)
+                {
+                    if (product.Counts == null || !product.Counts.Any()) return CreateOurEditProductResult.CountListIsNotExisted;
+                }
+
+                if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
+                var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                    PathExtension.ProductThumbServer);
+                if (!res) return CreateOurEditProductResult.IsNotImage;
+
+                var newProduct = new Product
+                {
+                    Name = product.Name,
+                    SeoTitle = product.SeoTitle,
+                    Description = product.Description,
+                    DefaultPrice = product.DefaultPrice,
+                    ShortDescription = product.ShortDescription,
+                    ExrernalLink = product.ExrernalLink,
+                    InternalLink = product.InternalLink,
+                    Keywords = product.Keywords,
+                    MetaDescription = product.MetaDescription,
+                    PictureAlt = product.PictureAlt,
+                    PictureTitle = product.PictureTitle,
+                    PictureName = imageName,
+                    IsActive = product.IsActive,
+                    StateForCount = product.StateForCount,
+                };
+                if (product.Size != null) newProduct.Size = product.Size;
+
+                string countArray = "";
+                foreach (var count in product.Counts)
+                {
+                    countArray += count.ToString() + ",";
+                }
+
+                newProduct.CountArray = countArray;
+
+                await _productRepository.AddEntity(newProduct);
+                await _productRepository.SaveChanges();
+
+
+                if (product.selectedCategories.Any()) await AddSelectedCategory(newProduct.Id, product.selectedCategories);
+
+                return CreateOurEditProductResult.Success;
             }
-
-            if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
-            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
-            var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-                PathExtension.ProductThumbServer);
-            if (!res) return CreateOurEditProductResult.IsNotImage;
-
-            var newProduct = new Product
+            catch (Exception e)
             {
-                Name = product.Name,
-                SeoTitle = product.SeoTitle,
-                Description = product.Description,
-                DefaultPrice = product.DefaultPrice,
-                ShortDescription = product.ShortDescription,
-                ExrernalLink = product.ExrernalLink,
-                InternalLink = product.InternalLink,
-                Keywords = product.Keywords,
-                MetaDescription = product.MetaDescription,
-                PictureAlt = product.PictureAlt,
-                PictureTitle = product.PictureTitle,
-                PictureName = imageName,
-                IsActive = product.IsActive,
-                StateForCount = product.StateForCount,
-            };
-            if (product.Size != null) newProduct.Size = product.Size;
-
-            string countArray = "";
-            foreach (var count in product.Counts)
-            {
-                countArray += count.ToString() + ",";
+                return CreateOurEditProductResult.Error;
             }
-
-            newProduct.CountArray = countArray;
-
-            await _productRepository.AddEntity(newProduct);
-            await _productRepository.SaveChanges();
-
-
-            if (product.selectedCategories.Any()) await AddSelectedCategory(newProduct.Id, product.selectedCategories);
-
-            return CreateOurEditProductResult.Success;
-            //}
-            //catch (Exception e)
-            //{
-            //    return CreateOurEditProductResult.Error;
-            //}
         }
 
-        #endregion
-
-        #region dipose
-        public async ValueTask DisposeAsync()
+        public async Task<List<ReadProductDto>> GetAllProduct()
         {
-            if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
-            if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
-            if (_productRepository != null) await _productRepository.DisposeAsync();
-            if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
-        }
-
-        #endregion
+            return await _productRepository.GetQuery().AsQueryable()
+                .Where(x => !x.IsDelete)
+                .Include(x=>x.ProductSelectedCategories)
+                .Select(x => new ReadProductDto
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    CountArray = x.CountArray,
+                    DefaultPrice = x.DefaultPrice,
+                    ExrernalLink = x.ExrernalLink,
+                    InternalLink = x.InternalLink,
+                    Keywords = x.Keywords,
+                    MetaDescription = x.MetaDescription,
+                    PictureAlt = x.PictureAlt,
+                    PictureTitle = x.PictureTitle,
+                    PictureName = x.PictureName,
+                    IsActive = x.IsActive,
+                    SeoTitle = x.SeoTitle,
+                    ShortDescription = x.ShortDescription,
+                    Size = x.Size,
+                    OriginAddress = PathExtension.ProductOrigin,
+                    ThumbAddress = PathExtension.ProductThumb,
+                    CategoriesId = x.ProductSelectedCategories.Select(z=>z.ProductCategoryId).ToList(),
+                    StateForCount = x.StateForCount
+        }).ToListAsync();
     }
+
+    #endregion
+
+    #region dipose
+    public async ValueTask DisposeAsync()
+    {
+        if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
+        if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
+        if (_productRepository != null) await _productRepository.DisposeAsync();
+        if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
+    }
+
+    #endregion
+}
 }

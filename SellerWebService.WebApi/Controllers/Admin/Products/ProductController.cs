@@ -17,6 +17,12 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
             _productService = productService;
         }
 
+        [HttpGet("get-all-product")]
+        public async Task<IEnumerable<ReadProductDto>> GetAllProducts()
+        {
+            return await _productService.GetAllProduct();
+        }
+
         [HttpPost("create-product")]
         public async Task<ActionResult<OperationResponse>> CreateProduct([FromForm] CreateProductDto product)
         {

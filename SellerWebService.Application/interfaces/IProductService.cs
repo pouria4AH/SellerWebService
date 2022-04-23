@@ -11,10 +11,6 @@ namespace SellerWebService.Application.interfaces
         Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory);
         #endregion
 
-        //#region Count of product
-        //Task CreateCount(long productId, IEnumerable<CreateCountDto> counts);
-        //#endregion
-
         #region selected category
         Task AddSelectedCategory(long productId, List<long> selectedCategoryId);
         Task RemoveSelectedCategory(long productId);
@@ -34,6 +30,7 @@ namespace SellerWebService.Application.interfaces
         #region product
 
         Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product);
+        Task<List<ReadProductDto>> GetAllProduct();
 
         #endregion
     }
