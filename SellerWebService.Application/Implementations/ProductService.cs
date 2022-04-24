@@ -438,6 +438,23 @@ namespace SellerWebService.Application.Implementations
 
         }
 
+        public async Task<bool> ChangeProductActiveState(long id)
+        {
+            try
+            {
+                var product = await _productRepository.GetEntityById(id);
+                if (product == null) return false;
+                product.IsActive = !product.IsActive;
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         #endregion
         #region dipose
 

@@ -87,6 +87,16 @@ namespace SellerWebService.WebApi.Controllers.Admin.Products
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                 "مشکلی پیش امد دوباره تلاش کنید", null));
         }
+
+        [HttpPatch("change-active-state-for-product-by-{id}")]
+        public async Task<ActionResult<OperationResponse>> ChangeActiveState(long id)
+        {
+            var res = await _productService.ChangeProductActiveState(id);
+            if (!res)
+                return (OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                    "مشکلی پیش امده است دوباره سعی کنید", null));
+            return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, "عملیات موفق امیز بود", null));
+        }
     }
 
 }
