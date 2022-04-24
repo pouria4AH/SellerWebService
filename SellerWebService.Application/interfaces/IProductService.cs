@@ -32,8 +32,13 @@ namespace SellerWebService.Application.interfaces
         Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product);
         Task<List<ReadProductDto>> GetAllProduct();
         Task<ReadProductDto> GetProductById(long id);
-        Task<CreateOurEditProductResult> EditProduct(EditProductDto product); 
+        Task<CreateOurEditProductResult> EditProduct(EditProductDto product);
         Task<bool> ChangeProductActiveState(long id);
+
+        #endregion
+
+        #region product feature
+        //Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature);
 
         #endregion
     }

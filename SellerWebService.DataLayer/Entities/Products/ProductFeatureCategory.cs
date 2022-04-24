@@ -15,8 +15,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         #endregion
 
         #region relations
-
-        public ICollection<ProductFeature> ProductFeatures { get; set; }
+        public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         #endregion
 
     }

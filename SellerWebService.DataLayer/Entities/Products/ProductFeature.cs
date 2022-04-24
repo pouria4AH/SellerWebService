@@ -5,8 +5,8 @@ namespace SellerWebService.DataLayer.Entities.Products
     public class ProductFeature : BaseEntity
     {
         #region props
-        public long ProductFeatureCategoryId { get; set; }
-        public long ProductId { get; set; }
+        public long GroupForProductFeatureId { get; set; }
+        //public long ProductId { get; set; }
         [Display(Name = "نام ویژگی")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -25,8 +25,8 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         #region relations
 
-        public ProductFeatureCategory ProductFeatureCategory { get; set; }
-        public Product Product { get; set; }
+        public GroupForProductFeature GroupForProductFeature { get; set; }
+        //public Product Product { get; set; }
         #endregion
     }
 }

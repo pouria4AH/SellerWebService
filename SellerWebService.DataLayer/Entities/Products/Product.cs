@@ -17,7 +17,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         public string SeoTitle { get; set; }
 
         [Display(Name = "قیمت پیش فرض")]
-        [Range(0,long.MaxValue)]
+        [Range(0, long.MaxValue)]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long DefaultPrice { get; set; }
 
@@ -74,7 +74,8 @@ namespace SellerWebService.DataLayer.Entities.Products
         #region relations
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        public ICollection<ProductFeature> ProductFeatures { get; set; }
+        //public ICollection<ProductFeature> ProductFeatures { get; set; }
+        public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         //public ICollection<CountOfProduct> CountOfProducts { get; set; }
         #endregion
 
