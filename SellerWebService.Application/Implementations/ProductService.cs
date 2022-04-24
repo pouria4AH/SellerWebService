@@ -1,13 +1,10 @@
-﻿using System.Xml;
-using _0_framework.Extensions;
+﻿using _0_framework.Extensions;
 using _0_framework.Utils;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
-using SellerWebService.DataLayer.DTOs;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Repository;
-using SixLabors.ImageSharp.ColorSpaces;
 
 namespace SellerWebService.Application.Implementations
 {
@@ -468,7 +465,7 @@ namespace SellerWebService.Application.Implementations
 
         #region product feature
 
-        public async Task<CreateGroupProductFeatureResult> CrateGroupOfProductFeature(
+        public async Task<CreateGroupProductFeatureResult> CreateGroupOfProductFeature(
             CreateGroupProductFeatureDto groupProductFeature)
         {
             try
@@ -487,6 +484,8 @@ namespace SellerWebService.Application.Implementations
                     ProductFeatureCategoryId = groupProductFeature.ProductFeatureCategoryId,
                     Order = groupProductFeature.Order
                 };
+                var orderCheck = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x => x.ProductId == groupProductFeature.ProductId && x.Order == groupProductFeature.Order && !x.IsDelete);
+                if(orderCheck) return CreateGroupProductFeatureResult.IsExisted;
                 await _groupForProductFeatureRepository.AddEntity(newGroup);
                 await _groupForProductFeatureRepository.SaveChanges();
                 return CreateGroupProductFeatureResult.Success;
@@ -512,6 +511,26 @@ namespace SellerWebService.Application.Implementations
             {
                 return false;
             }
+        }
+
+        public async Task<List<ReadGroupProductFeatureDto>> GetGroupsForProduct(long productId)
+        {
+            return await _groupForProductFeatureRepository.GetQuery().Include(x => x.ProductFeatures).AsQueryable()
+                 .Where(x => x.ProductId == productId)
+                 .Select(x => new ReadGroupProductFeatureDto
+                 {
+                     Id = x.Id,
+                     Order = x.Order,
+                     ProductFeatureCategoryId = x.ProductFeatureCategoryId,
+                     ProductId = x.ProductId,
+                     ProductFeatures = x.ProductFeatures.Where(x => !x.IsDelete).Select(x => new EditProductFeatureDto
+                     {
+                         Id = x.Id,
+                         Description = x.Description,
+                         ExtraPrice = x.ExtraPrice,
+                         Name = x.Name
+                     }).ToList()
+                 }).ToListAsync();
         }
 
         public async Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature)

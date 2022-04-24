@@ -1,4 +1,4 @@
-﻿namespace SellerWebService.DataLayer.DTOs
+﻿namespace SellerWebService.DataLayer.DTOs.Products
 {
     public class CreateGroupProductFeatureDto
     {
@@ -14,6 +14,6 @@
         Error,
         Success,
         IsExisted,
-        NotFound
+        OrderExisted
     }
 }

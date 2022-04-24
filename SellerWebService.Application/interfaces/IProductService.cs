@@ -39,9 +39,10 @@ namespace SellerWebService.Application.interfaces
         #endregion
 
         #region product feature
-        Task<CreateGroupProductFeatureResult> CrateGroupOfProductFeature(
+        Task<CreateGroupProductFeatureResult> CreateGroupOfProductFeature(
             CreateGroupProductFeatureDto groupProductFeature);
         Task<bool> DeleteGroup(long groupId);
+        Task<List<ReadGroupProductFeatureDto>> GetGroupsForProduct(long productId);
         Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature);
         Task<CreateOrEditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature);
 
