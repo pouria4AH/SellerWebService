@@ -2,6 +2,7 @@
 using _0_framework.Utils;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
+using SellerWebService.DataLayer.DTOs;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Repository;
@@ -17,6 +18,7 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
+        
 
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
@@ -459,10 +461,13 @@ namespace SellerWebService.Application.Implementations
         #endregion
 
         #region product feature
-        //public async Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature)
-        //{
 
-        //}
+        public async Task<CreateOurEditGroupProductFeatureResult> CrateGroupOfProductFeature(
+            CreateGroupProductFeatureDto groupProductFeature)
+        {
+            //var checkExiskted= 
+            return CreateOurEditGroupProductFeatureResult.Success;
+        }
 
         #endregion
         #region dipose

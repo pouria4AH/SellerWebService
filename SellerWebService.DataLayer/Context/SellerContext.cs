@@ -15,10 +15,11 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public DbSet<ProductFeatureCategory> ProductFeatureCategories { get; set; }
         public DbSet<ProductFeature> ProductFeatures { get; set; }
+        public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }
         //public DbSet<CountOfProduct> CountOfProducts { get; set; }
         #endregion
 
-     
+
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

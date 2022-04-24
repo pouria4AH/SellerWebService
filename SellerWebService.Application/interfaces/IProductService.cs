@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SellerWebService.DataLayer.DTOs;
 using SellerWebService.DataLayer.DTOs.Products;
 
 namespace SellerWebService.Application.interfaces
@@ -39,7 +40,8 @@ namespace SellerWebService.Application.interfaces
 
         #region product feature
         //Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature);
-
+        Task<CreateOurEditGroupProductFeatureResult> CrateGroupOfProductFeature(
+            CreateGroupProductFeatureDto groupProductFeature);
         #endregion
     }
 }

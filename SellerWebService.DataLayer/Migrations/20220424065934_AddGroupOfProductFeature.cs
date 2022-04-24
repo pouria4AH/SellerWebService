@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SellerWebService.DataLayer.Migrations
 {
-    public partial class AddGropeForProductFeature : Migration
+    public partial class AddGroupOfProductFeature : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,7 +36,25 @@ namespace SellerWebService.DataLayer.Migrations
                 newName: "IX_ProductFeatures_GroupForProductFeatureId");
 
             migrationBuilder.CreateTable(
-                name: "GroupForProductFeature",
+                name: "CountOfProducts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Count = table.Column<long>(type: "bigint", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CountOfProducts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupForProductFeatures",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -50,15 +68,15 @@ namespace SellerWebService.DataLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupForProductFeature", x => x.Id);
+                    table.PrimaryKey("PK_GroupForProductFeatures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GroupForProductFeature_ProductFeatureCategories_ProductFeatureCategoryId",
+                        name: "FK_GroupForProductFeatures_ProductFeatureCategories_ProductFeatureCategoryId",
                         column: x => x.ProductFeatureCategoryId,
                         principalTable: "ProductFeatureCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroupForProductFeature_Products_ProductId",
+                        name: "FK_GroupForProductFeatures_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -66,20 +84,20 @@ namespace SellerWebService.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupForProductFeature_ProductFeatureCategoryId",
-                table: "GroupForProductFeature",
+                name: "IX_GroupForProductFeatures_ProductFeatureCategoryId",
+                table: "GroupForProductFeatures",
                 column: "ProductFeatureCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupForProductFeature_ProductId",
-                table: "GroupForProductFeature",
+                name: "IX_GroupForProductFeatures_ProductId",
+                table: "GroupForProductFeatures",
                 column: "ProductId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ProductFeatures_GroupForProductFeature_GroupForProductFeatureId",
+                name: "FK_ProductFeatures_GroupForProductFeatures_GroupForProductFeatureId",
                 table: "ProductFeatures",
                 column: "GroupForProductFeatureId",
-                principalTable: "GroupForProductFeature",
+                principalTable: "GroupForProductFeatures",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -87,11 +105,14 @@ namespace SellerWebService.DataLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ProductFeatures_GroupForProductFeature_GroupForProductFeatureId",
+                name: "FK_ProductFeatures_GroupForProductFeatures_GroupForProductFeatureId",
                 table: "ProductFeatures");
 
             migrationBuilder.DropTable(
-                name: "GroupForProductFeature");
+                name: "CountOfProducts");
+
+            migrationBuilder.DropTable(
+                name: "GroupForProductFeatures");
 
             migrationBuilder.RenameColumn(
                 name: "GroupForProductFeatureId",

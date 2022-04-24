@@ -12,8 +12,8 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    [Migration("20220424063527_AddGropeForProductFeature")]
-    partial class AddGropeForProductFeature
+    [Migration("20220424065934_AddGroupOfProductFeature")]
+    partial class AddGroupOfProductFeature
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,38 @@ namespace SellerWebService.DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.CountOfProduct", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("Count")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CountOfProducts");
+                });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", b =>
                 {
@@ -56,7 +88,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("GroupForProductFeature");
+                    b.ToTable("GroupForProductFeatures");
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.Product", b =>
