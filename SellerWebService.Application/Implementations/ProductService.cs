@@ -1,4 +1,5 @@
-﻿using _0_framework.Extensions;
+﻿using System.Xml;
+using _0_framework.Extensions;
 using _0_framework.Utils;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
@@ -18,17 +19,20 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
-        
+        private readonly IGenericRepository<GroupForProductFeature> _groupForProductFeatureRepository;
+
 
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
             IGenericRepository<Product> productRepository,
-            IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository)
+            IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository,
+            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
             _productSelectedCategoryRepository = productSelectedCategoryRepository;
+            _groupForProductFeatureRepository = groupForProductFeatureRepository;
         }
 
         #endregion
@@ -465,8 +469,47 @@ namespace SellerWebService.Application.Implementations
         public async Task<CreateOurEditGroupProductFeatureResult> CrateGroupOfProductFeature(
             CreateGroupProductFeatureDto groupProductFeature)
         {
-            //var checkExiskted= 
-            return CreateOurEditGroupProductFeatureResult.Success;
+            try
+            {
+                var checkExiskted = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x =>
+                    groupProductFeature.ProductId == x.ProductId &&
+                    x.ProductFeatureCategoryId == groupProductFeature.ProductFeatureCategoryId && !x.IsDelete);
+                if (checkExiskted) return CreateOurEditGroupProductFeatureResult.IsExisted;
+                var product = await _productRepository.GetEntityById(groupProductFeature.ProductId);
+                var category =
+                    await _productFeatureCategoryRepository.GetEntityById(groupProductFeature.ProductFeatureCategoryId);
+                if (category == null || product == null) return CreateOurEditGroupProductFeatureResult.NotFound;
+                var newGroup = new GroupForProductFeature
+                {
+                    ProductId = groupProductFeature.ProductId,
+                    ProductFeatureCategoryId = groupProductFeature.ProductFeatureCategoryId,
+                    Order = groupProductFeature.Order
+                };
+                await _groupForProductFeatureRepository.AddEntity(newGroup);
+                await _groupForProductFeatureRepository.SaveChanges();
+                return CreateOurEditGroupProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOurEditGroupProductFeatureResult.Error;
+            }
+        }
+
+        public async Task<bool> DeleteGroup(long groupId)
+        {
+            try
+            {
+                var group = await _groupForProductFeatureRepository.GetEntityById(groupId);
+                if (group == null) return false;
+                group.IsDelete = true;
+                _groupForProductFeatureRepository.EditEntity(group);
+                await _groupForProductFeatureRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         #endregion
@@ -478,6 +521,7 @@ namespace SellerWebService.Application.Implementations
             if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
             if (_productRepository != null) await _productRepository.DisposeAsync();
             if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
+            if (_groupForProductFeatureRepository != null) await _groupForProductFeatureRepository.DisposeAsync();
         }
 
         #endregion
