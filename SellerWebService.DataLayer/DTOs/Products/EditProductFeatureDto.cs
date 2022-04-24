@@ -1,8 +1,8 @@
 ﻿namespace SellerWebService.DataLayer.DTOs.Products
 {
-    public class CreateProductFeatureDto
+    public class EditProductFeatureDto 
     {
-        public long GroupForProductFeatureId { get; set; }
+        public long Id { get; set; }
         [Display(Name = "نام ویژگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Name { get; set; }
@@ -15,12 +15,5 @@
         [Range(0, long.MaxValue)]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long ExtraPrice { get; set; }
-    }
-
-    public enum CreateOrEditProductFeatureResult
-    {
-        Error,
-        Success,
-        NotFound,
     }
 }

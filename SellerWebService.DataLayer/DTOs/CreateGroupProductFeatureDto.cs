@@ -9,7 +9,7 @@
         public int Order { get; set; }
     }
 
-    public enum CreateOurEditGroupProductFeatureResult
+    public enum CreateGroupProductFeatureResult
     {
         Error,
         Success,

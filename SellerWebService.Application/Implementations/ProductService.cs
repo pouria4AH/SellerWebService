@@ -20,19 +20,21 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
         private readonly IGenericRepository<GroupForProductFeature> _groupForProductFeatureRepository;
+        private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
 
 
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
             IGenericRepository<Product> productRepository,
             IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository,
-            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository)
+            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository, IGenericRepository<ProductFeature> productFeatureRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
             _productSelectedCategoryRepository = productSelectedCategoryRepository;
             _groupForProductFeatureRepository = groupForProductFeatureRepository;
+            _productFeatureRepository = productFeatureRepository;
         }
 
         #endregion
@@ -466,7 +468,7 @@ namespace SellerWebService.Application.Implementations
 
         #region product feature
 
-        public async Task<CreateOurEditGroupProductFeatureResult> CrateGroupOfProductFeature(
+        public async Task<CreateGroupProductFeatureResult> CrateGroupOfProductFeature(
             CreateGroupProductFeatureDto groupProductFeature)
         {
             try
@@ -474,11 +476,11 @@ namespace SellerWebService.Application.Implementations
                 var checkExiskted = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x =>
                     groupProductFeature.ProductId == x.ProductId &&
                     x.ProductFeatureCategoryId == groupProductFeature.ProductFeatureCategoryId && !x.IsDelete);
-                if (checkExiskted) return CreateOurEditGroupProductFeatureResult.IsExisted;
-                var product = await _productRepository.GetEntityById(groupProductFeature.ProductId);
-                var category =
-                    await _productFeatureCategoryRepository.GetEntityById(groupProductFeature.ProductFeatureCategoryId);
-                if (category == null || product == null) return CreateOurEditGroupProductFeatureResult.NotFound;
+                if (checkExiskted) return CreateGroupProductFeatureResult.IsExisted;
+                //var product = await _productRepository.GetEntityById(groupProductFeature.ProductId);
+                //var category =
+                //    await _productFeatureCategoryRepository.GetEntityById(groupProductFeature.ProductFeatureCategoryId);
+                //if (category == null || product == null) return CreateGroupProductFeatureResult.NotFound;
                 var newGroup = new GroupForProductFeature
                 {
                     ProductId = groupProductFeature.ProductId,
@@ -487,11 +489,11 @@ namespace SellerWebService.Application.Implementations
                 };
                 await _groupForProductFeatureRepository.AddEntity(newGroup);
                 await _groupForProductFeatureRepository.SaveChanges();
-                return CreateOurEditGroupProductFeatureResult.Success;
+                return CreateGroupProductFeatureResult.Success;
             }
             catch (Exception e)
             {
-                return CreateOurEditGroupProductFeatureResult.Error;
+                return CreateGroupProductFeatureResult.Error;
             }
         }
 
@@ -509,6 +511,46 @@ namespace SellerWebService.Application.Implementations
             catch (Exception e)
             {
                 return false;
+            }
+        }
+
+        public async Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature)
+        {
+            try
+            {
+                var newFeature = new ProductFeature
+                {
+                    Name = feature.Name,
+                    Description = feature.Description,
+                    ExtraPrice = feature.ExtraPrice,
+                    GroupForProductFeatureId = feature.GroupForProductFeatureId
+                };
+                await _productFeatureRepository.AddEntity(newFeature);
+                await _productFeatureRepository.SaveChanges();
+                return CreateOrEditProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOrEditProductFeatureResult.Error;
+            }
+        }
+
+        public async Task<CreateOrEditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature)
+        {
+            try
+            {
+                var productFeature = await _productFeatureRepository.GetEntityById(feature.Id);
+                if (productFeature == null) return CreateOrEditProductFeatureResult.NotFound;
+                productFeature.Name = feature.Name;
+                productFeature.Description = feature.Description;
+                productFeature.ExtraPrice = feature.ExtraPrice;
+                _productFeatureRepository.EditEntity(productFeature);
+                await _productFeatureRepository.SaveChanges();
+                return CreateOrEditProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOrEditProductFeatureResult.Error;
             }
         }
 
