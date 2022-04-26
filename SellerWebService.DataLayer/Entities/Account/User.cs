@@ -48,7 +48,8 @@ namespace SellerWebService.DataLayer.Entities.Account
         public bool IsBlocked { get; set; }
 
         [Display(Name = "دسترسی")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")] 
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Role { get; set; }
 
         public Guid UniqueCode { get; set; }

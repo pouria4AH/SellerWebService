@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.DataLayer.Context
@@ -16,7 +17,7 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<ProductFeatureCategory> ProductFeatureCategories { get; set; }
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }
-        //public DbSet<CountOfProduct> CountOfProducts { get; set; }
+        public DbSet<User> Users { get; set; }        
         #endregion
 
 
