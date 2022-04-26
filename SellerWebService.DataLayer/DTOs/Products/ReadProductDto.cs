@@ -18,6 +18,9 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Display(Name = "سایز پیش فرض")]
         public string? Size { get; set; }
 
+        [Display(Name = "پرداخت اولیه")]
+        public double Prepayment { get; set; }
+
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 

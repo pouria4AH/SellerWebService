@@ -297,6 +297,7 @@ namespace SellerWebService.Application.Implementations
                     PictureName = imageName,
                     IsActive = product.IsActive,
                     StateForCount = product.StateForCount,
+                    Prepayment = product.Prepayment
                 };
                 if (product.Size != null) newProduct.Size = product.Size;
 
@@ -349,7 +350,8 @@ namespace SellerWebService.Application.Implementations
                     OriginAddress = PathExtension.ProductOrigin,
                     ThumbAddress = PathExtension.ProductThumb,
                     CategoriesId = x.ProductSelectedCategories.Select(z => z.ProductCategoryId).ToList(),
-                    StateForCount = x.StateForCount
+                    StateForCount = x.StateForCount,
+                    Prepayment = x.Prepayment
                 }).ToListAsync();
         }
 
@@ -379,7 +381,8 @@ namespace SellerWebService.Application.Implementations
                 ThumbAddress = PathExtension.ProductThumb,
                 CategoriesId = await _productSelectedCategoryRepository.GetQuery().AsQueryable()
                     .Where(x => x.ProductId == id).Select(x => x.ProductCategoryId).ToListAsync(),
-                StateForCount = product.StateForCount
+                StateForCount = product.StateForCount,
+                Prepayment = product.Prepayment
             };
         }
 
@@ -423,6 +426,7 @@ namespace SellerWebService.Application.Implementations
             mainProduct.Name = product.Name;
             mainProduct.PictureAlt = product.PictureAlt;
             mainProduct.PictureTitle = product.PictureTitle;
+            mainProduct.Prepayment = product.Prepayment;
 
             await RemoveSelectedCategory(product.Id);
             await AddSelectedCategory(product.Id, product.selectedCategories);
