@@ -1,6 +1,6 @@
 ﻿using _0_framework.Entities;
 
-namespace SellerWebService.DataLayer.Entities.User
+namespace SellerWebService.DataLayer.Entities.Account
 {
     public class User : BaseEntity
     {

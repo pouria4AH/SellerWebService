@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using SellerWebService.DataLayer.Entities.User;
+using SellerWebService.DataLayer.Entities.Account;
 
 namespace SellerWebService.WebApi.Account
 {
