@@ -23,4 +23,8 @@
     <ProjectReference Include="..\0-framework\0-framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\User\" />
+  </ItemGroup>
+
 </Project>
