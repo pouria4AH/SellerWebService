@@ -15,6 +15,7 @@
             };
         }
     }
+
     public enum OperationResponseStatusType
     {
         Success,

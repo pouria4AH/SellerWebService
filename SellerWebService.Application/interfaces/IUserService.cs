@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SellerWebService.DataLayer.DTOs.Account;
+using SellerWebService.DataLayer.Entities.Account;
 
 namespace SellerWebService.Application.interfaces
 {
-    public interface IUserService
+    public interface IUserService : IAsyncDisposable
     {
+        Task<RegisterUserResult> RegisterUser(RegisterUserDTO register, string role);
+        Task<bool> IsUserExistsByMobileNumber(string mobile);
     }
 }
