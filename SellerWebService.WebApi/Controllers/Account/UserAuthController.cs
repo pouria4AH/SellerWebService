@@ -1,4 +1,5 @@
 ﻿using _0_framework.Entities;
+using _0_framework.Messages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,10 @@ namespace SellerWebService.WebApi.Controllers.Account
                 {
                     case RegisterUserResult.Error:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                            "مشکلی پیش امده است", null));
+                            ApplicationMessages.Error, null));
                     case RegisterUserResult.Success:
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                            "عملیات موفق امیز بود", new
+                            ApplicationMessages.Success, new
                             {
                                 mobile = register.Mobile,
                                 firstName = register.FirstName,
@@ -43,11 +44,11 @@ namespace SellerWebService.WebApi.Controllers.Account
                             }));
                     case RegisterUserResult.MobileExists:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
-                            "شماره مورد نظر از قبل وجود دارد", null));
+                            ApplicationMessages.MobileExists, null));
                 }
             }
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                "مشکلی پیش امده است", null));
+                ApplicationMessages.Error, null));
         }
 
         [HttpPost("active-mobile")]
@@ -59,19 +60,20 @@ namespace SellerWebService.WebApi.Controllers.Account
                 switch (res)
                 {
                     case ActiveMobileState.ExpiredCode:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning, "تاریخ کد شما گذشته است", null));
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
+                            ApplicationMessages.ActiveCodeIsExpired, null));
                     case ActiveMobileState.MobileIsActiveAlready:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info,
-                            "این شماره در حال حاضر فعال است", null));
+                            ApplicationMessages.MobileIsActive, null));
                     case ActiveMobileState.UserNotFound:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                            "کاربر مورد نظر پیدا نشد", null));
+                            ApplicationMessages.UserNotFound, null));
                     case ActiveMobileState.CodeIsWrong:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                            "کد اشتباه است", null));
+                            ApplicationMessages.ActiveCodeIsWrong, null));
                     case ActiveMobileState.Success:
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                            "موبایل شما فعال شد", null));
+                            ApplicationMessages.MobileIsActivated, null));
                 }
             }
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
@@ -89,30 +91,30 @@ namespace SellerWebService.WebApi.Controllers.Account
                 {
                     case LoginUserResult.NotActivated:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
-                            "اکانت شما فعال نیست", new
+                            ApplicationMessages.UserNotActive, new
                             {
                                 IsActive = false,
                                 mobile = login.Mobile
                             }));
                     case LoginUserResult.NotFound:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                            "کاربر مورد نظر یافت نشد", null));
+                            ApplicationMessages.UserNotFound, null));
                     case LoginUserResult.Success:
                         var user = await _userService.GetUserByMobile(login.Mobile);
                         var token = user.GenerateJwtToken(_configuration);
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                            "عمیات با موقیت انجام شد", new
+                            ApplicationMessages.Success, new
                             {
                                 mobile = user.Mobile,
                                 token = token
                             }));
                 }
             }
-            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.ModelIsNotValid, null));
         }
 
         [HttpPost("recover-user-password")]
-        public async Task<ActionResult<OperationResponse>> RecoverUserPassword([FromBody]ForgotPassUserDTO forgot)
+        public async Task<ActionResult<OperationResponse>> RecoverUserPassword([FromBody] ForgotPassUserDTO forgot)
         {
             if (ModelState.IsValid)
             {
@@ -121,15 +123,14 @@ namespace SellerWebService.WebApi.Controllers.Account
                 {
                     case ForgotPassUserResult.NotFound:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                            "مشکلی پیش امده است", null));
+                            ApplicationMessages.MobileNotFound, null));
                     case ForgotPassUserResult.Success:
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                            "عمیات با موقیت انجام شد", null));
+                            ApplicationMessages.Success, null));
                 }
-
             }
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                "مشکلی پیش امده است", null));
+                ApplicationMessages.Error, null));
         }
 
     }
