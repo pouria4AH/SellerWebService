@@ -22,10 +22,11 @@ namespace SellerWebService.WebApi.Extensions
                 new Claim(ClaimTypes.NameIdentifier, user.UniqueCode.ToString("N"))
             };
 
-            var token = new JwtSecurityToken(configuration.GetSection("AppSettings:Issuer").Value,
+            var token = new JwtSecurityToken(
+                configuration.GetSection("AppSettings:Issuer").Value,
                 configuration.GetSection("AppSettings:Audience").Value,
-                claims,
-                expires: DateTime.Now.AddMinutes(45),
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

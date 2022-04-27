@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using _0_framework.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
@@ -81,7 +82,7 @@ namespace SellerWebService.WebApi.Controllers.Account
         [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> Login([FromBody] LoginUserDTO login)
         {
-            if(HttpContext.User.Identity.IsAuthenticated) return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info, "شما لاگین هستید", null));
+            if(HttpContext.User.Identity.IsAuthenticated ) return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info, "شما لاگین هستید", null));
 
             if (ModelState.IsValid)
             {
@@ -114,10 +115,11 @@ namespace SellerWebService.WebApi.Controllers.Account
 
         [HttpGet]
         [Authorize]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
-            
-            return Ok("jbjbh");
+            var user = await _userService.GetUserByMobile("09199900839");
+            if (user.UniqueCode == User.GetUserUniqueCode()) return Ok(user.UniqueCode);
+            return BadRequest();
         }
     }
 }
