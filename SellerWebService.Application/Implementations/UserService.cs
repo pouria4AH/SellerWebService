@@ -84,6 +84,20 @@ namespace SellerWebService.Application.Implementations
             return ActiveMobileState.UserNotFound;
         }
 
+        public async Task<LoginUserResult> GetUserForLogin(LoginUserDTO login)
+        {
+            var user = await _userRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Mobile == login.Mobile);
+            if (user == null) return LoginUserResult.NotFound;
+            if (!user.IsMobileActive) return LoginUserResult.NotActivated;
+            if (user.Password != _passwordHelper.EncodePasswordMd5(login.Password)) return LoginUserResult.NotFound;
+            return LoginUserResult.Success;
+        }
+        public async Task<User> GetUserByMobile(string mobile)
+        {
+            return await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.Mobile == mobile);
+        }
+
         private async Task<bool> SendActiveCode(string code)
         {
             Console.WriteLine(code);

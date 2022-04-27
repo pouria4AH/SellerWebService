@@ -1,23 +1,26 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Account;
+using SellerWebService.WebApi.Extensions;
 
 namespace SellerWebService.WebApi.Controllers.Account
 {
     [Route("api/Account/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
+        private readonly IConfiguration _configuration;
+        public UserController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
+            _configuration = configuration;
         }
 
         [HttpPost("register-user")]
+        [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> Register([FromBody] RegisterUserDTO register)
         {
             if (ModelState.IsValid)
@@ -47,6 +50,7 @@ namespace SellerWebService.WebApi.Controllers.Account
         }
 
         [HttpPost("active-mobile")]
+        [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> ActiveMobile([FromBody] ActivateMobileDTO activate)
         {
             if (ModelState.IsValid)
@@ -73,5 +77,47 @@ namespace SellerWebService.WebApi.Controllers.Account
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
         }
 
+        [HttpPost("login-user")]
+        [AllowAnonymous]
+        public async Task<ActionResult<OperationResponse>> Login([FromBody] LoginUserDTO login)
+        {
+            if(HttpContext.User.Identity.IsAuthenticated) return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info, "شما لاگین هستید", null));
+
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.GetUserForLogin(login);
+                switch (res)
+                {
+                    case LoginUserResult.NotActivated:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
+                            "اکانت شما فعال نیست", new
+                            {
+                                IsActive = false,
+                                mobile= login.Mobile
+                            }));
+                    case LoginUserResult.NotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "کاربر مورد نظر یافت نشد", null));
+                    case LoginUserResult.Success:
+                        var user = await _userService.GetUserByMobile(login.Mobile);
+                        var token = user.GenerateJwtToken(_configuration);
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            "عمیات با موقیت انجام شد", new
+                            {
+                                mobile = user.Mobile,
+                                token = token
+                            }));
+                }
+            }
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Test()
+        {
+            
+            return Ok("jbjbh");
+        }
     }
 }
