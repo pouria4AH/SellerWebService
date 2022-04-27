@@ -10,5 +10,6 @@ namespace SellerWebService.Application.interfaces
         Task<ActiveMobileState> ActiveMobile(ActivateMobileDTO activate);
         Task<LoginUserResult> GetUserForLogin(LoginUserDTO login);
         Task<User> GetUserByMobile(string mobile);
+        Task<ForgotPassUserResult> RecoverUserPassword(ForgotPassUserDTO forgot);
     }
 }

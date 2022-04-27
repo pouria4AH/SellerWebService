@@ -10,18 +10,18 @@ namespace SellerWebService.WebApi.Controllers.Account
 {
     [Route("api/Account/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    [AllowAnonymous]
+    public class UserAuthController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
-        public UserController(IUserService userService, IConfiguration configuration)
+        public UserAuthController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
             _configuration = configuration;
         }
 
         [HttpPost("register-user")]
-        [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> Register([FromBody] RegisterUserDTO register)
         {
             if (ModelState.IsValid)
@@ -51,7 +51,6 @@ namespace SellerWebService.WebApi.Controllers.Account
         }
 
         [HttpPost("active-mobile")]
-        [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> ActiveMobile([FromBody] ActivateMobileDTO activate)
         {
             if (ModelState.IsValid)
@@ -60,7 +59,7 @@ namespace SellerWebService.WebApi.Controllers.Account
                 switch (res)
                 {
                     case ActiveMobileState.ExpiredCode:
-                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,"تاریخ کد شما گذشته است",null));
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning, "تاریخ کد شما گذشته است", null));
                     case ActiveMobileState.MobileIsActiveAlready:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info,
                             "این شماره در حال حاضر فعال است", null));
@@ -79,10 +78,9 @@ namespace SellerWebService.WebApi.Controllers.Account
         }
 
         [HttpPost("login-user")]
-        [AllowAnonymous]
         public async Task<ActionResult<OperationResponse>> Login([FromBody] LoginUserDTO login)
         {
-            if(HttpContext.User.Identity.IsAuthenticated ) return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info, "شما لاگین هستید", null));
+            if (HttpContext.User.Identity.IsAuthenticated) return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info, "شما لاگین هستید", null));
 
             if (ModelState.IsValid)
             {
@@ -94,7 +92,7 @@ namespace SellerWebService.WebApi.Controllers.Account
                             "اکانت شما فعال نیست", new
                             {
                                 IsActive = false,
-                                mobile= login.Mobile
+                                mobile = login.Mobile
                             }));
                     case LoginUserResult.NotFound:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
@@ -113,13 +111,26 @@ namespace SellerWebService.WebApi.Controllers.Account
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Test()
+        [HttpPost("recover-user-password")]
+        public async Task<ActionResult<OperationResponse>> RecoverUserPassword([FromBody]ForgotPassUserDTO forgot)
         {
-            var user = await _userService.GetUserByMobile("09199900839");
-            if (user.UniqueCode == User.GetUserUniqueCode()) return Ok(user.UniqueCode);
-            return BadRequest();
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.RecoverUserPassword(forgot);
+                switch (res)
+                {
+                    case ForgotPassUserResult.NotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "مشکلی پیش امده است", null));
+                    case ForgotPassUserResult.Success:
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            "عمیات با موقیت انجام شد", null));
+                }
+
+            }
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                "مشکلی پیش امده است", null));
         }
+
     }
 }

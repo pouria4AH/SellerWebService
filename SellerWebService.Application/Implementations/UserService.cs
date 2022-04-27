@@ -98,6 +98,27 @@ namespace SellerWebService.Application.Implementations
             return await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.Mobile == mobile);
         }
 
+        public async Task<ForgotPassUserResult> RecoverUserPassword(ForgotPassUserDTO forgot)
+        {
+            try
+            {
+                var user = await _userRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Mobile == forgot.Mobile);
+                if (user == null) return ForgotPassUserResult.NotFound;
+                var newPass = new Random().Next(100000, 999999).ToString();
+                user.Password = _passwordHelper.EncodePasswordMd5(newPass);
+                //todo : send password by sms
+                Console.WriteLine(newPass);
+                user.LastUpdateDate = DateTime.Now;
+                await _userRepository.SaveChanges();
+                return ForgotPassUserResult.Success;
+            }
+            catch (Exception e)
+            {
+                return ForgotPassUserResult.Error;
+            }
+        }
+
         private async Task<bool> SendActiveCode(string code)
         {
             Console.WriteLine(code);

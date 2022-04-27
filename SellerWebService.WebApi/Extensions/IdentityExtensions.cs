@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using SellerWebService.DataLayer.DTOs;
 
 namespace SellerWebService.WebApi.Extensions
 {
@@ -19,6 +20,23 @@ namespace SellerWebService.WebApi.Extensions
         {
             var user = (ClaimsPrincipal)principal;
             return user.GetUserUniqueCode();
+        }
+        public static UserClaimsStore GetCurrentUser(this ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal != null)
+            {
+                var userClaims = claimsPrincipal.Claims;
+
+                return new UserClaimsStore
+                {
+                    UniqueCode = Guid.Parse(claimsPrincipal.Claims.SingleOrDefault(s => s.Type == ClaimTypes.NameIdentifier)?.Value),
+                    Mobile = claimsPrincipal.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.MobilePhone)?.Value,
+                    FirstName = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
+                    Role = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.Role)?.Value
+                };
+            }
+            return null;
         }
     }
 }
