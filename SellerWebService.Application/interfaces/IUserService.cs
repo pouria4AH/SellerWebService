@@ -7,5 +7,6 @@ namespace SellerWebService.Application.interfaces
     {
         Task<RegisterUserResult> RegisterUser(RegisterUserDTO register, string role);
         Task<bool> IsUserExistsByMobileNumber(string mobile);
+        Task<ActiveMobileState> ActiveMobile(ActivateMobileDTO activate);
     }
 }

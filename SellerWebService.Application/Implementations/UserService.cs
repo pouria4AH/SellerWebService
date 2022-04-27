@@ -35,12 +35,11 @@ namespace SellerWebService.Application.Implementations
                         Role = role,
                         IsEmailActive = false,
                         IsMobileActive = false,
-                        UniqueCode = new Guid(),
+                        UniqueCode = Guid.NewGuid(),
                     };
                     await _userRepository.AddEntity(user);
                     await _userRepository.SaveChanges();
-                    // todo: send sms here
-                    Console.WriteLine(user.MobileActiveCode);
+                    await SendActiveCode(user.MobileActiveCode);
                     return RegisterUserResult.Success;
                 }
                 return RegisterUserResult.MobileExists;
@@ -51,18 +50,51 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-       
-
         public async Task<bool> IsUserExistsByMobileNumber(string mobile)
         {
             return await _userRepository.GetQuery().AsQueryable().AnyAsync(x => x.Mobile == mobile);
+        }
+
+        public async Task<ActiveMobileState> ActiveMobile(ActivateMobileDTO activate)
+        {
+            var user = await _userRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Mobile == activate.Mobile);
+            if (user != null)
+            {
+                if (user.IsMobileActive) return ActiveMobileState.MobileIsActiveAlready;
+                
+                if (user.MobileActiveCode == activate.MobileActiveCode)
+                {
+                    if (user.LastUpdateDate.AddMinutes(10) < DateTime.Now)
+                    {
+                        user.MobileActiveCode = new Random().Next(100000, 999999).ToString();
+                        await SendActiveCode(user.MobileActiveCode);
+                        user.LastUpdateDate = DateTime.Now;
+                        await _userRepository.SaveChanges();
+                        return ActiveMobileState.ExpiredCode;
+                    }
+                    user.IsMobileActive = true;
+                    user.MobileActiveCode = new Random().Next(100000, 999999).ToString();
+                    user.LastUpdateDate = DateTime.Now;
+                    await _userRepository.SaveChanges();
+                    return ActiveMobileState.Success;
+                }
+                return ActiveMobileState.CodeIsWrong;
+            }
+            return ActiveMobileState.UserNotFound;
+        }
+
+        private async Task<bool> SendActiveCode(string code)
+        {
+            Console.WriteLine(code);
+            return true;
         }
         #region dispose
 
 
         public async ValueTask DisposeAsync()
         {
-           if(_userRepository != null) await _userRepository.DisposeAsync();
+           /*if(_userRepository != null)*/ await _userRepository.DisposeAsync();
         }
 
         #endregion

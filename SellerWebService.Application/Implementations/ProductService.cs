@@ -582,11 +582,11 @@ namespace SellerWebService.Application.Implementations
 
         public async ValueTask DisposeAsync()
         {
-            if (_productFeatureCategoryRepository != null) await _productFeatureCategoryRepository.DisposeAsync();
-            if (_productCategoryRepository != null) await _productCategoryRepository.DisposeAsync();
-            if (_productRepository != null) await _productRepository.DisposeAsync();
-            if (_productSelectedCategoryRepository != null) await _productSelectedCategoryRepository.DisposeAsync();
-            if (_groupForProductFeatureRepository != null) await _groupForProductFeatureRepository.DisposeAsync();
+           /* if (_productFeatureCategoryRepository != null)*/ await _productFeatureCategoryRepository.DisposeAsync();
+           /* if (_productCategoryRepository != null)*/ await _productCategoryRepository.DisposeAsync();
+           /* if (_productRepository != null)*/ await _productRepository.DisposeAsync();
+           /* if (_productSelectedCategoryRepository != null)*/ await _productSelectedCategoryRepository.DisposeAsync();
+            /*if (_groupForProductFeatureRepository != null)*/ await _groupForProductFeatureRepository.DisposeAsync();
         }
 
         #endregion

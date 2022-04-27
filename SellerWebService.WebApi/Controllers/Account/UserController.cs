@@ -18,7 +18,7 @@ namespace SellerWebService.WebApi.Controllers.Account
         }
 
         [HttpPost("register-user")]
-        public async Task<ActionResult<OperationResponse>> Register([FromBody]RegisterUserDTO register)
+        public async Task<ActionResult<OperationResponse>> Register([FromBody] RegisterUserDTO register)
         {
             if (ModelState.IsValid)
             {
@@ -45,5 +45,33 @@ namespace SellerWebService.WebApi.Controllers.Account
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                 "مشکلی پیش امده است", null));
         }
+
+        [HttpPost("active-mobile")]
+        public async Task<ActionResult<OperationResponse>> ActiveMobile([FromBody] ActivateMobileDTO activate)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.ActiveMobile(activate);
+                switch (res)
+                {
+                    case ActiveMobileState.ExpiredCode:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,"تاریخ کد شما گذشته است",null));
+                    case ActiveMobileState.MobileIsActiveAlready:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Info,
+                            "این شماره در حال حاضر فعال است", null));
+                    case ActiveMobileState.UserNotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "کاربر مورد نظر پیدا نشد", null));
+                    case ActiveMobileState.CodeIsWrong:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            "کد اشتباه است", null));
+                    case ActiveMobileState.Success:
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            "موبایل شما فعال شد", null));
+                }
+            }
+            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
+        }
+
     }
 }
