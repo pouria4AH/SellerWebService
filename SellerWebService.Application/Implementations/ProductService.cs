@@ -598,7 +598,9 @@ namespace SellerWebService.Application.Implementations
             {
                 ProductId = productId,
                 ImageName = imageName,
-                DisplayPriority = createOurEdit.DisplayPriority
+                DisplayPriority = createOurEdit.DisplayPriority,
+                PictureAlt = createOurEdit.PictureAlt,
+                PictureTitle = createOurEdit.PictureTitle,
             });
             await _productGalleryRepository.SaveChanges();
             return CreateOurEditProductGalleryResult.Success;
@@ -612,7 +614,9 @@ namespace SellerWebService.Application.Implementations
             return new CreateOurEditProductGalleryDTO
             {
                 ImageName = gallery.ImageName,
-                DisplayPriority = gallery.DisplayPriority
+                DisplayPriority = gallery.DisplayPriority,
+                PictureTitle = gallery.PictureTitle,
+                PictureAlt = gallery.PictureAlt,
             };
         }
         public async Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId, CreateOurEditProductGalleryDTO gallery)
@@ -630,11 +634,12 @@ namespace SellerWebService.Application.Implementations
                 mainGallery.ImageName = imageName;
             }
             mainGallery.DisplayPriority = gallery.DisplayPriority;
+            mainGallery.PictureTitle = gallery.PictureTitle;
+            mainGallery.PictureAlt = gallery.PictureAlt;
             _productGalleryRepository.EditEntity(mainGallery);
             await _productGalleryRepository.SaveChanges();
             return CreateOurEditProductGalleryResult.Success;
         }
-
         #endregion
 
         #region dipose

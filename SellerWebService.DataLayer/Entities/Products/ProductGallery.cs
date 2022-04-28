@@ -20,6 +20,11 @@ namespace SellerWebService.DataLayer.Entities.Products
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ImageName { get; set; }
 
+        [Display(Name = "الت عکس")]
+        public string PictureAlt { get; set; }
+
+        [Display(Name = "عنوان عکس")]
+        public string PictureTitle { get; set; }
         #endregion
 
         #region realstion
