@@ -1,4 +1,4 @@
-﻿namespace SellerWebService.DataLayer.DTOs
+﻿namespace SellerWebService.DataLayer.DTOs.Identity
 {
     public class UserClaimsStore
     {

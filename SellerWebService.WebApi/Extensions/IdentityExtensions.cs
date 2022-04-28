@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
 using SellerWebService.DataLayer.DTOs;
+using SellerWebService.DataLayer.DTOs.Identity;
 
 namespace SellerWebService.WebApi.Extensions
 {

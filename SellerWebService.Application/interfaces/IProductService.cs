@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SellerWebService.DataLayer.DTOs;
 using SellerWebService.DataLayer.DTOs.Products;
+using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.Application.interfaces
 {
@@ -45,6 +46,17 @@ namespace SellerWebService.Application.interfaces
         Task<List<ReadGroupProductFeatureDto>> GetGroupsForProduct(long productId);
         Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature);
         Task<CreateOrEditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature);
+
+        #endregion
+
+        #region product gallery
+
+        Task<List<ProductGallery>> GetAllProductGallery(long id);
+        Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId);
+        Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit,
+            long productId);
+        Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId,
+            CreateOurEditProductGalleryDTO gallery);
 
         #endregion
     }

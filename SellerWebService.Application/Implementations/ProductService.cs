@@ -18,13 +18,13 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
         private readonly IGenericRepository<GroupForProductFeature> _groupForProductFeatureRepository;
         private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
-
+        private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
 
         public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
             IGenericRepository<ProductCategory> productCategoryRepository,
             IGenericRepository<Product> productRepository,
             IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository,
-            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository, IGenericRepository<ProductFeature> productFeatureRepository)
+            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository, IGenericRepository<ProductFeature> productFeatureRepository, IGenericRepository<ProductGallery> productGalleryRepository)
         {
             _productFeatureCategoryRepository = productFeatureCategoryRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -32,6 +32,7 @@ namespace SellerWebService.Application.Implementations
             _productSelectedCategoryRepository = productSelectedCategoryRepository;
             _groupForProductFeatureRepository = groupForProductFeatureRepository;
             _productFeatureRepository = productFeatureRepository;
+            _productGalleryRepository = productGalleryRepository;
         }
 
         #endregion
@@ -578,6 +579,64 @@ namespace SellerWebService.Application.Implementations
         }
 
         #endregion
+
+        #region product gallery
+        public async Task<List<ProductGallery>> GetAllProductGallery(long id)
+        {
+            return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == id).ToListAsync();
+        }
+        public async Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit, long productId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+            if (product == null) return CreateOurEditProductGalleryResult.ProductNotFound;
+            if (createOurEdit.Image == null || !createOurEdit.Image.IsImage()) return CreateOurEditProductGalleryResult.ImageIsNull;
+
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(createOurEdit.Image.FileName);
+            createOurEdit.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                PathExtension.ProductGalleryThumbServer);
+            await _productGalleryRepository.AddEntity(new ProductGallery
+            {
+                ProductId = productId,
+                ImageName = imageName,
+                DisplayPriority = createOurEdit.DisplayPriority
+            });
+            await _productGalleryRepository.SaveChanges();
+            return CreateOurEditProductGalleryResult.Success;
+        }
+        public async Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId)
+        {
+            var gallery = await _productGalleryRepository.GetQuery()
+                .Include(x => x.Product)
+                .SingleOrDefaultAsync(x => x.Id == galleryId);
+            if (gallery == null) return null;
+            return new CreateOurEditProductGalleryDTO
+            {
+                ImageName = gallery.ImageName,
+                DisplayPriority = gallery.DisplayPriority
+            };
+        }
+        public async Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId, CreateOurEditProductGalleryDTO gallery)
+        {
+            var mainGallery = await _productGalleryRepository.GetQuery()
+                .Include(x => x.Product)
+                .SingleOrDefaultAsync(x => x.Id == galleryId);
+            if (mainGallery == null) return CreateOurEditProductGalleryResult.ProductNotFound;
+            if (gallery.Image != null && gallery.Image.IsImage())
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(gallery.Image.FileName);
+                gallery.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                    PathExtension.ProductGalleryThumbServer, mainGallery.ImageName);
+
+                mainGallery.ImageName = imageName;
+            }
+            mainGallery.DisplayPriority = gallery.DisplayPriority;
+            _productGalleryRepository.EditEntity(mainGallery);
+            await _productGalleryRepository.SaveChanges();
+            return CreateOurEditProductGalleryResult.Success;
+        }
+
+        #endregion
+
         #region dipose
 
         public async ValueTask DisposeAsync()
