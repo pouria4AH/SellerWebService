@@ -1,6 +1,4 @@
-﻿using _0_framework.Entities;
-using _0_framework.Messages;
-using Microsoft.AspNetCore.Authentication;
+﻿using _0_framework.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;

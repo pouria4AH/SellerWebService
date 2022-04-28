@@ -78,9 +78,8 @@ namespace SellerWebService.DataLayer.Entities.Products
         #region relations
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        //public ICollection<ProductFeature> ProductFeatures { get; set; }
         public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
-        //public ICollection<CountOfProduct> CountOfProducts { get; set; }
+        public ICollection<ProductGallery> ProductGalleries { get; set; }
         #endregion
 
     }
