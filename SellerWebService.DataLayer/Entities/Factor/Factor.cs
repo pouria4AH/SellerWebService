@@ -40,9 +40,13 @@ namespace SellerWebService.DataLayer.Entities.Factor
         [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Name { get; set; }
 
-        [Display(Name = "قیمت محصول")]
+        [Display(Name = "مجموع قیمت ")]
         [Range(0, long.MaxValue)]
-        public long MainPrice { get; set; } = 0;
+        public long TotalPrice { get; set; } = 0; 
+        
+        [Display(Name = "مجموع تخفیف")]
+        [Range(0, long.MaxValue)]
+        public long TotalDiscount { get; set; } = 0;
 
         [Display(Name = "قیمت نهایی")]
         [Range(0, long.MaxValue)]
@@ -57,7 +61,7 @@ namespace SellerWebService.DataLayer.Entities.Factor
 
         [Display(Name = "مالیات")]
         [Range(0,100)]
-        public int? taxation { get; set; } = null;
+        public int taxation { get; set; } = 0;
 
         [Display(Name = "وضعیت فعلی فاکتور")]
         public FactorStatus FactorStatus { get; set; }

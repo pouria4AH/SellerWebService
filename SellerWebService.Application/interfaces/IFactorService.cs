@@ -6,5 +6,6 @@ namespace SellerWebService.Application.interfaces
     {
         Task<Guid> CreateBlankFactor(CreateFactorDto factor);
         Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails);
+        Task<ReadFactorForFinishOrderDto> GetFinialFactorToConfirm(Guid FactorCode);
     }
 }

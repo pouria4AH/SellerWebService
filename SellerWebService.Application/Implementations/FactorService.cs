@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Factor;
 using SellerWebService.DataLayer.Entities.Account;
@@ -37,9 +38,9 @@ namespace SellerWebService.Application.Implementations
                     Description = factor.Description,
                     Prepayment = factor.Prepayment,
                     DeliveryDate = factor.DeliveryDate,
-                    FactorStatus = FactorStatus.Open
+                    FactorStatus = FactorStatus.Open,
+                    taxation = factor.taxation
                 };
-                if (factor.taxation != null || factor.taxation != 0) newFactor.taxation = factor.taxation;
                 await _factorRepository.AddEntity(newFactor);
                 await _factorDetailsRepository.SaveChanges();
                 return newFactor.Code;
@@ -54,7 +55,8 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var factor = await _factorRepository.GetEntityById(factorDetails.FactorId);
+                var factor = await _factorRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Code == factorDetails.FactorCode);
                 if (factor == null) return false;
                 var newDetails = new FactorDetails
                 {
@@ -74,6 +76,67 @@ namespace SellerWebService.Application.Implementations
             {
                 return false;
             }
+        }
+
+        public async Task<ReadFactorForFinishOrderDto> GetFinialFactorToConfirm(Guid factorCode)
+        {
+            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x => x.User).AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode);
+            if (factor == null || !factor.FactorDetails.Any()) return null;
+            await CalculateFactor(factorCode);
+            return new ReadFactorForFinishOrderDto
+            {
+                Name = factor.Name,
+                Description = factor.Name,
+                FinalPrice = factor.FinalPrice,
+                Code = factor.Code,
+                Prepayment = factor.Prepayment,
+                taxation = factor.taxation,
+                DeliveryDate = factor.DeliveryDate,
+                FactorStatus = factor.FactorStatus.ToString(),
+                FirstName = factor.User.FirstName,
+                LastName = factor.User.LastName,
+                Mobile = factor.User.Mobile,
+                UserCode = factor.User.UniqueCode.ToString("N"),
+                TotalDiscount = factor.TotalDiscount,
+                TotalPrice = factor.TotalPrice,
+                CreateFactorDetailsDtos = factor.FactorDetails.Select(x => new CreateFactorDetailsDto
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    Count = x.Count,
+                    Discount = x.Discount,
+                    FactorCode = factor.Code,
+                    Packaging = x.Packaging,
+                    Price = x.Price
+
+                }).ToList()
+
+            };
+
+        }
+
+
+        #endregion
+
+        #region calculate
+
+        private async Task CalculateFactor(Guid factorCode)
+        {
+            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode);
+
+            foreach (var factorDetails in factor.FactorDetails)
+            {
+                factor.TotalPrice += factorDetails.Price * factorDetails.Count;
+                factor.TotalDiscount += factorDetails.Discount * factorDetails.Count;
+            }
+
+            factor.FinalPrice = factor.TotalPrice - factor.TotalDiscount;
+            if (factor.taxation != 0)
+                factor.FinalPrice = (long)Math.Ceiling((decimal)(factor.FinalPrice - ((factor.taxation * factor.FinalPrice) / 100)));
+            _factorRepository.EditEntity(factor);
+            await _factorRepository.SaveChanges();
         }
 
         #endregion

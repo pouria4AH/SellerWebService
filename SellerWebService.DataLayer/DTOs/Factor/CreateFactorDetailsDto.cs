@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SellerWebService.DataLayer.DTOs.Factor
+﻿namespace SellerWebService.DataLayer.DTOs.Factor
 {
     public class CreateFactorDetailsDto
     {
-        public long FactorId { get; set; }
+        public Guid FactorCode { get; set; }
 
         [Display(Name = "نام")]
         [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]

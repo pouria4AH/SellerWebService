@@ -20,6 +20,6 @@
 
         [Display(Name = "مالیات")]
         [Range(0, 100)]
-        public int? taxation { get; set; } = null;
+        public int taxation { get; set; } 
     }
 }
