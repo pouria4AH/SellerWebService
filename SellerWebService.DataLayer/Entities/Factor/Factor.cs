@@ -55,6 +55,10 @@ namespace SellerWebService.DataLayer.Entities.Factor
         [Display(Name = "تاریخ تحویل")]
         public int DeliveryDate { get; set; }
 
+        [Display(Name = "مالیات")]
+        [Range(0,100)]
+        public int? taxation { get; set; } = null;
+
         [Display(Name = "وضعیت فعلی فاکتور")]
         public FactorStatus FactorStatus { get; set; }
 
