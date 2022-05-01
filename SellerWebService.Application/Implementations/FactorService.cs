@@ -78,13 +78,13 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-        public async Task<ReadFactorForFinishOrderDto> GetFinialFactorToConfirm(Guid factorCode)
+        public async Task<ReadMainFactorDto> GetFinialFactorToConfirm(Guid factorCode)
         {
             var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x => x.User).AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode);
             if (factor == null || !factor.FactorDetails.Any()) return null;
             await CalculateFactor(factorCode);
-            return new ReadFactorForFinishOrderDto
+            return new ReadMainFactorDto
             {
                 Name = factor.Name,
                 Description = factor.Name,
@@ -116,6 +116,24 @@ namespace SellerWebService.Application.Implementations
 
         }
 
+        public async Task<CreateFactorResult> PublishFactor(Guid factorCode)
+        {
+            try
+            {
+                var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x => x.User).AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Code == factorCode);
+                if (factor == null || !factor.FactorDetails.Any()) return CreateFactorResult.FactorNotFound;
+                await CalculateFactor(factorCode);
+                if(factor.FactorStatus != FactorStatus.Open) return CreateFactorResult.IsAlreadyPublish;
+                factor.FactorStatus = FactorStatus.Waiting;
+                await _factorRepository.SaveChanges();
+                return CreateFactorResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateFactorResult.Error;
+            }
+        }
 
         #endregion
 

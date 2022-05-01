@@ -1,6 +1,6 @@
 ﻿namespace SellerWebService.DataLayer.DTOs.Factor
 {
-    public class ReadFactorForFinishOrderDto
+    public class ReadMainFactorDto
     {
         [Display(Name = "کد محصول")]
         public Guid Code { get; set; }
