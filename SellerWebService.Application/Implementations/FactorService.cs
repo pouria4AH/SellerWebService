@@ -50,6 +50,32 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails)
+        {
+            try
+            {
+                var factor = await _factorRepository.GetEntityById(factorDetails.FactorId);
+                if (factor == null) return false;
+                var newDetails = new FactorDetails
+                {
+                    FactorId = factor.Id,
+                    Name = factorDetails.Name,
+                    Description = factorDetails.Description,
+                    Count = factorDetails.Count,
+                    Discount = factorDetails.Discount,
+                    Packaging = factorDetails.Packaging,
+                    Price = factorDetails.Price
+                };
+                await _factorDetailsRepository.AddEntity(newDetails);
+                await _factorDetailsRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region disposs

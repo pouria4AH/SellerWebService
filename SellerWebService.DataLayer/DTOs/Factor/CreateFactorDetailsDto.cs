@@ -8,6 +8,7 @@ namespace SellerWebService.DataLayer.DTOs.Factor
 {
     public class CreateFactorDetailsDto
     {
+        public long FactorId { get; set; }
 
         [Display(Name = "نام")]
         [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]

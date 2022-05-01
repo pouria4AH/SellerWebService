@@ -5,6 +5,6 @@ namespace SellerWebService.Application.interfaces
     public interface IFactorService : IAsyncDisposable
     {
         Task<Guid> CreateBlankFactor(CreateFactorDto factor);
-        //Task<List<>>
+        Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails);
     }
 }
