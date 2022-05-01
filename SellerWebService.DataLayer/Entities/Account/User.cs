@@ -1,4 +1,5 @@
-﻿using _0_framework.Entities;
+﻿using System.Security.AccessControl;
+using _0_framework.Entities;
 
 namespace SellerWebService.DataLayer.Entities.Account
 {
@@ -12,7 +13,7 @@ namespace SellerWebService.DataLayer.Entities.Account
 
         [Required(ErrorMessage = "لطفا {0} راK وارد کنید")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string EmailActiveCode { get; set; }
+        public string? EmailActiveCode { get; set; }
 
         [Display(Name = "ایمیل فعال / غیر فعال")]
         public bool IsEmailActive { get; set; }
@@ -47,6 +48,15 @@ namespace SellerWebService.DataLayer.Entities.Account
         [Display(Name = "بلاک شده")]
         public bool IsBlocked { get; set; }
 
+        [Display(Name = "آدرس")]
+        [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string? Address { get; set; } 
+        
+        [Display(Name = "کد پستی")]
+        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string? ZipCode { get; set; }
+
+        
         [Display(Name = "دسترسی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")] 
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]

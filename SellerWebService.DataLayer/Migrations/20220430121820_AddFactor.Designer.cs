@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SellerWebService.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20220430121820_AddFactor")]
+    partial class AddFactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +31,6 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -94,10 +92,6 @@ namespace SellerWebService.DataLayer.Migrations
                     b.Property<Guid>("UniqueCode")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ZipCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -114,20 +108,21 @@ namespace SellerWebService.DataLayer.Migrations
                     b.Property<Guid>("Code")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<long>("Count")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeliveryDate")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("FactorStatus")
+                    b.Property<int>("DiscountRate")
                         .HasColumnType("int");
 
-                    b.Property<int>("FinalFactorPaymentState")
+                    b.Property<int>("FactorStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("FinalPaymentDate")
@@ -139,9 +134,6 @@ namespace SellerWebService.DataLayer.Migrations
                     b.Property<string>("FinalTracingCode")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("FirstFactorPaymentState")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("FirstPaymentDate")
                         .HasColumnType("datetime2");
@@ -167,23 +159,28 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int>("Prepayment")
                         .HasColumnType("int");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Factors");
                 });
 
-            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.FactorDetails", b =>
+            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.FactorFeatureSelected", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,21 +188,13 @@ namespace SellerWebService.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("Count")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Discount")
-                        .HasColumnType("int");
-
                     b.Property<long>("FactorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GroupForProductFeatureId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDelete")
@@ -214,24 +203,21 @@ namespace SellerWebService.DataLayer.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                    b.Property<long>("PriceOfFeature")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Packaging")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<long>("Price")
+                    b.Property<long>("ProductFeatureId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FactorId");
 
-                    b.ToTable("FactorDetails");
+                    b.HasIndex("GroupForProductFeatureId");
+
+                    b.HasIndex("ProductFeatureId");
+
+                    b.ToTable("FactorFeatureSelecteds");
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", b =>
@@ -584,24 +570,48 @@ namespace SellerWebService.DataLayer.Migrations
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.Factor", b =>
                 {
+                    b.HasOne("SellerWebService.DataLayer.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SellerWebService.DataLayer.Entities.Account.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Product");
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.FactorDetails", b =>
+            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.FactorFeatureSelected", b =>
                 {
                     b.HasOne("SellerWebService.DataLayer.Entities.Factor.Factor", "Factor")
-                        .WithMany("FactorDetails")
+                        .WithMany("FactorFeatureSelecteds")
                         .HasForeignKey("FactorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", "GroupForProductFeature")
+                        .WithMany("FactorFeatureSelecteds")
+                        .HasForeignKey("GroupForProductFeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SellerWebService.DataLayer.Entities.Products.ProductFeature", "ProductFeature")
+                        .WithMany("FactorFeatureSelecteds")
+                        .HasForeignKey("ProductFeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Factor");
+
+                    b.Navigation("GroupForProductFeature");
+
+                    b.Navigation("ProductFeature");
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", b =>
@@ -666,11 +676,13 @@ namespace SellerWebService.DataLayer.Migrations
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.Factor", b =>
                 {
-                    b.Navigation("FactorDetails");
+                    b.Navigation("FactorFeatureSelecteds");
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", b =>
                 {
+                    b.Navigation("FactorFeatureSelecteds");
+
                     b.Navigation("ProductFeatures");
                 });
 
@@ -686,6 +698,11 @@ namespace SellerWebService.DataLayer.Migrations
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductCategory", b =>
                 {
                     b.Navigation("ProductSelectedCategories");
+                });
+
+            modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeature", b =>
+                {
+                    b.Navigation("FactorFeatureSelecteds");
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeatureCategory", b =>

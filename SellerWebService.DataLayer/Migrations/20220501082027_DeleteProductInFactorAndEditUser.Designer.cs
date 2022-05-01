@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SellerWebService.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20220501082027_DeleteProductInFactorAndEditUser")]
+    partial class DeleteProductInFactorAndEditUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +33,7 @@ namespace SellerWebService.DataLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -95,6 +98,7 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ZipCode")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

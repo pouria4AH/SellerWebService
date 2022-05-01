@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SellerWebService.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20220501081122_ChangeFatore")]
+    partial class ChangeFatore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +31,6 @@ namespace SellerWebService.DataLayer.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -93,10 +91,6 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.Property<Guid>("UniqueCode")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ZipCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -173,10 +167,15 @@ namespace SellerWebService.DataLayer.Migrations
                     b.Property<int>("Prepayment")
                         .HasColumnType("int");
 
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -584,11 +583,17 @@ namespace SellerWebService.DataLayer.Migrations
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.Factor", b =>
                 {
+                    b.HasOne("SellerWebService.DataLayer.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
                     b.HasOne("SellerWebService.DataLayer.Entities.Account.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });

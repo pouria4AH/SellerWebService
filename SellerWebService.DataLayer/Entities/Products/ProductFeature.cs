@@ -1,4 +1,5 @@
 ﻿using _0_framework.Entities;
+using SellerWebService.DataLayer.Entities.Factor;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {
@@ -26,6 +27,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         #region relations
 
         public GroupForProductFeature GroupForProductFeature { get; set; }
+        //public ICollection<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
         //public Product Product { get; set; }
         #endregion
     }

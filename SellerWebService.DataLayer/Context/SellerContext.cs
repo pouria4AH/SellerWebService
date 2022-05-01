@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SellerWebService.DataLayer.Entities.Account;
+using SellerWebService.DataLayer.Entities.Factor;
 using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.DataLayer.Context
@@ -18,9 +19,15 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }
         public DbSet<ProductGallery> ProductGalleries { get; set; }
-        public DbSet<User> Users { get; set; }        
         #endregion
-
+        #region oder
+        public DbSet<User> Users { get; set; }
+        #endregion
+        #region factor
+        public DbSet<Factor> Factors { get; set; }
+        public DbSet<FactorDetails> FactorDetails { get; set; }
+        //public DbSet<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
+        #endregion
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)

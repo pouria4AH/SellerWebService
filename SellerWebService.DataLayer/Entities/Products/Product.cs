@@ -1,5 +1,6 @@
 ﻿global using System.ComponentModel.DataAnnotations;
 using _0_framework.Entities;
+using SellerWebService.DataLayer.Entities.Factor;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {
