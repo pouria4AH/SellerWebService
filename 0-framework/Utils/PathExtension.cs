@@ -68,5 +68,13 @@
         public static string ProductGalleryThumb = "ImageUploader/Content/Images/ProductGallery/Thumb/";
         public static string  ProductGalleryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductGallery/Thumb/");
         #endregion
+        #region store details gallery
+
+        public static string StoreDetailsSignatureImage = "ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/";
+        public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/");
+
+        public static string StoreDetailsStampImage = "ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
+        public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/StoreDetails/StampImage/");
+        #endregion
     }
 }

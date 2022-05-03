@@ -1,5 +1,8 @@
 ﻿using System.Xml;
 using _0_framework.Account;
+using _0_framework.Extensions;
+using _0_framework.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Store;
@@ -81,7 +84,7 @@ namespace SellerWebService.Application.Implementations
                 StoreDataId = user.StoreData.Id,
                 TracingCode = refId.ToString()
             };
-            user.StoreData.IsActive =true;
+            user.StoreData.IsActive = true;
             await _storeRepository.SaveChanges();
             await _storePaymentRepository.AddEntity(newPayment);
             await _storePaymentRepository.SaveChanges();
@@ -94,7 +97,93 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<bool> IsHaveStoreDetails(Guid storeCode)
         {
-            return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode);
+            return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode && !x.IsDelete && !x.IsDelete);
+        }
+
+        public async Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, Guid storeCode)
+
+        {
+            try
+            {
+                var store = await _storeRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.UniqueCode == storeCode);
+                if (store == null) return CreateStoreDetailsResult.StoreIsNull;
+                var newDetails = new StoreDetails
+                {
+                    Description = createStoreDetails.Description,
+                    IsActive = true,
+                    Mobile = createStoreDetails.Mobile,
+                    StoreCode = storeCode,
+                    StoreDataId = store.Id,
+                };
+                if (createStoreDetails.TelegramNumber != null) newDetails.TelegramNumber = createStoreDetails.TelegramNumber;
+                if (createStoreDetails.WhatsappNumber != null) newDetails.WhatsappNumber = createStoreDetails.WhatsappNumber;
+                if (createStoreDetails.Email != null) newDetails.Email = createStoreDetails.Email;
+                if (createStoreDetails.Phone != null) newDetails.Phone = createStoreDetails.Phone;
+                if (createStoreDetails.Instagram != null) newDetails.Instagram = createStoreDetails.Instagram;
+                await _storeDetailsRepository.AddEntity(newDetails);
+                await _storeDetailsRepository.SaveChanges();
+                return CreateStoreDetailsResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateStoreDetailsResult.Error;
+            }
+            
+            //if (createStoreDetails.StampImage != null && createStoreDetails.StampImage.IsImage())
+            //{
+            //    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") + Path.GetExtension(createStoreDetails.SignatureImage.FileName);
+            //    createStoreDetails.StampImage.AddImageToServer(imageName, PathExtension.StoreDetailsStampImageServer, null, null);
+            //    newDetails.StampImage = imageName;
+            //}
+        }
+
+        public async Task<bool> CreateSignature(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsSignatureImageServer, null, null);
+                    storeDetails.SigntureImage = imageName;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CreateStamp(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsSignatureImageServer, null, null);
+                    storeDetails.StampImage = imageName;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         #endregion

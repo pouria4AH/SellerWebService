@@ -34,12 +34,10 @@ namespace SellerWebService.DataLayer.Entities.Store
         public string Description { get; set; }
 
         [Display(Name = "نام تصویر امضا")]
-        [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string SigntureImage { get; set; }
+        public string? SigntureImage { get; set; }
 
         [Display(Name = "نام تصویر مهر")]
-        [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string StampImage { get; set; }
+        public string? StampImage { get; set; }
 
         [Display(Name = "ایمیل")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
