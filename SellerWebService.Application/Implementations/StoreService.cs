@@ -16,12 +16,14 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<StoreData> _storeRepository;
         private readonly IGenericRepository<StoreDetails> _storeDetailsRepository;
+        private readonly IGenericRepository<StorePayment> _storePaymentRepository;
 
-        public StoreService(IGenericRepository<User> userRepository, IGenericRepository<StoreData> storeRepository, IGenericRepository<StoreDetails> storeDetailsRepository)
+        public StoreService(IGenericRepository<User> userRepository, IGenericRepository<StoreData> storeRepository, IGenericRepository<StoreDetails> storeDetailsRepository, IGenericRepository<StorePayment> storePaymentRepository)
         {
             _userRepository = userRepository;
             _storeRepository = storeRepository;
             _storeDetailsRepository = storeDetailsRepository;
+            _storePaymentRepository = storePaymentRepository;
         }
 
         #endregion
@@ -35,6 +37,7 @@ namespace SellerWebService.Application.Implementations
                 if (user == null) return RegisterStoreResult.UserNotFound;
                 var IsExists = await _storeRepository.GetQuery().Include(x => x.Users)
                     .AsQueryable().AnyAsync(x => x.PersonalId == store.PersonalId && x.Users.Any(y => y.UniqueCode == user.UniqueCode && !x.IsDelete));
+                if (user.StoreDataId != null) return RegisterStoreResult.StoreIsExists;
                 if (IsExists) return RegisterStoreResult.StoreIsExists;
                 StoreData newStore = new StoreData
                 {
@@ -63,6 +66,27 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<bool> ActiveStore(int refId, Guid userCode)
+        {
+            var user = await _userRepository.GetQuery().Include(x => x.StoreData).AsQueryable()
+                .SingleOrDefaultAsync(x => x.UniqueCode == userCode);
+            if (user == null) return false;
+            if (user.StoreData.IsActive) return false;
+            var newPayment = new StorePayment
+            {
+                IsPayed = true,
+                PaymentDate = DateTime.Now,
+                StoreCode = user.StoreData.UniqueCode,
+                UserCode = user.UniqueCode,
+                StoreDataId = user.StoreData.Id,
+                TracingCode = refId.ToString()
+            };
+            user.StoreData.IsActive =true;
+            await _storeRepository.SaveChanges();
+            await _storePaymentRepository.AddEntity(newPayment);
+            await _storePaymentRepository.SaveChanges();
+            return true;
+        }
 
         #endregion
 
@@ -73,6 +97,7 @@ namespace SellerWebService.Application.Implementations
             if (_storeDetailsRepository != null) await _storeDetailsRepository.DisposeAsync();
             if (_storeRepository != null) await _storeRepository.DisposeAsync();
             if (_userRepository != null) await _userRepository.DisposeAsync();
+            if (_storePaymentRepository != null) await _storePaymentRepository.DisposeAsync();
 
         }
         #endregion

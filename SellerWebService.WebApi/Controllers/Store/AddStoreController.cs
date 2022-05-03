@@ -65,22 +65,41 @@ namespace SellerWebService.WebApi.Controllers.Store
         [Authorize(Roles = AccountRole.Seller)]
         public async Task<ActionResult> GetPayGateway()
         {
-            var res = await _paymentService.Payment(2000, "خرید اشتراک", "https://localhost:7210/api/AddStore/validate-payment", _configuration);
+            var res = await _paymentService.Payment(2000, "خرید اشتراک", $"https://localhost:7210/api/AddStore/validate-payment-by-{User.GetUserUniqueCode():N}", _configuration);
             if (res.Authority == null)
                 return BadRequest(res.Errors);
             return Ok($"https://sandbox.zarinpal.com/pg/StartPay/{res.Authority}");
         }
-
-        [HttpGet("validate-payment")]
-        public async Task<ActionResult<OperationResponse>> Validate([FromQuery] string authority, [FromQuery] string status)
+        [HttpGet("validate-payment-by-{userCode}")]
+        public async Task<ActionResult<OperationResponse>> Validate([FromQuery] string authority, [FromQuery] string status, [FromRoute] string userCode)
         {
-            var res = await _paymentService.Validate(2000, authority, status, _configuration);
-            if (res.IsSuccess)
+            try
             {
-                return Ok(res.RefId);
+                var res = await _paymentService.Validate(2000, authority, status, _configuration);
+                if (res.IsSuccess && res.RefId != 0)
+                {
+                    var task = await _storeService.ActiveStore(res.RefId, Guid.Parse(userCode));
+                    if (task)
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                            ApplicationMessages.Error, new
+                            {
+                                refId = res.RefId,
+                                usercode = userCode,
+                            }));
+                    return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                        ApplicationMessages.PaymentIsFailed, new
+                        {
+                            refId = res.RefId,
+                        }));
+                }
+                return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                    ApplicationMessages.PaymentIsFailed, null));
             }
-            return BadRequest();
-            
+            catch (Exception e)
+            {
+                return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                    ApplicationMessages.Error, null));
+            }
         }
     }
 }

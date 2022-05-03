@@ -1,4 +1,5 @@
-﻿using SellerWebService.DataLayer.DTOs.Store;
+﻿using SellerWebService.DataLayer.DTOs.Payment;
+using SellerWebService.DataLayer.DTOs.Store;
 using SellerWebService.DataLayer.Entities.Account;
 
 namespace SellerWebService.Application.interfaces
@@ -7,7 +8,7 @@ namespace SellerWebService.Application.interfaces
     {
         #region Active store
         Task<RegisterStoreResult> RegisterStore(RegisterStoreDto store, Guid userCode);
-        //Task<>
+        Task<bool> ActiveStore(int refId,Guid userCode);
         #endregion
 
     }

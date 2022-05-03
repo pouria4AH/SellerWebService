@@ -13,7 +13,7 @@ namespace SellerWebService.DataLayer.Entities.Store
         public string TracingCode { get; set; }
         [Display(Name = "کد پیگیری")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string Description { get; set; }
+        //public string Description { get; set; }
         public bool IsPayed { get; set; }
         public Guid StoreCode { get; set; }
         public Guid UserCode { get; set; }

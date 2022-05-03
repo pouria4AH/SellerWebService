@@ -49,7 +49,7 @@ namespace SellerWebService.Application.Implementations
             return new ValidateResultDto
             {
                 IsSuccess = false,
-                RefId = null
+                RefId = 0
             };
         }
     }

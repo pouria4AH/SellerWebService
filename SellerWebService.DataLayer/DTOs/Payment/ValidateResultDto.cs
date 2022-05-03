@@ -2,8 +2,7 @@
 {
     public class ValidateResultDto
     {
-        public int? RefId { get; set; }
+        public int RefId { get; set; } =0;
         public bool IsSuccess { get; set; }
-        public Guid StoreCode { get; set; }
     }
 }
