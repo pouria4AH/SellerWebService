@@ -3,11 +3,11 @@ using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Account
 {
-    public class User : BaseEntity
+    public class Customer : BaseEntity
     {
         #region prop
 
-        public long? StoreDataId { get; set; }
+        public long StoreDataId { get; set; }
 
         [Display(Name = "ایمیل")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -15,29 +15,10 @@ namespace SellerWebService.DataLayer.Entities.Account
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "لطفا {0} راK وارد کنید")]
-        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string? EmailActiveCode { get; set; }
-
-        [Display(Name = "ایمیل فعال / غیر فعال")]
-        public bool IsEmailActive { get; set; }
-
         [Display(Name = "تلفن همراه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Mobile { get; set; }
-
-        [Display(Name = "تلفن همراه فعال / غیر فعال")]
-        public bool IsMobileActive { get; set; }
-
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        [MaxLength(20, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string MobileActiveCode { get; set; }
-
-        [Display(Name = "کلمه عبور")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string Password { get; set; }
 
         [Display(Name = "نام")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -48,26 +29,21 @@ namespace SellerWebService.DataLayer.Entities.Account
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string LastName { get; set; }
-
-        [Display(Name = "بلاک شده")]
-        public bool IsBlocked { get; set; }
+        
+        [Display(Name = "نام خانوادگی")]
+        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string? CompanyName { get; set; }
 
         [Display(Name = "آدرس")]
         [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string? Address { get; set; } 
-        
+        public string? Address { get; set; }
+
         [Display(Name = "کد پستی")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? ZipCode { get; set; }
 
-        
-        [Display(Name = "دسترسی")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")] 
-        [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string Role { get; set; }
-
         [Display(Name = "کد فروشگاه")]
-        public Guid? StoreCode { get; set; }
+        public Guid StoreCode { get; set; }
 
         [Display(Name = "کد ")]
         public Guid UniqueCode { get; set; }
@@ -75,6 +51,7 @@ namespace SellerWebService.DataLayer.Entities.Account
         #endregion
 
         #region relations
+
         public StoreData StoreData { get; set; }
 
         #endregion

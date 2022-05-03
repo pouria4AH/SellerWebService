@@ -2,14 +2,15 @@
 using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Products;
+using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Factor
 {
     public class Factor : BaseEntity
     {
         #region prop
-        //public long? ProductId { get; set; }
         public long UserId { get; set; }
+
         [Display(Name = "کد محصول")]
         public Guid Code { get; set; }
 
@@ -63,6 +64,8 @@ namespace SellerWebService.DataLayer.Entities.Factor
         [Range(0,100)]
         public int taxation { get; set; } = 0;
 
+        public Guid StoreCode { get; set; }
+
         [Display(Name = "وضعیت فعلی فاکتور")]
         public FactorStatus FactorStatus { get; set; }
 
@@ -71,10 +74,8 @@ namespace SellerWebService.DataLayer.Entities.Factor
         #endregion
         #region relations
         public User User { get; set; }
-        //public Product Product { get; set; }
         public ICollection<FactorDetails> FactorDetails { get; set; }
         
-        //public ICollection<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
         #endregion
     }
 

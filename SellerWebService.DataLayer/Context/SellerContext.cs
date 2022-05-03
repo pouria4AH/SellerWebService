@@ -2,6 +2,7 @@
 using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Factor;
 using SellerWebService.DataLayer.Entities.Products;
+using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Context
 {
@@ -20,8 +21,9 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }
         public DbSet<ProductGallery> ProductGalleries { get; set; }
         #endregion
-        #region oder
+        #region users
         public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         #endregion
         #region factor
         public DbSet<Factor> Factors { get; set; }
@@ -29,14 +31,18 @@ namespace SellerWebService.DataLayer.Context
         //public DbSet<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
         #endregion
 
+        #region store
+        public DbSet<StoreData> StoreDatas { get; set; }
+        public DbSet<StoreDetails> StoreDetails { get; set; }
+        #endregion
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
-        //    {
-        //        relationship.DeleteBehavior = DeleteBehavior.Restrict;
-        //    }
-        //    base.OnModelCreating(modelBuilder);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
