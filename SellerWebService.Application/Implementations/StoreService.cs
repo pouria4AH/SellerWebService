@@ -1,4 +1,5 @@
-﻿using _0_framework.Account;
+﻿using System.Xml;
+using _0_framework.Account;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Store;
@@ -24,14 +25,17 @@ namespace SellerWebService.Application.Implementations
         }
 
         #endregion
+
+        #region Active store
         public async Task<RegisterStoreResult> RegisterStore(RegisterStoreDto store, Guid userCode)
         {
             try
             {
-                var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.UniqueCode == userCode && x.Role != AccountRole.Seller && x.Role != AccountRole.SellerEmployee);
+                var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.UniqueCode == userCode && x.Role == AccountRole.User && x.IsDelete);
                 if (user == null) return RegisterStoreResult.UserNotFound;
-                var IsExists = await _storeRepository.GetQuery().AsQueryable().AnyAsync(x => x.PersonalId == store.PersonalId);
-                if (IsExists) return RegisterStoreResult.PersonalIdExists;
+                var IsExists = await _storeRepository.GetQuery().Include(x => x.Users)
+                    .AsQueryable().AnyAsync(x => x.PersonalId == store.PersonalId && x.Users.Any(y => y.UniqueCode == user.UniqueCode));
+                if (IsExists) return RegisterStoreResult.StoreIsExists;
                 StoreData newStore = new StoreData
                 {
                     CompanyName = store.CompanyName,
@@ -58,6 +62,10 @@ namespace SellerWebService.Application.Implementations
                 return RegisterStoreResult.Error;
             }
         }
+
+
+        #endregion
+
 
         #region dispose
         public async ValueTask DisposeAsync()

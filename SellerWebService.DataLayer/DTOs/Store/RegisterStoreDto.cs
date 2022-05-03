@@ -17,7 +17,7 @@
 
         [Display(Name = "کد ملی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public int PersonalId { get; set; }
+        public string PersonalId { get; set; }
     }
 
     public enum RegisterStoreResult
@@ -25,6 +25,6 @@
         Error,
         Success,
         UserNotFound,
-        PersonalIdExists,
+        StoreIsExists,
     }
 }

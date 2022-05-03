@@ -45,10 +45,11 @@ namespace SellerWebService.DataLayer.Entities.Store
 
         [Display(Name = "کد ملی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public int PersonalId { get; set; }
+        public string PersonalId { get; set; }
 
         [Display(Name = "کد ")]
         public Guid UniqueCode { get; set; }
+
         #endregion
 
         #region relations
