@@ -31,10 +31,10 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.UniqueCode == userCode && x.Role == AccountRole.User && x.IsDelete);
+                var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.UniqueCode == userCode && x.Role == AccountRole.User && !x.IsDelete);
                 if (user == null) return RegisterStoreResult.UserNotFound;
                 var IsExists = await _storeRepository.GetQuery().Include(x => x.Users)
-                    .AsQueryable().AnyAsync(x => x.PersonalId == store.PersonalId && x.Users.Any(y => y.UniqueCode == user.UniqueCode));
+                    .AsQueryable().AnyAsync(x => x.PersonalId == store.PersonalId && x.Users.Any(y => y.UniqueCode == user.UniqueCode && !x.IsDelete));
                 if (IsExists) return RegisterStoreResult.StoreIsExists;
                 StoreData newStore = new StoreData
                 {

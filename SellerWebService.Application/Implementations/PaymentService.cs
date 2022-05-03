@@ -1,4 +1,5 @@
 ﻿using Dto.Payment;
+using Dto.Response.Payment;
 using Microsoft.Extensions.Configuration;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Payment;
@@ -15,7 +16,7 @@ namespace SellerWebService.Application.Implementations
             var expose = new Expose();
             _payment = expose.CreatePayment();
         }
-        public async Task<object> Payment(int amount, string description, string callbackUrl, IConfiguration configuration)
+        public async Task<Request> Payment(int amount, string description, string callbackUrl, IConfiguration configuration)
         {
             var res = await _payment.Request(new DtoRequest()
             {
@@ -27,15 +28,16 @@ namespace SellerWebService.Application.Implementations
             return res;
         }
 
-        public async Task<ValidateResultDto> Validate(int amount, string authority, string status)
+        public async Task<ValidateResultDto> Validate(int amount, string authority, string status, IConfiguration configuration)
         {
             var verification = await _payment.Verification(new DtoVerification()
             {
                 Amount = amount,
                 Authority = authority,
+                MerchantId = configuration.GetSection("ZarinPal:MerchantId").Value
             }, ZarinPal.Class.Payment.Mode.sandbox);
 
-            if (status != null && authority != null && status == "Ok")
+            if (status != null && authority != null && status == "OK")
             {
                 return new ValidateResultDto
                 {

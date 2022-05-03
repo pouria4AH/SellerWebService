@@ -7,7 +7,7 @@ namespace SellerWebService.Application.interfaces
     {
         #region Active store
         Task<RegisterStoreResult> RegisterStore(RegisterStoreDto store, Guid userCode);
-
+        //Task<>
         #endregion
 
     }

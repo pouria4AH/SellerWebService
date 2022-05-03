@@ -1,13 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SellerWebService.Application.Implementations;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.Context;
-using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Repository;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -32,6 +30,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
 builder.Services.AddScoped<IFactorService, FactorService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 #endregion
 
 builder.Services.AddEndpointsApiExplorer();
@@ -79,7 +79,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseAuthorization(); 
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -18,5 +18,7 @@
         public const string MobileIsActive = "این شماره در حال حاضر فعال است";
         public const string ActiveCodeIsExpired = "تاریخ کد شما گذشته است";
         public const string MobileExists = "شماره مورد نظر از قبل وجود دارد";
+        // ----------------------------------------------- store -------------------------------------------------------
+        public const string StoreIsExists = "قبلا فروشگاهی با این مشخصات ثبت شده است";
     }
 }
