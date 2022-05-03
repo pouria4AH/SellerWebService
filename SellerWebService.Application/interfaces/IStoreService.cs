@@ -9,5 +9,6 @@ namespace SellerWebService.Application.interfaces
         Task<RegisterStoreResult> RegisterStore(RegisterStoreDto store, Guid userCode);
 
         #endregion
+
     }
 }
