@@ -27,7 +27,7 @@ namespace SellerWebService.DataLayer.Entities.Store
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string OwnerLastName { get; set; }
 
-        [Display(Name = "نام خانوادگی")]
+        [Display(Name = "نام شرکت")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string CompanyName { get; set; }
