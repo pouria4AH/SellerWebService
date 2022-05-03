@@ -34,7 +34,8 @@ namespace SellerWebService.WebApi.Extensions
                     Mobile = claimsPrincipal.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.MobilePhone)?.Value,
                     FirstName = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
                     LastName = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.Role)?.Value
+                    Role = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
+                    SerialNumber = claimsPrincipal.Claims.SingleOrDefault(o => o.Type == ClaimTypes.SerialNumber)?.Value
                 };
             }
             return null;

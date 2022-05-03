@@ -36,6 +36,7 @@ namespace SellerWebService.Application.Implementations
                         IsEmailActive = false,
                         IsMobileActive = false,
                         UniqueCode = Guid.NewGuid(),
+
                     };
                     await _userRepository.AddEntity(user);
                     await _userRepository.SaveChanges();

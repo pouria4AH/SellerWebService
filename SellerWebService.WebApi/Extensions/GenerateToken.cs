@@ -19,8 +19,10 @@ namespace SellerWebService.WebApi.Extensions
                 new Claim(ClaimTypes.GivenName, user.FirstName ),
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.NameIdentifier, user.UniqueCode.ToString("N"))
+                new Claim(ClaimTypes.NameIdentifier, user.UniqueCode.ToString("N")),
+              
             };
+            if (user.StoreCode != null) claims.Add(new Claim(ClaimTypes.SerialNumber, user.StoreCode?.ToString("N")));
 
             var token = new JwtSecurityToken(
                 configuration.GetSection("AppSettings:Issuer").Value,

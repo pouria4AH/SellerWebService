@@ -1,4 +1,5 @@
-﻿using _0_framework.Messages;
+﻿using _0_framework.Account;
+using _0_framework.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
@@ -25,7 +26,7 @@ namespace SellerWebService.WebApi.Controllers.Account
         {
             if (ModelState.IsValid)
             {
-                string role = "User";
+                string role = AccountRole.User;
                 var res = await _userService.RegisterUser(register, role);
                 switch (res)
                 {
