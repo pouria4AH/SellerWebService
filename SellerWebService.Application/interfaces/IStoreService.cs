@@ -11,5 +11,11 @@ namespace SellerWebService.Application.interfaces
         Task<bool> ActiveStore(int refId,Guid userCode);
         #endregion
 
+        #region store details
+
+        Task<bool> IsHaveStoreDetails(Guid storeCode);
+
+        #endregion
+
     }
 }

@@ -90,6 +90,14 @@ namespace SellerWebService.Application.Implementations
 
         #endregion
 
+        #region store details
+
+        public async Task<bool> IsHaveStoreDetails(Guid storeCode)
+        {
+            return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode);
+        }
+
+        #endregion
 
         #region dispose
         public async ValueTask DisposeAsync()

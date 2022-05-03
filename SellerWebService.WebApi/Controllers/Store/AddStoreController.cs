@@ -70,6 +70,7 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest(res.Errors);
             return Ok($"https://sandbox.zarinpal.com/pg/StartPay/{res.Authority}");
         }
+
         [HttpGet("validate-payment-by-{userCode}")]
         public async Task<ActionResult<OperationResponse>> Validate([FromQuery] string authority, [FromQuery] string status, [FromRoute] string userCode)
         {

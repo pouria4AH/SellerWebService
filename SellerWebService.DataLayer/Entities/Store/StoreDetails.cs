@@ -49,6 +49,8 @@ namespace SellerWebService.DataLayer.Entities.Store
 
         [Display(Name = "کد فروشگاه")]
         public Guid StoreCode { get; set; }
+
+        public bool IsActive { get; set; } = false;
         #endregion
 
         #region relations
