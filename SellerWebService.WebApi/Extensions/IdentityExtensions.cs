@@ -21,6 +21,21 @@ namespace SellerWebService.WebApi.Extensions
         {
             var user = (ClaimsPrincipal)principal;
             return user.GetUserUniqueCode();
+        } 
+        public static Guid GetUserStoreCode(this ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal != null)
+            {
+                var data = claimsPrincipal.Claims.SingleOrDefault(s => s.Type == ClaimTypes.SerialNumber);
+                if (data != null) return Guid.Parse(data.Value);
+            }
+
+            return default(Guid);
+        }
+        public static Guid GetUserStoreCode(this IPrincipal principal)
+        {
+            var user = (ClaimsPrincipal)principal;
+            return user.GetUserStoreCode();
         }
         public static UserClaimsStore GetCurrentUser(this ClaimsPrincipal claimsPrincipal)
         {
