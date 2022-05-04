@@ -2,6 +2,7 @@
 {
     public class CreateFactorDetailsDto
     {
+
         public Guid FactorCode { get; set; }
 
         [Display(Name = "نام")]

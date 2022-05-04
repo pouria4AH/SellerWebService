@@ -2,7 +2,8 @@
 {
     public class CreateFactorDto
     {
-        public long UserId { get; set; }
+
+        public Guid CustomerCode { get; set; }
 
         [Display(Name = "توضیحات")]
         public string Description { get; set; }

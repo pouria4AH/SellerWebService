@@ -9,7 +9,7 @@ namespace SellerWebService.DataLayer.Entities.Factor
     public class Factor : BaseEntity
     {
         #region prop
-        public long UserId { get; set; }
+        public long CustomerId { get; set; }
 
         [Display(Name = "کد محصول")]
         public Guid Code { get; set; }
@@ -73,7 +73,7 @@ namespace SellerWebService.DataLayer.Entities.Factor
         public FactorPaymentState FinalFactorPaymentState { get; set; }
         #endregion
         #region relations
-        public User User { get; set; }
+        public Customer Customer { get; set; }
         public ICollection<FactorDetails> FactorDetails { get; set; }
         
         #endregion
@@ -88,9 +88,9 @@ namespace SellerWebService.DataLayer.Entities.Factor
         Reject,
         [Display(Name = "قبول شده")]
         Accepted,
-        [Display(Name = "اماده برای پرداخت دوم")]
+        [Display(Name = "آماده برای پرداخت دوم")]
         ReadyToFinalPayed,
-        [Display(Name = "اماده تحویل")]
+        [Display(Name = "آماده تحویل")]
         Ready,
         [Display(Name = "تحویل داده شده")]
         Delivered,

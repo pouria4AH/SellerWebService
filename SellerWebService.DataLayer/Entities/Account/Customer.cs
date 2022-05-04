@@ -52,6 +52,7 @@ namespace SellerWebService.DataLayer.Entities.Account
 
         #region relations
 
+        public ICollection<Factor.Factor> Factors { get; set; }
         public StoreData StoreData { get; set; }
 
         #endregion

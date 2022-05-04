@@ -46,7 +46,7 @@
         [Display(Name = "تلفن همراه")]
         public string Mobile { get; set; }
 
-        public string UserCode { get; set; }
+        public string CustomerCode { get; set; }
 
     }
 }
