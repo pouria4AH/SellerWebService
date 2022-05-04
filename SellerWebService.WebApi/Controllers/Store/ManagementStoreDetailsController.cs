@@ -86,7 +86,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("creaet-signature-image")]
+        [HttpPost("create-signature-image")]
         public async Task<ActionResult> CreateSignature(IFormFile image)
         {
             try
@@ -104,7 +104,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("edit-stamp-image")]
+        [HttpPost("create-stamp-image")]
         public async Task<ActionResult> CreateStamp(IFormFile image)
         {
             try
@@ -140,7 +140,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("creaet-stamp-image")]
+        [HttpPost("edit-stamp-image")]
         public async Task<ActionResult> EditStamp(IFormFile image)
         {
             try

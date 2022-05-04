@@ -145,6 +145,8 @@ namespace SellerWebService.Application.Implementations
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsSignatureImageServer, null, null);
                     storeDetails.SigntureImage = imageName;
+
+                    _storeDetailsRepository.EditEntity(storeDetails);
                     await _storeDetailsRepository.SaveChanges();
                 }
 
@@ -165,11 +167,13 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName =  Guid.NewGuid().ToString("N") +
+                    var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsStampImageServer, null, null);
                     storeDetails.StampImage = imageName;
+
+                    _storeDetailsRepository.EditEntity(storeDetails);
                     await _storeDetailsRepository.SaveChanges();
 
                 }
@@ -215,11 +219,13 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null || storeDetails.SigntureImage == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName =  Guid.NewGuid().ToString("N") +
+                    var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsSignatureImageServer, null, null, null, storeDetails.SigntureImage);
-                    storeDetails.StampImage = imageName;
+                    storeDetails.SigntureImage = imageName;
+
+                    _storeDetailsRepository.EditEntity(storeDetails);
                     await _storeDetailsRepository.SaveChanges();
 
                 }
@@ -241,11 +247,12 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null || storeDetails.StampImage == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName =  Guid.NewGuid().ToString("N") +
+                    var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsStampImageServer, null, null, null, storeDetails.StampImage);
                     storeDetails.StampImage = imageName;
+                    _storeDetailsRepository.EditEntity(storeDetails);
                     await _storeDetailsRepository.SaveChanges();
 
                 }
