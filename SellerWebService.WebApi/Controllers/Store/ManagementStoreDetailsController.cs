@@ -29,7 +29,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             return Ok(res);
         }
 
-        [HttpPost("create-store-details")]
+        [HttpPost("store-details")]
         public async Task<ActionResult<OperationResponse>> CreateStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
             try
@@ -59,7 +59,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("edit-store-details")]
+        [HttpPut("store-details")]
         public async Task<ActionResult<OperationResponse>> EditStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
             try
@@ -86,7 +86,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("create-signature-image")]
+        [HttpPost("signature-image")]
         public async Task<ActionResult> CreateSignature(IFormFile image)
         {
             try
@@ -104,7 +104,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("create-stamp-image")]
+        [HttpPost("stamp-image")]
         public async Task<ActionResult> CreateStamp(IFormFile image)
         {
             try
@@ -122,7 +122,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("edit-signature-image")]
+        [HttpPut("signature-image")]
         public async Task<ActionResult> EditSignature(IFormFile image)
         {
             try
@@ -140,7 +140,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPost("edit-stamp-image")]
+        [HttpPut("stamp-image")]
         public async Task<ActionResult> EditStamp(IFormFile image)
         {
             try
