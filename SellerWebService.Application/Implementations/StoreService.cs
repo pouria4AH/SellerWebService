@@ -130,12 +130,6 @@ namespace SellerWebService.Application.Implementations
                 return CreateStoreDetailsResult.Error;
             }
             
-            //if (createStoreDetails.StampImage != null && createStoreDetails.StampImage.IsImage())
-            //{
-            //    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") + Path.GetExtension(createStoreDetails.SignatureImage.FileName);
-            //    createStoreDetails.StampImage.AddImageToServer(imageName, PathExtension.StoreDetailsStampImageServer, null, null);
-            //    newDetails.StampImage = imageName;
-            //}
         }
 
         public async Task<bool> CreateSignature(IFormFile image, Guid storeCode)

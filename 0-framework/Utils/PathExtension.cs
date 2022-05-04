@@ -47,34 +47,34 @@
         #region product category 
 
         public static string ProductCategoryOrigin = "ImageUploader/Content/Images/ProductCategory/origin/";
-        public static string ProductCategoryOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductCategory/origin/");
+        public static string ProductCategoryOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/ProductCategory/origin/");
 
         public static string ProductCategoryThumb = "ImageUploader/Content/Images/ProductCategory/Thumb/";
-        public static string  ProductCategoryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductCategory/Thumb/");
+        public static string  ProductCategoryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/ProductCategory/Thumb/");
         #endregion  
         #region product 
 
         public static string ProductOrigin = "ImageUploader/Content/Images/Product/origin/";
-        public static string ProductOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/Product/origin/");
+        public static string ProductOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/Product/origin/");
 
         public static string ProductThumb = "ImageUploader/Content/Images/Product/Thumb/";
-        public static string  ProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/Product/Thumb/");
+        public static string  ProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/Product/Thumb/");
         #endregion 
         #region product gallery
 
         public static string ProductGalleryOrigin = "ImageUploader/Content/Images/ProductGallery/origin/";
-        public static string ProductGalleryOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductGallery/origin/");
+        public static string ProductGalleryOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/ProductGallery/origin/");
 
         public static string ProductGalleryThumb = "ImageUploader/Content/Images/ProductGallery/Thumb/";
-        public static string  ProductGalleryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/ProductGallery/Thumb/");
+        public static string  ProductGalleryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/ProductGallery/Thumb/");
         #endregion
         #region store details gallery
 
         public static string StoreDetailsSignatureImage = "ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/";
-        public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/");
+        public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/");
 
         public static string StoreDetailsStampImage = "ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
-        public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "ImageUploader/Content/Images/StoreDetails/StampImage/");
+        public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/StoreDetails/StampImage/");
         #endregion
     }
 }
