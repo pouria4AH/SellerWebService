@@ -24,4 +24,8 @@
     <ProjectReference Include="..\SellerWebService.DataLayer\SellerWebService.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\ImageUploader\Content\Store\Images\StoreDetails\" />
+  </ItemGroup>
+
 </Project>

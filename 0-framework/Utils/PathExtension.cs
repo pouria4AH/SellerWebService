@@ -70,11 +70,11 @@
         #endregion
         #region store details gallery
 
-        public static string StoreDetailsSignatureImage = "ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/";
-        public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/StoreDetails/SignatureImage/origin/");
+        public static string StoreDetailsSignatureImage = "ImageUploader/Content/Store/Images/StoreDetails/SignatureImage/";
+        public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/SignatureImage/");
 
         public static string StoreDetailsStampImage = "ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
-        public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Images/StoreDetails/StampImage/");
+        public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/StampImage/");
         #endregion
     }
 }

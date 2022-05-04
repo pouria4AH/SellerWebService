@@ -15,6 +15,7 @@ namespace SellerWebService.WebApi.Controllers.Store
     {
         #region ctor
         private readonly IStoreService _storeService;
+        
         public ManagementStoreDetailsController(IStoreService storeService)
         {
             _storeService = storeService;
@@ -29,16 +30,16 @@ namespace SellerWebService.WebApi.Controllers.Store
         }
 
         [HttpPost("create-store-details")]
-        public async Task<ActionResult<OperationResponse>> EditStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
+        public async Task<ActionResult<OperationResponse>> CreateStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
             try
             {
-                if(await _storeService.IsHaveStoreDetails(User.GetUserStoreCode()))
+                if (await _storeService.IsHaveStoreDetails(User.GetUserStoreCode()))
                     return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.StoreIsExists, null));
 
                 if (ModelState.IsValid)
                 {
-                    var res = await _storeService.EditStoreDetails(storeDetails, User.GetUserStoreCode());
+                    var res = await _storeService.CreateStoreDetails(storeDetails, User.GetUserStoreCode());
                     switch (res)
                     {
                         case CreateStoreDetailsResult.StoreIsNull:
@@ -56,16 +57,16 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
 
             }
-        } 
+        }
 
         [HttpPost("edit-store-details")]
-        public async Task<ActionResult<OperationResponse>> CreateStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
+        public async Task<ActionResult<OperationResponse>> EditStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _storeService.CreateStoreDetails(storeDetails, User.GetUserStoreCode());
+                    var res = await _storeService.EditStoreDetails(storeDetails, User.GetUserStoreCode());
                     switch (res)
                     {
                         case CreateStoreDetailsResult.StoreIsNull:
@@ -156,5 +157,6 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
+
     }
 }

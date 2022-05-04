@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /SellerWebService.WebApi/ImageUploader/Content/Images/Product
+/SellerWebService.WebApi/wwwroot/ImageUploader/Content/Store/Images/StoreDetails/SignatureImage

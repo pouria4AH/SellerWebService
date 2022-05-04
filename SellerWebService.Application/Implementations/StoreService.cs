@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using _0_framework.Account;
+﻿using _0_framework.Account;
 using _0_framework.Extensions;
 using _0_framework.Utils;
 using Microsoft.AspNetCore.Http;
@@ -141,11 +140,12 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                    var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsSignatureImageServer, null, null);
                     storeDetails.SigntureImage = imageName;
+                    await _storeDetailsRepository.SaveChanges();
                 }
 
                 return true;
@@ -165,11 +165,13 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                    var imageName =  Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsStampImageServer, null, null);
                     storeDetails.StampImage = imageName;
+                    await _storeDetailsRepository.SaveChanges();
+
                 }
 
                 return true;
@@ -213,11 +215,13 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null || storeDetails.SigntureImage == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                    var imageName =  Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsSignatureImageServer, null, null, null, storeDetails.SigntureImage);
                     storeDetails.StampImage = imageName;
+                    await _storeDetailsRepository.SaveChanges();
+
                 }
 
                 return true;
@@ -237,11 +241,13 @@ namespace SellerWebService.Application.Implementations
                 if (storeDetails == null || storeDetails.StampImage == null) return false;
                 if (image != null && image.IsImage())
                 {
-                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                    var imageName =  Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
                         PathExtension.StoreDetailsStampImageServer, null, null, null, storeDetails.StampImage);
                     storeDetails.StampImage = imageName;
+                    await _storeDetailsRepository.SaveChanges();
+
                 }
 
                 return true;
