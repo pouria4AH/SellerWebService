@@ -97,7 +97,7 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<bool> IsHaveStoreDetails(Guid storeCode)
         {
-            return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode && !x.IsDelete && !x.IsDelete);
+            return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode && x.IsActive && !x.IsDelete);
         }
 
         public async Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, Guid storeCode)
@@ -129,7 +129,7 @@ namespace SellerWebService.Application.Implementations
             {
                 return CreateStoreDetailsResult.Error;
             }
-            
+
         }
 
         public async Task<bool> CreateSignature(IFormFile image, Guid storeCode)
@@ -168,7 +168,79 @@ namespace SellerWebService.Application.Implementations
                     var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsSignatureImageServer, null, null);
+                        PathExtension.StoreDetailsStampImageServer, null, null);
+                    storeDetails.StampImage = imageName;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, Guid storeCode)
+        {
+            try
+            {
+                var store = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (store == null) return CreateStoreDetailsResult.StoreIsNull;
+                store.Description = storeDetails.Description;
+                store.Email = storeDetails.Email;
+                store.Instagram = storeDetails.Instagram;
+                store.WhatsappNumber = storeDetails.WhatsappNumber;
+                store.Mobile = storeDetails.Mobile;
+                store.TelegramNumber = storeDetails.TelegramNumber;
+                store.Phone = storeDetails.Phone;
+                _storeDetailsRepository.EditEntity(store);
+                await _storeDetailsRepository.SaveChanges();
+                return CreateStoreDetailsResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateStoreDetailsResult.Error;
+            }
+        }
+
+        public async Task<bool> EditSignature(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null || storeDetails.SigntureImage == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsSignatureImageServer, null, null, null, storeDetails.SigntureImage);
+                    storeDetails.StampImage = imageName;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EditStamp(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null || storeDetails.StampImage == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = storeCode.ToString("N") + Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsStampImageServer, null, null, null, storeDetails.StampImage);
                     storeDetails.StampImage = imageName;
                 }
 
