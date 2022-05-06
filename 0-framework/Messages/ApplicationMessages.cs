@@ -9,6 +9,7 @@
         public const string NotFound = "موردی با این مشخصات پیدا نشد";
         public const string ModelIsNotValid = "اطلاعات وارد شده نادرست است";
         public const string IsNotImage = "لطفا عکس را درست وارد کنید";
+        public const string IsExist = "رکورد مورد نظر از قبل موجود میباشد";
         // ---------------------------------------------- auth ------------------------------------------------------
         public const string MobileNotFound = "شماره ای با این مشخصات پیدا نشد";
         public const string UserNotFound = "کاربر مورد نظر یافت نشد";

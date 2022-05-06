@@ -2,7 +2,7 @@
 {
     public class EditCustomerDto : CreateCustomerDto
     {
-        public long CustomerCode { get; set; }
+        public Guid CustomerCode { get; set; }
 
     }
 }

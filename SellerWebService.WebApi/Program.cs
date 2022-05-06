@@ -32,6 +32,7 @@ builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
 builder.Services.AddScoped<IFactorService, FactorService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 #endregion
 
 builder.Services.AddEndpointsApiExplorer();
