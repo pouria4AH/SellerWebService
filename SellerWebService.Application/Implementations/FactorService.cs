@@ -98,6 +98,7 @@ namespace SellerWebService.Application.Implementations
                 taxation = factor.taxation,
                 DeliveryDate = factor.DeliveryDate,
                 FactorStatus = factor.FactorStatus.GetEnumName(),
+                Status = factor.FactorStatus,
                 FirstName = factor.Customer.FirstName,
                 LastName = factor.Customer.LastName,
                 Mobile = factor.Customer.Mobile,
@@ -139,6 +140,45 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<ReadFullFactorDto> GetFinialFactor(Guid factorCode, Guid storeCode)
+        {
+            var factore = await _factorRepository.GetQuery().AsQueryable().Include(x => x.FactorDetails)
+                .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete);
+            if (factore == null || !factore.FactorDetails.Any()) return null;
+            return new ReadFullFactorDto
+            {
+                Name = factore.Name,
+                Description = factore.Description,
+                Code = factore.Code,
+                StoreCode = storeCode,
+                FactorStatus = factore.FactorStatus.GetEnumName(),
+                FinalPrice = factore.FinalPrice,
+                taxation = factore.taxation,
+                Prepayment = factore.Prepayment,
+                TotalPrice = factore.TotalPrice,
+                TotalDiscount = factore.TotalDiscount,
+                IsFinalPaid = factore.IsFinalPaid,
+                FinalFactorPaymentState = factore.FinalFactorPaymentState,
+                DeliveryDate = factore.DeliveryDate,
+                FirstFactorPaymentState = factore.FirstFactorPaymentState,
+                FinalPaymentDate = factore.FinalPaymentDate,
+                FinalTracingCode = factore.FinalTracingCode,
+                FirstPaymentDate = factore.FirstPaymentDate,
+                FirstTracingCode = factore.FirstTracingCode,
+                IsFirstPaid = factore.IsFirstPaid,
+                CreateFactorDetailsDtos = factore.FactorDetails.Select(x => new CreateFactorDetailsDto
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    Count = x.Count,
+                    Discount = x.Discount,
+                    FactorCode = factorCode,
+                    Price = x.Price,
+                    Packaging = x.Packaging
+                }).ToList()
+
+            };
+        }
 
         #endregion
 
@@ -236,6 +276,18 @@ namespace SellerWebService.Application.Implementations
         }
 
         #endregion
+
+        #region private
+
+        private void CheckForExpired(DateTime date, out bool res)
+        {
+            if (date.AddDays(7) > DateTime.Now) res = true;
+            res = false;
+        }
+
+
+        #endregion
+
         #region disposs
 
         public async ValueTask DisposeAsync()

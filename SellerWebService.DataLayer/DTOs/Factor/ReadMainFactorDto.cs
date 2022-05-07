@@ -1,4 +1,6 @@
-﻿namespace SellerWebService.DataLayer.DTOs.Factor
+﻿using SellerWebService.DataLayer.Entities.Factor;
+
+namespace SellerWebService.DataLayer.DTOs.Factor
 {
     public class ReadMainFactorDto
     {
@@ -35,6 +37,7 @@
         [Display(Name = "وضعیت فعلی فاکتور")]
         public string FactorStatus { get; set; }
 
+        public FactorStatus Status { get; set; }
         public List<CreateFactorDetailsDto> CreateFactorDetailsDtos { get; set; }
 
         [Display(Name = "نام")]

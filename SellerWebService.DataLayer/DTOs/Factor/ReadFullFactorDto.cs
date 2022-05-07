@@ -1,16 +1,9 @@
-﻿using System.Security.AccessControl;
-using _0_framework.Entities;
-using SellerWebService.DataLayer.Entities.Account;
-using SellerWebService.DataLayer.Entities.Products;
-using SellerWebService.DataLayer.Entities.Store;
+﻿using SellerWebService.DataLayer.Entities.Factor;
 
-namespace SellerWebService.DataLayer.Entities.Factor
+namespace SellerWebService.DataLayer.DTOs.Factor
 {
-    public class Factor : BaseEntity
+    public class ReadFullFactorDto
     {
-        #region prop
-        public long CustomerId { get; set; }
-
         [Display(Name = "کد فاکتور")]
         public Guid Code { get; set; }
 
@@ -43,8 +36,8 @@ namespace SellerWebService.DataLayer.Entities.Factor
 
         [Display(Name = "مجموع قیمت ")]
         [Range(0, long.MaxValue)]
-        public long TotalPrice { get; set; } = 0; 
-        
+        public long TotalPrice { get; set; } = 0;
+
         [Display(Name = "مجموع تخفیف")]
         [Range(0, long.MaxValue)]
         public long TotalDiscount { get; set; } = 0;
@@ -61,52 +54,17 @@ namespace SellerWebService.DataLayer.Entities.Factor
         public int DeliveryDate { get; set; }
 
         [Display(Name = "مالیات")]
-        [Range(0,100)]
+        [Range(0, 100)]
         public int taxation { get; set; } = 0;
 
         public Guid StoreCode { get; set; }
 
         [Display(Name = "وضعیت فعلی فاکتور")]
-        public FactorStatus FactorStatus { get; set; }
+        public string FactorStatus { get; set; }
 
         public FactorPaymentState FirstFactorPaymentState { get; set; }
         public FactorPaymentState FinalFactorPaymentState { get; set; }
-        #endregion
-        #region relations
-        public Customer Customer { get; set; }
-        public ICollection<FactorDetails> FactorDetails { get; set; }
-        
-        #endregion
-    }
+        public List<CreateFactorDetailsDto> CreateFactorDetailsDtos { get; set; }
 
-    public enum FactorStatus
-    {
-
-        [Display(Name = "انتظار")]
-        Waiting,
-        [Display(Name = "رد شده")]
-        Reject,
-        [Display(Name = "قبول شده")]
-        Accepted,
-        [Display(Name = "آماده برای پرداخت دوم")]
-        ReadyToFinalPayed,
-        [Display(Name = "آماده تحویل")]
-        Ready,
-        [Display(Name = "تحویل داده شده")]
-        Delivered,
-        [Display(Name = "تاریخ گذشته")]
-        Expired,
-        [Display(Name = "در حال ثبت")]
-        Open
-    }
-
-    public enum FactorPaymentState
-    {
-        [Display(Name = "درگاه بانکی")]
-        Portal,
-        [Display(Name = "کارت به کارت")]
-        BankCreditCard,
-        [Display(Name = "چک")]
-        BankCheck
     }
 }
