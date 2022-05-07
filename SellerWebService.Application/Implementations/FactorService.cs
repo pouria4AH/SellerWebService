@@ -139,6 +139,7 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+
         #endregion
 
         #region calculate
@@ -163,6 +164,78 @@ namespace SellerWebService.Application.Implementations
 
         #endregion
 
+        #region change state
+        public async Task<bool> RejectFactor(Guid factorCode, Guid storeCode)
+        {
+            var factore = await _factorRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+            if (factore != null) return false;
+            factore.FactorStatus = FactorStatus.Reject;
+            _factorRepository.EditEntity(factore);
+            await _factorRepository.SaveChanges();
+            return true;
+        }
+
+        public async Task<bool> ReadyToFinalPayedFactor(Guid factorCode, Guid storeCode)
+        {
+            var factore = await _factorRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+            if (factore != null) return false;
+            factore.FactorStatus = FactorStatus.ReadyToFinalPayed;
+            _factorRepository.EditEntity(factore);
+            await _factorRepository.SaveChanges();
+            return true;
+        }
+
+        public async Task<bool> DeliveredFactor(Guid factorCode, Guid storeCode)
+        {
+            var factore = await _factorRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+            if (factore != null) return false;
+            factore.FactorStatus = FactorStatus.Delivered;
+            _factorRepository.EditEntity(factore);
+            await _factorRepository.SaveChanges();
+            return true;
+        }
+
+        public async Task<bool> AcceptedFactor(AcceptedFactorDto accepted, Guid factorCode, Guid storeCode)
+        {
+            try
+            {
+                var factore = await _factorRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+                if (factore != null) return false;
+                factore.FirstFactorPaymentState = accepted.PaymentState;
+                factore.FirstPaymentDate = accepted.PaymenyDate;
+                factore.FirstTracingCode = accepted.TracingCode;
+                _factorRepository.EditEntity(factore);
+                await _factorRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ReadyFactor(AcceptedFactorDto? accepted, Guid factorCode, Guid storeCode)
+        {
+            var factore = await _factorRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+            if (factore != null) return false;
+            if (factore.Prepayment != 100)
+            {
+                factore.FinalFactorPaymentState = accepted.PaymentState;
+                factore.FinalPaymentDate = accepted.PaymenyDate;
+                factore.FinalTracingCode = accepted.TracingCode;
+            }
+            factore.FactorStatus = FactorStatus.Ready;
+            _factorRepository.EditEntity(factore);
+            await _factorRepository.SaveChanges();
+            return true;
+        }
+
+        #endregion
         #region disposs
 
         public async ValueTask DisposeAsync()

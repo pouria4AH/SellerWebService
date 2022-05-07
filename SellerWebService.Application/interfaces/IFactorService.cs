@@ -8,5 +8,10 @@ namespace SellerWebService.Application.interfaces
         Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails, Guid storeCode);
         Task<ReadMainFactorDto> GetFinialFactorToConfirm(Guid factorCode, Guid storeCode);
         Task<CreateFactorResult> PublishFactor(Guid factorCode, Guid storeCode);
+        Task<bool> RejectFactor(Guid factorCode, Guid storeCode);
+        Task<bool> ReadyToFinalPayedFactor(Guid factorCode, Guid storeCode);
+        Task<bool> DeliveredFactor(Guid factorCode, Guid storeCode);
+        Task<bool> AcceptedFactor(AcceptedFactorDto accepted, Guid factorCode, Guid storeCode);
+        Task<bool> ReadyFactor(AcceptedFactorDto? accepted , Guid factorCode, Guid storeCode);
     }
 }
