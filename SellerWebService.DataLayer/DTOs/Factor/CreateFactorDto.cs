@@ -22,6 +22,8 @@
         [Display(Name = "مالیات")]
         [Range(0, 100)]
         public int taxation { get; set; }
+
+        public int longDayToExpired { get; set; }
     }
 
     public enum CreateFactorResult

@@ -19,7 +19,7 @@ namespace SellerWebService.WebApi.Controllers.GetImage
 
         #endregion
 
-        [HttpGet("signature-image-{imageName}")]
+        [HttpGet("signature-{imageName}")]
         public async Task<ActionResult<byte[]>> GetSignatureImage(string imageName)
         {
             try
@@ -34,7 +34,7 @@ namespace SellerWebService.WebApi.Controllers.GetImage
             }
         } 
         
-        [HttpGet("stamp-image-{imageName}")]
+        [HttpGet("stamp-{imageName}")]
         public async Task<ActionResult<byte[]>> GetStampImage(string imageName)
         {
             try

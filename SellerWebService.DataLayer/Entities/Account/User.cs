@@ -15,7 +15,7 @@ namespace SellerWebService.DataLayer.Entities.Account
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "لطفا {0} راK وارد کنید")]
+        [Required(ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? EmailActiveCode { get; set; }
 

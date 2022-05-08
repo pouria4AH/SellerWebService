@@ -24,7 +24,7 @@ namespace SellerWebService.DataLayer.Entities.Factor
         [Range(0, long.MaxValue)]
         public long Count { get; set; }
 
-        [Display(Name = "درصد تخفیف")]
+        [Display(Name = " تخفیف")]
         [Range(0, long.MaxValue)]
         public int Discount { get; set; } = 0;
 

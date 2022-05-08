@@ -1,8 +1,5 @@
-﻿using System.Security.AccessControl;
-using _0_framework.Entities;
+﻿using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Account;
-using SellerWebService.DataLayer.Entities.Products;
-using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Factor
 {
@@ -71,6 +68,8 @@ namespace SellerWebService.DataLayer.Entities.Factor
 
         public FactorPaymentState FirstFactorPaymentState { get; set; }
         public FactorPaymentState FinalFactorPaymentState { get; set; }
+
+        public DateTime ExpiredDate { get; set; }
         #endregion
         #region relations
         public Customer Customer { get; set; }

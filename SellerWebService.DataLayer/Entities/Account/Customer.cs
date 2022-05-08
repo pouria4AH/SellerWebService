@@ -30,7 +30,7 @@ namespace SellerWebService.DataLayer.Entities.Account
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string LastName { get; set; }
         
-        [Display(Name = "نام خانوادگی")]
+        [Display(Name = "نام شرکت")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? CompanyName { get; set; }
 

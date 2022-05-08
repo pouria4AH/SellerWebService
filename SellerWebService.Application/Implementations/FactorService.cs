@@ -40,7 +40,8 @@ namespace SellerWebService.Application.Implementations
                     DeliveryDate = factor.DeliveryDate,
                     FactorStatus = FactorStatus.Open,
                     taxation = factor.taxation,
-                    StoreCode = storeCode
+                    StoreCode = storeCode,
+                    ExpiredDate = DateTime.Now.AddDays(factor.longDayToExpired)
                 };
 
                 await _factorRepository.AddEntity(newFactor);
@@ -219,7 +220,7 @@ namespace SellerWebService.Application.Implementations
         public async Task<bool> ReadyToFinalPayedFactor(Guid factorCode, Guid storeCode)
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
-                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
+                .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode && x.Prepayment != 100);
             if (factore != null) return false;
             factore.FactorStatus = FactorStatus.ReadyToFinalPayed;
             _factorRepository.EditEntity(factore);
@@ -245,6 +246,8 @@ namespace SellerWebService.Application.Implementations
                 var factore = await _factorRepository.GetQuery().AsQueryable()
                     .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
                 if (factore != null) return false;
+                var res = await ExpiredFactor(factore);
+                factore.FactorStatus = res ? FactorStatus.Expired : FactorStatus.Accepted;
                 factore.FirstFactorPaymentState = accepted.PaymentState;
                 factore.FirstPaymentDate = accepted.PaymenyDate;
                 factore.FirstTracingCode = accepted.TracingCode;
@@ -274,19 +277,22 @@ namespace SellerWebService.Application.Implementations
             await _factorRepository.SaveChanges();
             return true;
         }
-
-        #endregion
-
-        #region private
-
-        private void CheckForExpired(DateTime date, out bool res)
+        public async Task<bool> ExpiredFactor(Factor factor)
         {
-            if (date.AddDays(7) > DateTime.Now) res = true;
-            res = false;
+            if (factor.ExpiredDate < DateTime.Now && factor.FactorStatus == FactorStatus.Waiting)
+            {
+                factor.FactorStatus = FactorStatus.Expired;
+                _factorRepository.EditEntity(factor);
+                await _factorRepository.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
-
         #endregion
+
+
 
         #region disposs
 

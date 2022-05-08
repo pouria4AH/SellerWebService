@@ -21,7 +21,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             _customerService = customerService;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<OperationResponse>> CreateCustomer(CreateCustomerDto customer)
         {
             try
@@ -48,7 +48,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpPut("edit")]
+        [HttpPut]
         public async Task<ActionResult<OperationResponse>> EditCustomer(EditCustomerDto customer)
         {
             try
@@ -75,7 +75,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpDelete("delete/{customerCode}")]
+        [HttpDelete("/{customerCode}")]
         public async Task<ActionResult> DeleteCustomer(string customerCode)
         {
             try
@@ -92,7 +92,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpGet("get-customer-{customerCode}")]
+        [HttpGet("{customerCode}")]
         public async Task<ActionResult<ReadCustomerDto>> GetCustomer(string customerCode)
         {
             var customer = await _customerService.GetCustomer(Guid.Parse(customerCode), User.GetUserStoreCode());

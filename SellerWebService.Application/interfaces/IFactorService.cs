@@ -1,4 +1,5 @@
 ﻿using SellerWebService.DataLayer.DTOs.Factor;
+using SellerWebService.DataLayer.Entities.Factor;
 
 namespace SellerWebService.Application.interfaces
 {
@@ -14,5 +15,6 @@ namespace SellerWebService.Application.interfaces
         Task<bool> DeliveredFactor(Guid factorCode, Guid storeCode);
         Task<bool> AcceptedFactor(AcceptedFactorDto accepted, Guid factorCode, Guid storeCode);
         Task<bool> ReadyFactor(AcceptedFactorDto? accepted, Guid factorCode, Guid storeCode);
+        Task<bool> ExpiredFactor(Factor factor);
     }
 }
