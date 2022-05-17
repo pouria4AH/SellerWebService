@@ -3,8 +3,6 @@
     public class CreateFactorDetailsDto
     {
 
-        public Guid FactorCode { get; set; }
-
         [Display(Name = "نام")]
         [MaxLength(80, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Name { get; set; }

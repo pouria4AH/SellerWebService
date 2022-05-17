@@ -25,7 +25,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         [HttpGet("have-any-store-details")]
         public async Task<ActionResult> HaveStoreDetails()
         {
-            var res = await _storeService.IsHaveStoreDetails(User.GetUserStoreCode());
+            var res = await _storeService.IsHaveStoreDetails(User.GetStoreCode());
             return Ok(res);
         }
 
@@ -34,12 +34,12 @@ namespace SellerWebService.WebApi.Controllers.Store
         {
             try
             {
-                if (await _storeService.IsHaveStoreDetails(User.GetUserStoreCode()))
+                if (await _storeService.IsHaveStoreDetails(User.GetStoreCode()))
                     return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.StoreIsExists, null));
 
                 if (ModelState.IsValid)
                 {
-                    var res = await _storeService.CreateStoreDetails(storeDetails, User.GetUserStoreCode());
+                    var res = await _storeService.CreateStoreDetails(storeDetails, User.GetStoreCode());
                     switch (res)
                     {
                         case CreateStoreDetailsResult.StoreIsNull:
@@ -66,7 +66,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _storeService.EditStoreDetails(storeDetails, User.GetUserStoreCode());
+                    var res = await _storeService.EditStoreDetails(storeDetails, User.GetStoreCode());
                     switch (res)
                     {
                         case CreateStoreDetailsResult.StoreIsNull:
@@ -91,7 +91,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         {
             try
             {
-                var res = await _storeService.CreateSignature(image, User.GetUserStoreCode());
+                var res = await _storeService.CreateSignature(image, User.GetStoreCode());
                 if (res)
                 {
                     return Ok();
@@ -109,7 +109,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         {
             try
             {
-                var res = await _storeService.CreateStamp(image, User.GetUserStoreCode());
+                var res = await _storeService.CreateStamp(image, User.GetStoreCode());
                 if (res)
                 {
                     return Ok();
@@ -127,7 +127,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         {
             try
             {
-                var res = await _storeService.EditSignature(image, User.GetUserStoreCode());
+                var res = await _storeService.EditSignature(image, User.GetStoreCode());
                 if (res)
                 {
                     return Ok();
@@ -145,7 +145,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         {
             try
             {
-                var res = await _storeService.EditStamp(image, User.GetUserStoreCode());
+                var res = await _storeService.EditStamp(image, User.GetStoreCode());
                 if (res)
                 {
                     return Ok();

@@ -22,7 +22,7 @@ namespace SellerWebService.WebApi.Extensions
             var user = (ClaimsPrincipal)principal;
             return user.GetUserUniqueCode();
         } 
-        public static Guid GetUserStoreCode(this ClaimsPrincipal claimsPrincipal)
+        public static Guid GetStoreCode(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal != null)
             {
@@ -35,7 +35,7 @@ namespace SellerWebService.WebApi.Extensions
         public static Guid GetUserStoreCode(this IPrincipal principal)
         {
             var user = (ClaimsPrincipal)principal;
-            return user.GetUserStoreCode();
+            return user.GetStoreCode();
         }
         public static UserClaimsStore GetCurrentUser(this ClaimsPrincipal claimsPrincipal)
         {

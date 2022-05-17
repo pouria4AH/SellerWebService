@@ -54,24 +54,31 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-        public async Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails, Guid storeCode)
+        public async Task<bool> CreateFactorDetails(List<CreateFactorDetailsDto> factorDetails, Guid storeCode, Guid factorCode)
         {
             try
             {
                 var factor = await _factorRepository.GetQuery().AsQueryable()
-                    .SingleOrDefaultAsync(x => x.Code == factorDetails.FactorCode && x.StoreCode == storeCode);
+                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
                 if (factor == null) return false;
-                var newDetails = new FactorDetails
+                _factorDetailsRepository.DeletePermanentEntities(factor.FactorDetails.ToList());
+
+                var list = new List<FactorDetails>();
+                foreach (var item in factor.FactorDetails)
                 {
-                    FactorId = factor.Id,
-                    Name = factorDetails.Name,
-                    Description = factorDetails.Description,
-                    Count = factorDetails.Count,
-                    Discount = factorDetails.Discount,
-                    Packaging = factorDetails.Packaging,
-                    Price = factorDetails.Price
-                };
-                await _factorDetailsRepository.AddEntity(newDetails);
+                    var newDetails = new FactorDetails
+                    {
+                        FactorId = factor.Id,
+                        Name = item.Name,
+                        Description = item.Description,
+                        Count = item.Count,
+                        Discount = item.Discount,
+                        Packaging = item.Packaging,
+                        Price = item.Price
+                    };
+                    list.Add(newDetails);
+                }
+                await _factorDetailsRepository.AddRangeEntities(list);
                 await _factorDetailsRepository.SaveChanges();
                 return true;
             }
@@ -112,7 +119,6 @@ namespace SellerWebService.Application.Implementations
                     Description = x.Description,
                     Count = x.Count,
                     Discount = x.Discount,
-                    FactorCode = factor.Code,
                     Packaging = x.Packaging,
                     Price = x.Price
 
@@ -173,7 +179,6 @@ namespace SellerWebService.Application.Implementations
                     Description = x.Description,
                     Count = x.Count,
                     Discount = x.Discount,
-                    FactorCode = factorCode,
                     Price = x.Price,
                     Packaging = x.Packaging
                 }).ToList()

@@ -28,7 +28,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _customerService.CreateCustomer(customer, User.GetUserStoreCode());
+                    var res = await _customerService.CreateCustomer(customer, User.GetStoreCode());
                     switch (res)
                     {
                         case CreateOurEditCustomerResult.IsExist:
@@ -55,7 +55,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _customerService.EditCustomer(customer, User.GetUserStoreCode());
+                    var res = await _customerService.EditCustomer(customer, User.GetStoreCode());
                     switch (res)
                     {
                         case CreateOurEditCustomerResult.NotFound:
@@ -81,7 +81,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             try
             {
                 var code = Guid.Parse(customerCode);
-                var res = await _customerService.DeleteCustomer(code, User.GetUserStoreCode());
+                var res = await _customerService.DeleteCustomer(code, User.GetStoreCode());
                 if (res) return Ok();
                 return BadRequest();
             }
@@ -95,7 +95,7 @@ namespace SellerWebService.WebApi.Controllers.Store
         [HttpGet("{customerCode}")]
         public async Task<ActionResult<ReadCustomerDto>> GetCustomer(string customerCode)
         {
-            var customer = await _customerService.GetCustomer(Guid.Parse(customerCode), User.GetUserStoreCode());
+            var customer = await _customerService.GetCustomer(Guid.Parse(customerCode), User.GetStoreCode());
             if (customer == null) return NotFound();
             return Ok(customer);
         }
