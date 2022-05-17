@@ -75,6 +75,8 @@ namespace SellerWebService.Application.Implementations
                 mainCustomer.FirstName = customer.FirstName;
                 mainCustomer.LastName = customer.LastName;
                 mainCustomer.Mobile = customer.Mobile;
+                _coustomerRepository.EditEntity(mainCustomer);
+                await _coustomerRepository.SaveChanges();
                 return CreateOurEditCustomerResult.Success;
             }
             catch (Exception e)

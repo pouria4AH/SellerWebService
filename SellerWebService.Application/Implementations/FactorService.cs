@@ -58,13 +58,16 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var factor = await _factorRepository.GetQuery().AsQueryable()
-                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
+                var factor = await _factorRepository.GetQuery().Include(x=>x.FactorDetails)
+                    .AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete);
                 if (factor == null) return false;
-                _factorDetailsRepository.DeletePermanentEntities(factor.FactorDetails.ToList());
+
+                if (factor.FactorDetails.Any() || factor.FactorDetails != null)
+                    _factorDetailsRepository.DeletePermanentEntities(factor.FactorDetails.ToList());
 
                 var list = new List<FactorDetails>();
-                foreach (var item in factor.FactorDetails)
+                foreach (var item in factorDetails)
                 {
                     var newDetails = new FactorDetails
                     {
@@ -90,7 +93,7 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<ReadMainFactorDto> GetFinialFactorToConfirm(Guid factorCode, Guid storeCode)
         {
-            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).AsQueryable()
+            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x=>x.Customer).AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
 
             if (factor == null || !factor.FactorDetails.Any()) return null;
@@ -132,7 +135,7 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var factor = await _factorRepository.GetQuery()
+                var factor = await _factorRepository.GetQuery().Include(x=>x.FactorDetails).AsQueryable()
                     .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
                 if (factor == null || !factor.FactorDetails.Any()) return CreateFactorResult.FactorNotFound;
                 await CalculateFactor(factorCode);
@@ -215,7 +218,7 @@ namespace SellerWebService.Application.Implementations
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
-            if (factore != null) return false;
+            if (factore == null) return false;
             factore.FactorStatus = FactorStatus.Reject;
             _factorRepository.EditEntity(factore);
             await _factorRepository.SaveChanges();
@@ -226,7 +229,7 @@ namespace SellerWebService.Application.Implementations
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode && x.Prepayment != 100);
-            if (factore != null) return false;
+            if (factore == null) return false;
             factore.FactorStatus = FactorStatus.ReadyToFinalPayed;
             _factorRepository.EditEntity(factore);
             await _factorRepository.SaveChanges();
@@ -237,7 +240,7 @@ namespace SellerWebService.Application.Implementations
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
-            if (factore != null) return false;
+            if (factore == null) return false;
             factore.FactorStatus = FactorStatus.Delivered;
             _factorRepository.EditEntity(factore);
             await _factorRepository.SaveChanges();
@@ -250,7 +253,7 @@ namespace SellerWebService.Application.Implementations
             {
                 var factore = await _factorRepository.GetQuery().AsQueryable()
                     .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
-                if (factore != null) return false;
+                if (factore == null) return false;
                 var res = await ExpiredFactor(factore);
                 factore.FactorStatus = res ? FactorStatus.Expired : FactorStatus.Accepted;
                 factore.FirstFactorPaymentState = accepted.PaymentState;
@@ -270,7 +273,7 @@ namespace SellerWebService.Application.Implementations
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
-            if (factore != null) return false;
+            if (factore == null) return false;
             if (factore.Prepayment != 100)
             {
                 factore.FinalFactorPaymentState = accepted.PaymentState;

@@ -1,5 +1,6 @@
-﻿using _0_framework.Messages;
-using Microsoft.AspNetCore.Http;
+﻿using _0_framework.Account;
+using _0_framework.Messages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Factor;
@@ -9,6 +10,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = AccountRole.Seller + "," + AccountRole.SellerEmployee)]
     public class ManagementFactorController : ControllerBase
     {
         #region ctor
@@ -23,7 +25,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         #endregion
 
         #region create factore
-        [HttpPost("blank-factor/{factorCode}")]
+        [HttpPost("blank-factor")]
         public async Task<ActionResult<OperationResponse>> CreateBlankFactor([FromBody] CreateFactorDto factor)
         {
             try
@@ -35,8 +37,8 @@ namespace SellerWebService.WebApi.Controllers.Factor
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                             ApplicationMessages.Error, null));
 
-                    return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                        ApplicationMessages.Error, new
+                    return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
+                        ApplicationMessages.Success, new
                         {
                             factorCode = code
                         }));
@@ -51,8 +53,8 @@ namespace SellerWebService.WebApi.Controllers.Factor
             }
         }
 
-        [HttpPost("factor-details")]
-        public async Task<ActionResult> CreateFactorDetails(List<CreateFactorDetailsDto> factorDetails, [FromRoute] string factorCode)
+        [HttpPost("factor-details/{factorCode}")]
+        public async Task<ActionResult> CreateFactorDetails([FromBody] List<CreateFactorDetailsDto> factorDetails, [FromRoute] string factorCode)
         {
             var res = await _factorService.CreateFactorDetails(factorDetails, User.GetStoreCode(), Guid.Parse(factorCode));
             if (res) return Ok();
@@ -70,20 +72,20 @@ namespace SellerWebService.WebApi.Controllers.Factor
         {
             try
             {
-                if (ModelState.IsValid)
+
+                var res = await _factorService.PublishFactor(Guid.Parse(factorCode), User.GetStoreCode());
+                switch (res)
                 {
-                    var res = await _factorService.PublishFactor(Guid.Parse(factorCode), User.GetStoreCode());
-                    switch (res)
-                    {
-                        case CreateFactorResult.FactorNotFound:
-                            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
-                                ApplicationMessages.NotFound, null));
-                        case CreateFactorResult.IsAlreadyPublish:
-                            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
-                                ApplicationMessages.IsExist, null));
-                        case CreateFactorResult.Error:
-                            return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
-                    }
+                    case CreateFactorResult.FactorNotFound:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
+                            ApplicationMessages.NotFound, null));
+                    case CreateFactorResult.IsAlreadyPublish:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
+                            ApplicationMessages.IsExist, null));
+                    case CreateFactorResult.Error:
+                        return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
+                    case CreateFactorResult.Success:
+                        return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, ApplicationMessages.Success, null));
                 }
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.ModelIsNotValid, null));
 
@@ -150,12 +152,12 @@ namespace SellerWebService.WebApi.Controllers.Factor
         }
 
         [HttpPost("ready/{factorCode}")]
-        public async Task<ActionResult> Ready([FromRoute] string factorCode, [FromBody] AcceptedFactorDto accepted)
+        public async Task<ActionResult> Ready([FromRoute] string factorCode, [FromBody] AcceptedFactorDto? accepted)
         {
             try
             {
                 var res = await _factorService.ReadyFactor(accepted, Guid.Parse(factorCode), User.GetUserStoreCode());
-                if(res) return Ok();
+                if (res) return Ok();
                 return BadRequest();
             }
             catch (Exception e)
