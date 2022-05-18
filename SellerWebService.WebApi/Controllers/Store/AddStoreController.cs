@@ -25,8 +25,15 @@ namespace SellerWebService.WebApi.Controllers.Store
         }
         #endregion
 
+        /// <summary>
+        ///  میتواند فروشگاه ثبت کند role = user در اینجا کاربر با 
+        /// </summary>
+        /// <remarks>In any case return OperationResponse and Does not return 500 rang code </remarks>
+        /// <response code="200">operation by non object </response>
+        /// <response code="400">operation by non object </response>
         [HttpPost("register-store")]
         [Authorize(Roles = AccountRole.User)]
+        [Produces("application/json")]
         public async Task<ActionResult<OperationResponse>> CreateStore([FromBody] RegisterStoreDto store)
         {
             try

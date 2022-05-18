@@ -75,6 +75,9 @@
 
         public static string StoreDetailsStampImage = "ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
         public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/StampImage/");
+
+        public static string StoreDetailsLogoImage = "ImageUploader/Content/Store/Images/StoreDetails/LogoImage/";
+        public static string StoreDetailsLogoImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/LogoImage/");
         #endregion
     }
 }

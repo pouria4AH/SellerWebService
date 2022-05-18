@@ -187,6 +187,34 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<bool> CreateLogo(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsLogoImageServer, null, null);
+                    storeDetails.LogoImage = imageName;
+
+                    _storeDetailsRepository.EditEntity(storeDetails);
+                    await _storeDetailsRepository.SaveChanges();
+
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public async Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, Guid storeCode)
         {
             try
@@ -266,7 +294,32 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<bool> EditLogo(IFormFile image, Guid storeCode)
+        {
+            try
+            {
+                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+                if (storeDetails == null || storeDetails.StampImage == null) return false;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsLogoImageServer, null, null, null, storeDetails.LogoImage);
+                    storeDetails.LogoImage = imageName;
+                    _storeDetailsRepository.EditEntity(storeDetails);
+                    await _storeDetailsRepository.SaveChanges();
 
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
         #endregion
 

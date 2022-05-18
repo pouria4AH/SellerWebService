@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SellerWebService.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.AddStoreController.CreateStore(SellerWebService.DataLayer.DTOs.Store.RegisterStoreDto)">
+            <summary>
+             میتواند فروشگاه ثبت کند role = user در اینجا کاربر با 
+            </summary>
+            <remarks>In any case return OperationResponse and Does not return 500 rang code </remarks>
+            <response code="200">operation by non object </response>
+            <response code="400">operation by non object </response>
+        </member>
+    </members>
+</doc>

@@ -38,6 +38,9 @@ namespace SellerWebService.DataLayer.Entities.Store
 
         [Display(Name = "نام تصویر مهر")]
         public string? StampImage { get; set; }
+        
+        [Display(Name = "نام تصویر لوگو")]
+        public string? LogoImage { get; set; }
 
         [Display(Name = "ایمیل")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
