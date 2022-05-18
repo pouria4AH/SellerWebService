@@ -1,3 +1,4 @@
+﻿using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,42 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "V1",
+        Title = "hi green",
+        Description = "این سیستم برای اکثر عملیات ها از یک شی خاص استفاده میکند تا گرفتن اطلاعات از ان راحت باشد "
+    });
+
+    //s.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    //{
+    //    Type = SecuritySchemeType.Http,
+    //    BearerFormat = "JWT",
+    //    In = ParameterLocation.Header,
+    //    Scheme = "bearer"
+    //});
+
+    //s.AddSecurityRequirement(new OpenApiSecurityRequirement
+    //{
+    //    {
+    //        new OpenApiSecurityScheme
+    //        {
+    //            Reference = new OpenApiReference
+    //            {
+    //                Type = ReferenceType.SecurityScheme,
+    //                Id = "bearer"
+    //            }
+    //        },
+    //        new List<string>()
+    //    }
+    //});
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    s.IncludeXmlComments(xmlPath);
+});
 
 #region config database
 builder.Services.AddDbContext<SellerContext>(options =>
@@ -33,6 +69,7 @@ builder.Services.AddScoped<IFactorService, FactorService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 #endregion
 
 builder.Services.AddEndpointsApiExplorer();

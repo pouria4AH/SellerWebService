@@ -1,5 +1,4 @@
-﻿using LazZiya.ImageResize.Animated;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Ticket;
 using SellerWebService.DataLayer.Entities.Factor;
@@ -9,7 +8,7 @@ using SellerWebService.DataLayer.Repository;
 
 namespace SellerWebService.Application.Implementations
 {
-    internal class TicketService : ITicketService
+    public class TicketService : ITicketService
     {
         #region ctor
         private readonly IGenericRepository<Ticket> _ticketRepository;

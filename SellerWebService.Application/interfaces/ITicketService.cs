@@ -2,7 +2,7 @@
 
 namespace SellerWebService.Application.interfaces
 {
-    internal interface ITicketService : IAsyncDisposable
+    public interface ITicketService : IAsyncDisposable
     {
         Task<bool> SendFromCustomer(CreateCustomerTicketDto customerTicket);
         Task<bool> SendFromSeller(CreateTicketDto ticket, Guid storeCode);
