@@ -22,5 +22,11 @@ namespace SellerWebService.Application.interfaces
         Task<bool> EditStamp(IFormFile image, Guid storeCode);
         #endregion
 
+        #region bank data
+        Task<bool> CreateBankData(BankDataDto bankData, Guid storeCode);
+        Task<bool> EditBankData(BankDataDto bankData, Guid storeCode);
+        Task<BankDataDto> GetBankData(Guid storeCode);
+
+        #endregion
     }
 }

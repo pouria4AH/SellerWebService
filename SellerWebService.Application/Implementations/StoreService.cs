@@ -19,13 +19,14 @@ namespace SellerWebService.Application.Implementations
         private readonly IGenericRepository<StoreData> _storeRepository;
         private readonly IGenericRepository<StoreDetails> _storeDetailsRepository;
         private readonly IGenericRepository<StorePayment> _storePaymentRepository;
-
-        public StoreService(IGenericRepository<User> userRepository, IGenericRepository<StoreData> storeRepository, IGenericRepository<StoreDetails> storeDetailsRepository, IGenericRepository<StorePayment> storePaymentRepository)
+        private readonly IGenericRepository<BankData> _bankRepository;
+        public StoreService(IGenericRepository<User> userRepository, IGenericRepository<StoreData> storeRepository, IGenericRepository<StoreDetails> storeDetailsRepository, IGenericRepository<StorePayment> storePaymentRepository, IGenericRepository<BankData> bankRepository)
         {
             _userRepository = userRepository;
             _storeRepository = storeRepository;
             _storeDetailsRepository = storeDetailsRepository;
             _storePaymentRepository = storePaymentRepository;
+            _bankRepository = bankRepository;
         }
 
         #endregion
@@ -263,6 +264,75 @@ namespace SellerWebService.Application.Implementations
             {
                 return false;
             }
+        }
+
+
+
+        #endregion
+
+        #region store bank
+        public async Task<bool> CreateBankData(BankDataDto bankData, Guid storeCode)
+        {
+            try
+            {
+                var store = await _storeRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
+                if (store == null) return false;
+                var newBank = new BankData
+                {
+                    StoreCode = store.UniqueCode,
+                    StoreDataId = store.Id,
+                    AccountNumber = bankData.AccountNumber,
+                    BankName = bankData.BankName,
+                    CardNumber = bankData.CardNumber,
+                    Owner = bankData.Owner,
+                    ShabaNumber = bankData.ShabaNumber
+                };
+                await _bankRepository.AddEntity(newBank);
+                await _bankRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EditBankData(BankDataDto bankData, Guid storeCode)
+        {
+            try
+            {
+                var mainBank = await _bankRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => !x.IsDelete && x.StoreCode == storeCode);
+                if (mainBank == null) return false;
+                mainBank.AccountNumber = bankData.AccountNumber;
+                mainBank.BankName = bankData.BankName;
+                mainBank.CardNumber = bankData.CardNumber;
+                mainBank.Owner = bankData.Owner;
+                mainBank.ShabaNumber = bankData.ShabaNumber;
+                _bankRepository.EditEntity(mainBank);
+                await _bankRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<BankDataDto> GetBankData(Guid storeCode)
+        {
+            var data = await _bankRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.StoreCode == storeCode);
+            if (data == null) return null;
+            return new BankDataDto
+            {
+                AccountNumber = data.AccountNumber,
+                BankName = data.BankName,
+                CardNumber = data.CardNumber,
+                Owner = data.Owner,
+                ShabaNumber = data.ShabaNumber,
+            };
         }
 
         #endregion
