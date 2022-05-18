@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LazZiya.ImageResize.Animated;
+using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Ticket;
 using SellerWebService.DataLayer.Entities.Factor;
@@ -24,14 +25,14 @@ namespace SellerWebService.Application.Implementations
         }
         #endregion
 
-        public async Task<bool> SendFromCustomer(CreateTicketFromCustomerDto ticket)
+        public async Task<bool> SendFromCustomer(CreateCustomerTicketDto customerTicket)
         {
             try
             {
                 var factor = await _factorRepository.GetQuery()
-                    .Include(x=>x.Customer)
+                    .Include(x => x.Customer)
                     .AsQueryable()
-                    .SingleOrDefaultAsync(x => !x.IsDelete && x.Code == ticket.FactorCode);
+                    .SingleOrDefaultAsync(x => !x.IsDelete && x.Code == customerTicket.FactorCode);
                 if (factor == null) return false;
                 var newTicket = new Ticket
                 {
@@ -40,8 +41,43 @@ namespace SellerWebService.Application.Implementations
                     IsReadByOwner = false,
                     IsReadByaSender = true,
                     TicketSection = TicketSection.Customer,
+                    TicketState = TicketState.OneWay,
                     StoreDataId = factor.Customer.StoreDataId,
-                    Title = ticket.Title,
+                    Title = customerTicket.Title,
+                };
+                await _ticketRepository.AddEntity(newTicket);
+                await _ticketRepository.SaveChanges();
+                var newMessage = new TicketsMessage
+                {
+                    Text = customerTicket.Text,
+                    TicketId = newTicket.Id
+                };
+                await _ticketsMessageRepository.AddEntity(newMessage);
+                await _ticketsMessageRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SendFromSeller(CreateTicketDto ticket, Guid storeCode)
+        {
+            try
+            {
+                var store = await _storeDataRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.IsActive && !x.IsDelete && x.UniqueCode == storeCode);
+                if (store == null) return false;
+                var newTicket = new Ticket
+                {
+                    IsForService = true,
+                    IsReadByOwner = false,
+                    IsReadByaSender = true,
+                    StoreDataId = store.Id,
+                    TicketSection = TicketSection.Support,
+                    TicketState = TicketState.UnderProcess,
+                    Title = ticket.Title
                 };
                 await _ticketRepository.AddEntity(newTicket);
                 await _ticketRepository.SaveChanges();
@@ -59,6 +95,32 @@ namespace SellerWebService.Application.Implementations
                 return false;
             }
         }
+
+        public async Task<bool> AnswerTicket(string text, long ticketId)
+        {
+            try
+            {
+                var mainTicket = await _ticketRepository.GetEntityById(ticketId);
+                if (mainTicket == null) return false;
+                var newMessage = new TicketsMessage
+                {
+                    TicketId = mainTicket.Id,
+                    Text = text
+                };
+                mainTicket.IsReadByaSender = false;
+                mainTicket.IsReadByOwner = true;
+                mainTicket.TicketState = TicketState.Answered;
+                _ticketRepository.EditEntity(mainTicket);
+                await _ticketRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+
         #region dispose
         public async ValueTask DisposeAsync()
         {

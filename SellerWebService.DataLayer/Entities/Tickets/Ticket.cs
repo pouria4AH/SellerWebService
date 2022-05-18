@@ -50,7 +50,7 @@ namespace SellerWebService.DataLayer.Entities.Tickets
         UnderProcess,
         [Display(Name = "پاسخ داده شده")]
         Answered,
-        [Display(Name = "بسته شده")]
-        Closed
+        [Display(Name = "یک طرفه")]
+        OneWay
     }
 }
