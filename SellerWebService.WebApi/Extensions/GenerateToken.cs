@@ -20,7 +20,7 @@ namespace SellerWebService.WebApi.Extensions
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim(ClaimTypes.NameIdentifier, user.UniqueCode.ToString("N")),
-              
+
             };
             if (user.StoreCode != null) claims.Add(new Claim(ClaimTypes.SerialNumber, user.StoreCode?.ToString("N")));
 

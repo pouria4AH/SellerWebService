@@ -3,6 +3,7 @@ using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Factor;
 using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Entities.Store;
+using SellerWebService.DataLayer.Entities.Tickets;
 
 namespace SellerWebService.DataLayer.Context
 {
@@ -20,7 +21,6 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }
         public DbSet<ProductGallery> ProductGalleries { get; set; }
-        public DbSet<BankData> BankDatas { get; set; }
         #endregion
         #region users
         public DbSet<User> Users { get; set; }
@@ -31,12 +31,16 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<FactorDetails> FactorDetails { get; set; }
         //public DbSet<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
         #endregion
-
         #region store
         public DbSet<StoreData> StoreDatas { get; set; }
         public DbSet<StoreDetails> StoreDetails { get; set; }
-        #endregion
+        public DbSet<BankData> BankDatas { get; set; }
 
+        #endregion
+        #region Tickets
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketsMessage> TicketsMessages { get; set; }
+        #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
