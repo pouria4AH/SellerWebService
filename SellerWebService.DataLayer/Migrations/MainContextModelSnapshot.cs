@@ -83,7 +83,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Account.User", b =>
@@ -172,7 +172,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.Factor", b =>
@@ -264,7 +264,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Factors");
+                    b.ToTable("Factors", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Factor.FactorDetails", b =>
@@ -315,7 +315,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("FactorId");
 
-                    b.ToTable("FactorDetails");
+                    b.ToTable("FactorDetails", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.GroupForProductFeature", b =>
@@ -350,7 +350,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("GroupForProductFeatures");
+                    b.ToTable("GroupForProductFeatures", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.Product", b =>
@@ -441,7 +441,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductCategory", b =>
@@ -518,7 +518,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeature", b =>
@@ -558,7 +558,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("GroupForProductFeatureId");
 
-                    b.ToTable("ProductFeatures");
+                    b.ToTable("ProductFeatures", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductFeatureCategory", b =>
@@ -588,7 +588,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductFeatureCategories");
+                    b.ToTable("ProductFeatureCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductGallery", b =>
@@ -631,7 +631,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductGalleries");
+                    b.ToTable("ProductGalleries", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Products.ProductSelectedCategory", b =>
@@ -663,7 +663,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSelectedCategories");
+                    b.ToTable("ProductSelectedCategories", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Store.BankData", b =>
@@ -718,7 +718,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("BankDatas");
+                    b.ToTable("BankDatas", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Store.StoreData", b =>
@@ -782,7 +782,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StoreDatas");
+                    b.ToTable("StoreDatas", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Store.StoreDetails", b =>
@@ -850,7 +850,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("StoreDetails");
+                    b.ToTable("StoreDetails", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Store.StorePayment", b =>
@@ -895,7 +895,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("StorePayment");
+                    b.ToTable("StorePayment", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Tickets.Ticket", b =>
@@ -945,7 +945,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("StoreDataId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Tickets.TicketsMessage", b =>
@@ -976,7 +976,7 @@ namespace SellerWebService.DataLayer.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TicketsMessages");
+                    b.ToTable("TicketsMessages", (string)null);
                 });
 
             modelBuilder.Entity("SellerWebService.DataLayer.Entities.Account.Customer", b =>

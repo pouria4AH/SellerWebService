@@ -58,6 +58,7 @@ namespace SellerWebService.DataLayer.Entities.Store
         public ICollection<StoreDetails> StoreDetails { get; set; }
         public ICollection<StorePayment> StorePayments { get; set; }
         public ICollection<BankData> BankDatas { get; set; }
+
         #endregion
     }
 }

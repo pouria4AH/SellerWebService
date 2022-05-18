@@ -344,6 +344,7 @@ namespace SellerWebService.Application.Implementations
             if (_storeRepository != null) await _storeRepository.DisposeAsync();
             if (_userRepository != null) await _userRepository.DisposeAsync();
             if (_storePaymentRepository != null) await _storePaymentRepository.DisposeAsync();
+            if (_bankRepository != null) await _bankRepository.DisposeAsync();
 
         }
         #endregion

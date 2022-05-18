@@ -1,5 +1,6 @@
 ﻿using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Account;
+using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Factor
 {
@@ -7,7 +8,6 @@ namespace SellerWebService.DataLayer.Entities.Factor
     {
         #region prop
         public long CustomerId { get; set; }
-
         [Display(Name = "کد فاکتور")]
         public Guid Code { get; set; }
 
@@ -74,7 +74,6 @@ namespace SellerWebService.DataLayer.Entities.Factor
         #region relations
         public Customer Customer { get; set; }
         public ICollection<FactorDetails> FactorDetails { get; set; }
-        
         #endregion
     }
 
