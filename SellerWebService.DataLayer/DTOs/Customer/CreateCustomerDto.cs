@@ -10,10 +10,12 @@
 
         [Display(Name = "تلفن همراه")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Mobile { get; set; }
 
         [Display(Name = "نام")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string FirstName { get; set; }
 
         [Display(Name = "نام خانوادگی")]

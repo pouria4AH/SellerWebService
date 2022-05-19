@@ -33,7 +33,6 @@ namespace SellerWebService.WebApi.Controllers.Store
         /// <response code="400">operation by non object </response>
         [HttpPost("register-store")]
         [Authorize(Roles = AccountRole.User)]
-        [Produces("application/json")]
         public async Task<ActionResult<OperationResponse>> CreateStore([FromBody] RegisterStoreDto store)
         {
             try
@@ -69,6 +68,13 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
+        /// <summary>
+        /// به درگاه پرداخت زرین پال منتقل میشود user در اینجا 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>In this section there is a link that should be in front of the front page with parameter user code at the end of it will be given to Zarrin Pal.   </remarks>
+        /// <response code="200">send link of get way</response>
+        /// <response code="400">send error of get way</response>
         [HttpGet("get-pay-gateway")]
         [Authorize(Roles = AccountRole.Seller)]
         public async Task<ActionResult> GetPayGateway()
@@ -79,7 +85,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             return Ok($"https://sandbox.zarinpal.com/pg/StartPay/{res.Authority}");
         }
 
-        [HttpGet("validate-payment-by-{userCode}")]
+        [HttpGet("validate-payment/{userCode}")]
         public async Task<ActionResult<OperationResponse>> Validate([FromQuery] string authority, [FromQuery] string status, [FromRoute] string userCode)
         {
             try
@@ -90,7 +96,7 @@ namespace SellerWebService.WebApi.Controllers.Store
                     var task = await _storeService.ActiveStore(res.RefId, Guid.Parse(userCode));
                     if (task)
                         return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success,
-                            ApplicationMessages.Error, new
+                            ApplicationMessages.Success, new
                             {
                                 refId = res.RefId,
                                 usercode = userCode,

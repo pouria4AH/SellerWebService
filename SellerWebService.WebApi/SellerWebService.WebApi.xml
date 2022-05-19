@@ -4,6 +4,77 @@
         <name>SellerWebService.WebApi</name>
     </assembly>
     <members>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.CreateBlankFactor(SellerWebService.DataLayer.DTOs.Factor.CreateFactorDto)">
+            <summary>
+            ساخت فاکتور خام
+            </summary>
+            <param name="factor"></param>
+            <remarks>send create factor dto if is success return 200 code operation response by factor code and if not success return 400 by non data</remarks>
+            <response code="200">return 200 by factor code</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.CreateFactorDetails(System.Collections.Generic.List{SellerWebService.DataLayer.DTOs.Factor.CreateFactorDetailsDto},System.String)">
+            <summary>
+            ساخت لیست محصولات در فاکتور
+            </summary>
+            <param name="factorDetails"></param>
+            <param name="factorCode"></param>
+             <remarks>send list CreateFactorDetailsDto and factor code from route four create factor details
+            if send again is not problem because before data has been delete
+            </remarks>
+            <response code="200">return 200 by non data</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.GetMainFactor(System.String)">
+            <summary>
+            ارسال بدنه اصلی فاکتور 
+            </summary>
+             <remarks>send factor by ReadMainFactorDto if factor is null return empty array like [] and if have factor return ReadMainFactorDto by non http code
+            </remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.PublishFactor(System.String)">
+            <summary>
+            پابلیش کردن فاکتور
+            </summary>
+            <param name="factorCode"></param>
+            <remarks>send factor code from route and return operation response by 400 our 200 code by non data</remarks>
+            <response code="200">return 200 by non data</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.GetFactor(System.String)">
+            <summary>
+            گرفتن فاکتور کامل 
+            </summary>
+            <param name="factorCode"></param>
+            <remarks>return full factor if is ok return ReadFullFactorDto and if is empty return [] </remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.GetImage.FactorGetImageController.GetSignatureImage(System.String)">
+            <summary>
+            گرفتن عکس امضا
+            </summary>
+            <param name="imageName"></param>
+            <remarks>send image name and return 200 our 400 if is 200 have bite array </remarks>
+            <response code="200">have bite array is image</response>
+            <response code="400">have non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.GetImage.FactorGetImageController.GetLogoImage(System.String)">
+            <summary>
+            گرفتن عکس لوگو
+            </summary>
+            <param name="imageName"></param>
+            <remarks>send image name and return 200 our 400 if is 200 have bite array </remarks>
+            <response code="200">have bite array is image</response>
+            <response code="400">have non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.GetImage.FactorGetImageController.GetStampImage(System.String)">
+            <summary>
+            گرفتن عکس امضا
+            </summary>
+            <param name="imageName"></param>
+            <remarks>send image name and return 200 our 400 if is 200 have bite array </remarks>
+            <response code="200">have bite array is image</response>
+            <response code="400">have non data</response>
+        </member>
         <member name="M:SellerWebService.WebApi.Controllers.Store.AddStoreController.CreateStore(SellerWebService.DataLayer.DTOs.Store.RegisterStoreDto)">
             <summary>
              میتواند فروشگاه ثبت کند role = user در اینجا کاربر با 
@@ -11,6 +82,46 @@
             <remarks>In any case return OperationResponse and Does not return 500 rang code </remarks>
             <response code="200">operation by non object </response>
             <response code="400">operation by non object </response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.AddStoreController.GetPayGateway">
+            <summary>
+            به درگاه پرداخت زرین پال منتقل میشود user در اینجا 
+            </summary>
+            <returns></returns>
+            <remarks>In this section there is a link that should be in front of the front page with parameter user code at the end of it will be given to Zarrin Pal.   </remarks>
+            <response code="200">send link of get way</response>
+            <response code="400">send error of get way</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.CreateCustomer(SellerWebService.DataLayer.DTOs.Customer.CreateCustomerDto)">
+            <summary>
+            در این قسمت ادمین یا کارمند مشتری اد میکنند
+            </summary>
+            <remarks>get customer data and return operation response non object any way</remarks>
+            <response code="200">return operation response</response>
+            <response code="400">return operation response </response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.EditCustomer(SellerWebService.DataLayer.DTOs.Customer.EditCustomerDto)">
+            <summary>
+            در قسمت مشتری ویرایش میشود میشود
+            </summary>
+            <param name="customer"></param>
+            <remarks>difference by create just customer returns operation response by non object</remarks> 
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.DeleteCustomer(System.String)">
+            <summary>
+            حذف مشتری با کد مشتری
+            </summary>
+            <param name="customerCode"></param>
+            <remarks>send customer code in url and return 200 our 400 by non data</remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.GetCustomer(System.String)">
+            <summary>
+            پیدا کردن مشتری با کد مشتری
+            </summary>
+            <param name="customerCode"></param>
+            <remarks>just return 404 our 200 if is 200 code have data (ReadCustomerDto) but 404 is not data</remarks>
+            <response code="200">send 200 by ReadCustomerDto</response>
+            <response code="404">send non object</response>
         </member>
     </members>
 </doc>

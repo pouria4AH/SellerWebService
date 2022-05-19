@@ -328,9 +328,12 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var store = await _storeRepository.GetQuery().AsQueryable()
+                var store = await _storeRepository
+                    .GetQuery().
+                    Include(x=>x.BankDatas)
+                    .AsQueryable()
                     .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
-                if (store == null) return false;
+                if (store == null || store.BankDatas.Any(x=>!x.IsDelete) || store.BankDatas != null) return false;
                 var newBank = new BankData
                 {
                     StoreCode = store.UniqueCode,

@@ -15,13 +15,21 @@ namespace SellerWebService.WebApi.Controllers.Store
     [Authorize(Roles = AccountRole.Seller)]
     public class CustomerController : ControllerBase
     {
+        #region ctor
         private readonly ICustomerService _customerService;
 
         public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
         }
+        #endregion
 
+        /// <summary>
+        /// در این قسمت ادمین یا کارمند مشتری اد میکنند
+        /// </summary>
+        /// <remarks>get customer data and return operation response non object any way</remarks>
+        /// <response code="200">return operation response</response>
+        /// <response code="400">return operation response </response>
         [HttpPost]
         public async Task<ActionResult<OperationResponse>> CreateCustomer(CreateCustomerDto customer)
         {
@@ -49,6 +57,11 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
+        /// <summary>
+        /// در قسمت مشتری ویرایش میشود میشود
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <remarks>difference by create just customer returns operation response by non object</remarks> 
         [HttpPut]
         public async Task<ActionResult<OperationResponse>> EditCustomer(EditCustomerDto customer)
         {
@@ -76,7 +89,12 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
-        [HttpDelete("/{customerCode}")]
+        /// <summary>
+        /// حذف مشتری با کد مشتری
+        /// </summary>
+        /// <param name="customerCode"></param>
+        /// <remarks>send customer code in url and return 200 our 400 by non data</remarks>
+        [HttpDelete("{customerCode}")]
         public async Task<ActionResult> DeleteCustomer(string customerCode)
         {
             try
@@ -89,10 +107,16 @@ namespace SellerWebService.WebApi.Controllers.Store
             catch (Exception e)
             {
                 return BadRequest();
-                throw;
             }
         }
 
+        /// <summary>
+        /// پیدا کردن مشتری با کد مشتری
+        /// </summary>
+        /// <param name="customerCode"></param>
+        /// <remarks>just return 404 our 200 if is 200 code have data (ReadCustomerDto) but 404 is not data</remarks>
+        /// <response code="200">send 200 by ReadCustomerDto</response>
+        /// <response code="404">send non object</response>
         [HttpGet("{customerCode}")]
         public async Task<ActionResult<ReadCustomerDto>> GetCustomer(string customerCode)
         {

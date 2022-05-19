@@ -12,12 +12,12 @@ namespace SellerWebService.WebApi.Controllers.Store
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = AccountRole.Seller)]
-    public class ManagementStoreDetailsController : ControllerBase
+    public class StoreDetailsManagementController : ControllerBase
     {
         #region ctor
         private readonly IStoreService _storeService;
-        
-        public ManagementStoreDetailsController(IStoreService storeService)
+
+        public StoreDetailsManagementController(IStoreService storeService)
         {
             _storeService = storeService;
         }
@@ -105,6 +105,23 @@ namespace SellerWebService.WebApi.Controllers.Store
             }
         }
 
+        [HttpPost("logo-image")]
+        public async Task<ActionResult> CreateLogo(IFormFile image)
+        {
+            try
+            {
+                var res = await _storeService.CreateLogo(image, User.GetStoreCode());
+                if (res)
+                {
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
         [HttpPost("stamp-image")]
         public async Task<ActionResult> CreateStamp(IFormFile image)
         {
@@ -147,6 +164,23 @@ namespace SellerWebService.WebApi.Controllers.Store
             try
             {
                 var res = await _storeService.EditStamp(image, User.GetStoreCode());
+                if (res)
+                {
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }  
+        [HttpPut("logo-image")]
+        public async Task<ActionResult> EditLogo(IFormFile image)
+        {
+            try
+            {
+                var res = await _storeService.EditLogo(image, User.GetStoreCode());
                 if (res)
                 {
                     return Ok();
