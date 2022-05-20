@@ -26,6 +26,7 @@ builder.Services.AddSwaggerGen(s =>
         Description = "این سیستم برای اکثر عملیات ها از یک شی خاص استفاده میکند تا گرفتن اطلاعات از ان راحت باشد "
     });
 
+    #region comment
     //s.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
     //{
     //    Type = SecuritySchemeType.Http,
@@ -48,6 +49,8 @@ builder.Services.AddSwaggerGen(s =>
     //        new List<string>()
     //    }
     //});
+    #endregion
+
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

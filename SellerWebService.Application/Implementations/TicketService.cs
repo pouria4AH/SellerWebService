@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using _0_framework.Extensions;
+using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Ticket;
 using SellerWebService.DataLayer.Entities.Factor;
@@ -95,16 +96,16 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-        public async Task<bool> AnswerTicket(string text, long ticketId)
+        public async Task<bool> AnswerTicket(AnswerTicketDto answer)
         {
             try
             {
-                var mainTicket = await _ticketRepository.GetEntityById(ticketId);
+                var mainTicket = await _ticketRepository.GetEntityById(answer.TicketId);
                 if (mainTicket == null) return false;
                 var newMessage = new TicketsMessage
                 {
                     TicketId = mainTicket.Id,
-                    Text = text
+                    Text = answer.Text
                 };
                 mainTicket.IsReadByaSender = false;
                 mainTicket.IsReadByOwner = true;
@@ -117,6 +118,25 @@ namespace SellerWebService.Application.Implementations
             {
                 return false;
             }
+        }
+
+        public async Task<ReadTicketDto> GetTicketStoreForRead(long ticketId, Guid storeCod)
+        {
+            var ticket = await _ticketRepository.GetQuery()
+                .Include(x => x.StoreData)
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.Id == ticketId && x.StoreData.UniqueCode == storeCod);
+            if (ticket == null) return null;
+            return new ReadTicketDto
+            {
+
+                Ticket = ticket,
+                SectionName = ticket.TicketSection.GetEnumName(),
+                StateName = ticket.TicketState.GetEnumName(),
+                TicketsMessages = await _ticketsMessageRepository.GetQuery().AsQueryable().Where(x=>!x.IsDelete && x.TicketId == ticketId).ToListAsync()
+            };
+
+
         }
 
 

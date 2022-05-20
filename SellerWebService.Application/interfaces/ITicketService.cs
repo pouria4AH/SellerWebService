@@ -6,6 +6,7 @@ namespace SellerWebService.Application.interfaces
     {
         Task<bool> SendFromCustomer(CreateCustomerTicketDto customerTicket);
         Task<bool> SendFromSeller(CreateTicketDto ticket, Guid storeCode);
-        Task<bool> AnswerTicket(string text, long ticketId);
+        Task<bool> AnswerTicket(AnswerTicketDto answer);
+        Task<ReadTicketDto> GetTicketStoreForRead(long ticketId,Guid storeCod);
     }
 }
