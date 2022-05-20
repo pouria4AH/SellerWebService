@@ -21,7 +21,18 @@ namespace SellerWebService.WebApi.Controllers.Account
             _userService = userService;
             _configuration = configuration;
         }
-
+        /// <summary>
+        /// ثبت نام اوله کاربر
+        /// </summary>
+        /// <remarks>return OperationResponse by 200 our 400 if is 200 have object but 400 have not</remarks>
+        /// <param name="register"></param>
+        ///  <response code="200">send 200 by object by like
+        ///  mobile : mobile,
+        ///  firstName : first Name,
+        ///  lastName : last Name,
+        /// UserRole : role
+        /// </response>
+        /// <response code="400">send non object</response>
         [HttpPost("register-user")]
         public async Task<ActionResult<OperationResponse>> Register([FromBody] RegisterUserDTO register)
         {
@@ -41,6 +52,7 @@ namespace SellerWebService.WebApi.Controllers.Account
                                 mobile = register.Mobile,
                                 firstName = register.FirstName,
                                 lastName = register.LastName,
+                                UserRole = role
                             }));
                     case RegisterUserResult.MobileExists:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
@@ -51,6 +63,13 @@ namespace SellerWebService.WebApi.Controllers.Account
                 ApplicationMessages.Error, null));
         }
 
+        /// <summary>
+        /// کد تایید کاربر
+        /// </summary>
+        /// <remarks>return OperationResponse by 200 our 400 by non object </remarks>
+        /// <param name="register"></param>
+        ///  <response code="200">send 200 by non data</response>
+        /// <response code="400">send non object</response>
         [HttpPost("active-mobile")]
         public async Task<ActionResult<OperationResponse>> ActiveMobile([FromBody] ActivateMobileDTO activate)
         {
@@ -79,6 +98,14 @@ namespace SellerWebService.WebApi.Controllers.Account
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, "اطلاعات وارد شده نادرست است", null));
         }
 
+        /// <summary>
+        ///  ورود کاربر
+        /// </summary>
+        /// <remarks>return OperationResponse by 200 our 400 if is 200 have object </remarks>
+        /// <param name="register"></param>
+        ///  <response code="200">send 200 by like   mobile : Mobile, token :  jwt token and role in the token
+        /// </response>
+        /// <response code="400">send non object</response>
         [HttpPost("login-user")]
         public async Task<ActionResult<OperationResponse>> Login([FromBody] LoginUserDTO login)
         {
@@ -91,11 +118,7 @@ namespace SellerWebService.WebApi.Controllers.Account
                 {
                     case LoginUserResult.NotActivated:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Warning,
-                            ApplicationMessages.UserNotActive, new
-                            {
-                                IsActive = false,
-                                mobile = login.Mobile
-                            }));
+                            ApplicationMessages.UserNotActive, null));
                     case LoginUserResult.NotFound:
                         return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger,
                             ApplicationMessages.UserNotFound, null));
@@ -106,13 +129,20 @@ namespace SellerWebService.WebApi.Controllers.Account
                             ApplicationMessages.Success, new
                             {
                                 mobile = user.Mobile,
-                                token = token
+                                token = token,
                             }));
                 }
             }
             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.ModelIsNotValid, null));
         }
 
+        /// <summary>
+        /// ارسال پسورد با کد پیامک
+        /// </summary>
+        /// <param name="forgot"></param>
+        /// <remarks>return OperationResponse by 200 our 400 by non object </remarks>
+        ///  <response code="200">send 200 by non data</response>
+        /// <response code="400">send non object</response>
         [HttpPost("recover-user-password")]
         public async Task<ActionResult<OperationResponse>> RecoverUserPassword([FromBody] ForgotPassUserDTO forgot)
         {

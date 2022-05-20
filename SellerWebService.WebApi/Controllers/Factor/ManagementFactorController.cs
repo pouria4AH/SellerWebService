@@ -136,6 +136,11 @@ namespace SellerWebService.WebApi.Controllers.Factor
         #endregion
 
         #region state
+        /// <summary>
+        /// رد کردن فاکتور
+        /// </summary>
+        /// <param name="factorCode">get factor code in url</param>
+        /// <remarks>just return 200 as success and 400 fore fail</remarks>
         [HttpGet("reject/{factorCode}")]
         public async Task<ActionResult> RejectFactor([FromRoute] string factorCode)
         {
@@ -150,7 +155,11 @@ namespace SellerWebService.WebApi.Controllers.Factor
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// قبول کردن فاکتور
+        /// </summary>
+        /// <param name="factorCode">get factor code in url<</param>
+        /// <remarks>get accepted factor dto in body just return 200 as success and 400 fore fail</remarks>
         [HttpPost("accepted/{factorCode}")]
         public async Task<ActionResult> AcceptedFactor([FromRoute] string factorCode, [FromBody] AcceptedFactorDto accepted)
         {
@@ -166,7 +175,11 @@ namespace SellerWebService.WebApi.Controllers.Factor
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// اماده کردن برای پرداخت نهایی
+        /// </summary>
+        /// <param name="factorCode">get factor code in url</param>
+        /// <remarks>just return 200 as success and 400 fore fail</remarks>
         [HttpGet("ready-to-final/{factorCode}")]
         public async Task<ActionResult> ReadyToFinalPay([FromRoute] string factorCode)
         {
@@ -181,7 +194,11 @@ namespace SellerWebService.WebApi.Controllers.Factor
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// قبول پرداخت دوم فاکتور
+        /// </summary>
+        /// <param name="factorCode">get factor code in url<</param>
+        /// <remarks>get accepted factor dto but is optional in body just return 200 as success and 400 fore fail</remarks>
         [HttpPost("ready/{factorCode}")]
         public async Task<ActionResult> Ready([FromRoute] string factorCode, [FromBody] AcceptedFactorDto? accepted)
         {
@@ -196,7 +213,11 @@ namespace SellerWebService.WebApi.Controllers.Factor
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ارسال شد
+        /// </summary>
+        /// <param name="factorCode">get factor code in url</param>
+        /// <remarks>just return 200 as success and 400 fore fail</remarks>
         [HttpGet("delivered/{factorCode}")]
         public async Task<ActionResult> Delivered([FromRoute] string factorCode)
         {

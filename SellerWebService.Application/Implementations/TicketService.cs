@@ -122,20 +122,28 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<ReadTicketDto> GetTicketStoreForRead(long ticketId, Guid storeCod)
         {
-            var ticket = await _ticketRepository.GetQuery()
-                .Include(x => x.StoreData)
-                .AsQueryable()
-                .SingleOrDefaultAsync(x => !x.IsDelete && x.Id == ticketId && x.StoreData.UniqueCode == storeCod);
-            if (ticket == null) return null;
-            return new ReadTicketDto
+            try
             {
+                var ticket = await _ticketRepository.GetQuery()
+                    .Include(x => x.StoreData)
+                    .Include(x=>x.TicketsMessages)
+                    .AsQueryable()
+                    .SingleOrDefaultAsync(x => !x.IsDelete && x.Id == ticketId && x.StoreData.UniqueCode == storeCod);
+                if (ticket == null) return null;
+                return new ReadTicketDto
+                {
 
-                Ticket = ticket,
-                SectionName = ticket.TicketSection.GetEnumName(),
-                StateName = ticket.TicketState.GetEnumName(),
-                TicketsMessages = await _ticketsMessageRepository.GetQuery().AsQueryable().Where(x=>!x.IsDelete && x.TicketId == ticketId).ToListAsync()
-            };
+                    Ticket = ticket,
+                    SectionName = ticket.TicketSection.GetEnumName(),
+                    StateName = ticket.TicketState.GetEnumName(),
+                    TicketsMessages = ticket.TicketsMessages.ToList()
+                };
 
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
         }
 

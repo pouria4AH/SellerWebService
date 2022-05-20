@@ -16,5 +16,6 @@ namespace SellerWebService.Application.interfaces
         Task<bool> AcceptedFactor(AcceptedFactorDto accepted, Guid factorCode, Guid storeCode);
         Task<bool> ReadyFactor(AcceptedFactorDto? accepted, Guid factorCode, Guid storeCode);
         Task<bool> ExpiredFactor(Factor factor);
+        Task<List<ReadFullFactorDto>> FilterFactor(FilterFactorDto filter);
     }
 }

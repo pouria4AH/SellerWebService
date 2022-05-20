@@ -22,7 +22,11 @@ namespace SellerWebService.WebApi.Controllers.Store
         }
 
         #endregion
-
+        /// <summary>
+        /// ساخت اصلاعات بانکی 
+        /// </summary>
+        /// <remarks> just return 400 our 200 by non object. you can have just one and end that you only can edit that</remarks>
+        /// <param name="data">data bank</param>
         [HttpPost("bank-data")]
         public async Task<ActionResult> CreateBankData([FromBody] BankDataDto data)
         {
@@ -42,7 +46,11 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ادیت اصلاعات بانکی 
+        /// </summary>
+        /// <remarks>you can have just one and end that you only can edit that just return 400 our 200 by non object</remarks>
+        /// <param name="data">data bank</param>
         [HttpPut("bank-data")]
         public async Task<ActionResult> EditBankData([FromBody] BankDataDto data)
         {
@@ -62,9 +70,13 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// گرفتن اصلاعات بانکی 
+        /// </summary>
+        /// <remarks>you can have just one and end that you only can edit that just return 400 our 200 if is 200 have bank data dto</remarks>
+        /// <param name="data">data bank</param>
         [HttpGet("bank-data")]
-        public async Task<ActionResult> GetBankData()
+        public async Task<ActionResult<BankDataDto>> GetBankData()
         {
             try
             {

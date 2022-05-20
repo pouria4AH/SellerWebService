@@ -298,6 +298,11 @@ namespace SellerWebService.Application.Implementations
             return false;
         }
 
+        public Task<List<ReadFullFactorDto>> FilterFactor(FilterFactorDto filter)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 

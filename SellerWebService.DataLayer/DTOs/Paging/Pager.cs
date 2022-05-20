@@ -1,4 +1,4 @@
-﻿namespace SellerWebService.DataLayer.Entities.Paging
+﻿namespace SellerWebService.DataLayer.DTOs.Paging
 {
     public class Pager
     {

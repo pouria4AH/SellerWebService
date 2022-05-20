@@ -1,4 +1,4 @@
-﻿namespace SellerWebService.DataLayer.Entities.Paging
+﻿namespace SellerWebService.DataLayer.DTOs.Paging
 {
     public class BasePaging
     {
@@ -21,7 +21,7 @@
         {
             return (int)Math.Ceiling(AllEntitiesCount / (double)TakeEntities);
         }
-        public string GetCurrentPagingState()
+        public int GetCurrentPagingState()
         {
             var startPage = 1;
             var endPage = AllEntitiesCount;
@@ -31,7 +31,7 @@
                 endPage = PageId * TakeEntities > AllEntitiesCount ? AllEntitiesCount : PageId * TakeEntities;
             }
 
-            return $"نمایش {startPage}-{endPage} از {AllEntitiesCount}";
+            return startPage - endPage;
         }
         public BasePaging GetCurrentPaging()
         {

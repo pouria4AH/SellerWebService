@@ -59,38 +59,38 @@ namespace SellerWebService.WebApi.Controllers.Ticket
             }
         }
 
-        [HttpPost("admin")]
-        [Authorize(Roles = AccountRole.SysAdmin)]
-        public async Task<ActionResult> AnswerTicket([FromBody] AnswerTicketDto answer)
-        {
-           try
-           {
-               var res = await _ticketService.AnswerTicket(answer);
-               if (res) return Ok();
-               return BadRequest();
-           }
-           catch (Exception e)
-           {
-               return BadRequest();
-           }
+        //[HttpPost("admin")]
+        //[Authorize(Roles = AccountRole.SysAdmin)]
+        //public async Task<ActionResult> AnswerTicket([FromBody] AnswerTicketDto answer)
+        //{
+        //   try
+        //   {
+        //       var res = await _ticketService.AnswerTicket(answer);
+        //       if (res) return Ok();
+        //       return BadRequest();
+        //   }
+        //   catch (Exception e)
+        //   {
+        //       return BadRequest();
+        //   }
 
-        }
+        //}
 
-        [HttpGet("seller/{ticketId}")]
-        [Authorize(Roles = AccountRole.Seller + "," + AccountRole.SellerEmployee)]
-        public async Task<ActionResult> GetTicketForSeller([FromRoute]long ticketId)
-        {
-            try
-            {
-                var res = await _ticketService.GetTicketStoreForRead(ticketId,User.GetStoreCode());
-                if(res != null) return Ok();
-                return BadRequest();
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
+        //[HttpGet("seller/{ticketId}")]
+        //[Authorize(Roles = AccountRole.Seller + "," + AccountRole.SellerEmployee)]
+        //public async Task<ActionResult<ReadTicketDto>> GetTicketForSeller([FromRoute]long ticketId)
+        //{
+        //    try
+        //    {
+        //        var res = await _ticketService.GetTicketStoreForRead(ticketId,User.GetStoreCode());
+        //        if(res != null) return Ok(res);
+        //        return BadRequest();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
     }
 }

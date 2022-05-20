@@ -22,14 +22,25 @@ namespace SellerWebService.WebApi.Controllers.Store
             _storeService = storeService;
         }
         #endregion
-
+        /// <summary>
+        /// ایا اطلاعات تماس دارد
+        /// </summary>
+        /// <remarks>just return 200 and 400</remarks>
+        /// <returns></returns>
         [HttpGet("have-any-store-details")]
         public async Task<ActionResult> HaveStoreDetails()
         {
             var res = await _storeService.IsHaveStoreDetails(User.GetStoreCode());
-            return Ok(res);
+            if (res) return Ok();
+            return BadRequest();
         }
-
+        /// <summary>
+        /// ساخت اطلاعات فروشگاه
+        /// </summary>
+        /// <param name="storeDetails"></param>
+        /// <remarks>send create factor dto if is success return 200 code operation response by factor code and if not success return 400 by non data and 404 by not operation response </remarks>
+        /// <response code="200">return 200 by factor code</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpPost("store-details")]
         public async Task<ActionResult<OperationResponse>> CreateStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
@@ -59,7 +70,13 @@ namespace SellerWebService.WebApi.Controllers.Store
 
             }
         }
-
+        /// <summary>
+        /// ادیت اطلاعات فروشگاه
+        /// </summary>
+        /// <param name="storeDetails"></param>
+        /// <remarks>send create factor dto if is success return 200 code operation response by factor code and if not success return 400 by non data and 404 by not operation response </remarks>
+        /// <response code="200">return 200 by factor code</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpPut("store-details")]
         public async Task<ActionResult<OperationResponse>> EditStoreDerails([FromBody] CreateStoreDetailsDto storeDetails)
         {
@@ -86,9 +103,13 @@ namespace SellerWebService.WebApi.Controllers.Store
 
             }
         }
-
+        /// <summary>
+        /// ساخت عکس مهر
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPost("signature-image")]
-        public async Task<ActionResult> CreateSignature(IFormFile image)
+        public async Task<ActionResult> CreateSignature([FromForm] IFormFile image)
         {
             try
             {
@@ -104,9 +125,13 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ساخت عکس لوگو
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPost("logo-image")]
-        public async Task<ActionResult> CreateLogo(IFormFile image)
+        public async Task<ActionResult> CreateLogo([FromForm] IFormFile image)
         {
             try
             {
@@ -122,8 +147,13 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// ساخت عکس مهر
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPost("stamp-image")]
-        public async Task<ActionResult> CreateStamp(IFormFile image)
+        public async Task<ActionResult> CreateStamp([FromForm] IFormFile image)
         {
             try
             {
@@ -139,9 +169,13 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ادیت عکس امضا
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPut("signature-image")]
-        public async Task<ActionResult> EditSignature(IFormFile image)
+        public async Task<ActionResult> EditSignature([FromForm] IFormFile image)
         {
             try
             {
@@ -157,9 +191,13 @@ namespace SellerWebService.WebApi.Controllers.Store
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ادیت عکس مهر
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPut("stamp-image")]
-        public async Task<ActionResult> EditStamp(IFormFile image)
+        public async Task<ActionResult> EditStamp([FromForm] IFormFile image)
         {
             try
             {
@@ -174,9 +212,14 @@ namespace SellerWebService.WebApi.Controllers.Store
             {
                 return BadRequest();
             }
-        }  
+        }
+        /// <summary>
+        /// ادیت عکس لوگو
+        /// </summary>
+        /// <param name="image">image file</param>
+        /// <returns>just return 200 and 400 </returns>
         [HttpPut("logo-image")]
-        public async Task<ActionResult> EditLogo(IFormFile image)
+        public async Task<ActionResult> EditLogo([FromForm] IFormFile image)
         {
             try
             {
