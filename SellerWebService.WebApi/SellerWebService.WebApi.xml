@@ -123,5 +123,14 @@
             <response code="200">send 200 by ReadCustomerDto</response>
             <response code="404">send non object</response>
         </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.SearchCustomer(SellerWebService.DataLayer.DTOs.Customer.SearchCustomerDto)">
+            <summary>
+            سرچ کردن مشتری با شماره یا نام یا نام خانوادگی
+            </summary>
+            <param name="search">get by query string</param>
+            <remarks>just return fore 200 have data but for 400 has not data</remarks>
+            <response code="400">send non object</response>
+            <response code="200">send 200 by list of ReadCustomerDto</response>
+        </member>
     </members>
 </doc>

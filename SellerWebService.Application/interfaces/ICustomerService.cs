@@ -8,6 +8,6 @@ namespace SellerWebService.Application.interfaces
         Task<CreateOurEditCustomerResult> EditCustomer(EditCustomerDto customer, Guid storeCode);
         Task<bool> DeleteCustomer(Guid customerCode, Guid storeCode);
         Task<ReadCustomerDto> GetCustomer(Guid customerCode, Guid storeCode);
-
+        Task<List<ReadCustomerDto>> SearchForCustomer(SearchCustomerDto search, Guid storeCode);
     }
 }

@@ -124,5 +124,30 @@ namespace SellerWebService.WebApi.Controllers.Store
             if (customer == null) return NotFound();
             return Ok(customer);
         }
+
+        /// <summary>
+        /// سرچ کردن مشتری با شماره و نام و نام خانوادگی
+        /// </summary>
+        /// <param name="search">get by query string</param>
+        /// <remarks>just return fore 200 have data but for 400 has not data</remarks>
+        /// <response code="400">send non object</response>
+        /// <response code="200">send 200 by list of ReadCustomerDto</response>
+        [HttpGet("search")]
+        [Authorize(Roles = AccountRole.Seller + "," + AccountRole.SellerEmployee)]
+        public async Task<ActionResult> SearchCustomer([FromQuery] SearchCustomerDto search)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(search.Mobile) && !string.IsNullOrEmpty(search.firstName) &&
+                    !string.IsNullOrEmpty(search.lastName)) return BadRequest();
+                var res = await _customerService.SearchForCustomer(search, User.GetUserStoreCode());
+                if (res != null && res.Any()) return Ok(res);
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
