@@ -158,7 +158,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         /// <summary>
         /// قبول کردن فاکتور
         /// </summary>
-        /// <param name="factorCode">get factor code in url<</param>
+        /// <param name="factorCode">get factor code in url</param>
         /// <remarks>get accepted factor dto in body just return 200 as success and 400 fore fail</remarks>
         [HttpPost("accepted/{factorCode}")]
         public async Task<ActionResult> AcceptedFactor([FromRoute] string factorCode, [FromBody] AcceptedFactorDto accepted)
@@ -197,7 +197,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         /// <summary>
         /// قبول پرداخت دوم فاکتور
         /// </summary>
-        /// <param name="factorCode">get factor code in url<</param>
+        /// <param name="factorCode">get factor code in url</param>
         /// <remarks>get accepted factor dto but is optional in body just return 200 as success and 400 fore fail</remarks>
         [HttpPost("ready/{factorCode}")]
         public async Task<ActionResult> Ready([FromRoute] string factorCode, [FromBody] AcceptedFactorDto? accepted)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Factor;
+using SellerWebService.DataLayer.DTOs.Paging;
 using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Factor;
 using SellerWebService.DataLayer.Repository;
@@ -58,7 +59,7 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var factor = await _factorRepository.GetQuery().Include(x=>x.FactorDetails)
+                var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails)
                     .AsQueryable()
                     .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete);
                 if (factor == null) return false;
@@ -93,7 +94,7 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<ReadMainFactorDto> GetFinialFactorToConfirm(Guid factorCode, Guid storeCode)
         {
-            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x=>x.Customer).AsQueryable()
+            var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x => x.Customer).AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
 
             if (factor == null || !factor.FactorDetails.Any()) return null;
@@ -135,7 +136,7 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var factor = await _factorRepository.GetQuery().Include(x=>x.FactorDetails).AsQueryable()
+                var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).AsQueryable()
                     .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
                 if (factor == null || !factor.FactorDetails.Any()) return CreateFactorResult.FactorNotFound;
                 await CalculateFactor(factorCode);
@@ -272,6 +273,7 @@ namespace SellerWebService.Application.Implementations
         public async Task<bool> ReadyFactor(AcceptedFactorDto? accepted, Guid factorCode, Guid storeCode)
         {
             var factore = await _factorRepository.GetQuery().AsQueryable()
+                .Include(x => x.Customer)
                 .SingleOrDefaultAsync(x => x.Code == factorCode && !x.IsDelete && x.StoreCode == storeCode);
             if (factore == null) return false;
             if (factore.Prepayment != 100)
@@ -298,9 +300,116 @@ namespace SellerWebService.Application.Implementations
             return false;
         }
 
-        public Task<List<ReadFullFactorDto>> FilterFactor(FilterFactorDto filter)
+        public async Task<FilterFactorDto> FilterFactor(FilterFactorDto filter)
         {
-            throw new NotImplementedException();
+            var query = _factorRepository.GetQuery()
+                .Include(x => x.Customer)
+                .ThenInclude(x => x.StoreData).AsQueryable();
+
+            if (filter.MinFinalPrice != null)
+                query = query.Where(x => !x.IsDelete && x.FinalPrice >= filter.MinFinalPrice);
+
+            if (filter.MaxFinalPrice != null)
+                query = query.Where(x => !x.IsDelete && x.FinalPrice <= filter.MaxFinalPrice);
+
+
+            switch (filter.FilterFactorStatus)
+            {
+                case FilterFactorStatus.All:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
+                case FilterFactorStatus.Accepted:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Accepted);
+                    break;
+                case FilterFactorStatus.Delivered:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Delivered);
+                    break;
+                case FilterFactorStatus.Expired:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Expired);
+                    break;
+                case FilterFactorStatus.Open:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Open);
+                    break;
+                case FilterFactorStatus.Ready:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Ready);
+                    break;
+                case FilterFactorStatus.Reject:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Reject);
+                    break;
+                case FilterFactorStatus.Waiting:
+                    query = query.Where(x => !x.IsDelete && x.FactorStatus == FactorStatus.Waiting);
+                    break;
+            }
+
+            switch (filter.FilterFactorOrder)
+            {
+                case FilterFactorOrder.CreateDate_Aec:
+                    query = query.Where(x => !x.IsDelete).OrderBy(x => x.CreateDate);
+                    break;
+                case FilterFactorOrder.CreateDate_Des:
+                    query = query.Where(x => !x.IsDelete).OrderByDescending(x => x.CreateDate);
+                    break;
+                case FilterFactorOrder.Price_Asc:
+                    query = query.Where(x => !x.IsDelete).OrderBy(x => x.FinalPrice);
+                    break;
+                case FilterFactorOrder.Price_Des:
+                    query = query.Where(x => !x.IsDelete).OrderByDescending(x => x.FinalPrice);
+                    break;
+
+
+
+
+
+            }
+
+            switch (filter.FinalFirstFilterFactorPaymentState)
+            {
+                case FilterFactorPaymentState.All:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
+                case FilterFactorPaymentState.BankCheck:
+                    query = query.Where(x => !x.IsDelete && x.FinalFactorPaymentState == FactorPaymentState.BankCheck);
+                    break;
+                case FilterFactorPaymentState.BankCreditCard:
+                    query = query.Where(x => !x.IsDelete && x.FinalFactorPaymentState == FactorPaymentState.BankCreditCard);
+                    break;
+                case FilterFactorPaymentState.Portal:
+                    query = query.Where(x => !x.IsDelete && x.FinalFactorPaymentState == FactorPaymentState.Portal);
+                    break;
+
+            }
+            
+            switch (filter.FirstFilterFactorPaymentState)
+            {
+                case FilterFactorPaymentState.All:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
+                case FilterFactorPaymentState.BankCheck:
+                    query = query.Where(x => !x.IsDelete && x.FirstFactorPaymentState == FactorPaymentState.BankCheck);
+                    break;
+                case FilterFactorPaymentState.BankCreditCard:
+                    query = query.Where(x => !x.IsDelete && x.FirstFactorPaymentState == FactorPaymentState.BankCreditCard);
+                    break;
+                case FilterFactorPaymentState.Portal:
+                    query = query.Where(x => !x.IsDelete && x.FirstFactorPaymentState == FactorPaymentState.Portal);
+                    break;
+
+            }
+
+            if (filter.Name != null)
+                query = query.Where(x => EF.Functions.Like(x.Name, $"%{filter.Name}%") && !x.IsDelete);
+
+            if (filter.Prepayment != null)
+                query = query.Where(x => x.Prepayment == filter.Prepayment && !x.IsDelete);
+
+            if (filter.CustomerCode != null)
+                query = query.Where(x => !x.IsDelete && x.Customer.UniqueCode == filter.CustomerCode);
+            #region paging
+            var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.Paging(pager).ToListAsync();
+            #endregion
+
+            return filter.SetProduct(allEntities).SetPaging(pager);
         }
 
         #endregion

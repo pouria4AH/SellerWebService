@@ -23,9 +23,10 @@ namespace SellerWebService.DataLayer.DTOs.Factor
 
         public Guid? CustomerCode { get; set; }
         public FilterFactorStatus FilterFactorStatus { get; set; }
-        public FactorPaymentState FilterFactorPaymentState { get; set; }
+        public FilterFactorPaymentState FirstFilterFactorPaymentState { get; set; }
+        public FilterFactorPaymentState FinalFirstFilterFactorPaymentState { get; set; }
         public FilterFactorOrder FilterFactorOrder { get; set; }
-        public List<Entities.Factor.Factor> Factors { get; private set; }
+        public List<Entities.Factor.Factor>? Factors { get; private set; }
         public FilterFactorDto SetProduct(List<Entities.Factor.Factor> factors)
         {
             this.Factors = factors;
@@ -59,7 +60,8 @@ namespace SellerWebService.DataLayer.DTOs.Factor
     }
     public enum FilterFactorStatus
     {
-
+        [Display(Name = "همه")]
+        All,
         [Display(Name = "انتظار")]
         Waiting,
         [Display(Name = "رد شده")]
@@ -76,9 +78,18 @@ namespace SellerWebService.DataLayer.DTOs.Factor
         Expired,
         [Display(Name = "در حال ثبت")]
         Open,
-        [Display(Name = "همه")]
-        All
+        
     }
-
+    public enum FilterFactorPaymentState
+    {
+        [Display(Name = "همه")]
+        All,
+        [Display(Name = "درگاه بانکی")]
+        Portal,
+        [Display(Name = "کارت به کارت")]
+        BankCreditCard,
+        [Display(Name = "چک")]
+        BankCheck
+    }
 
 }

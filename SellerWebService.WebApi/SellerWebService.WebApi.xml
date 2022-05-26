@@ -4,6 +4,48 @@
         <name>SellerWebService.WebApi</name>
     </assembly>
     <members>
+        <member name="M:SellerWebService.WebApi.Controllers.Account.UserAuthController.Register(SellerWebService.DataLayer.DTOs.Account.RegisterUserDTO)">
+            <summary>
+            ثبت نام اوله کاربر
+            </summary>
+            <remarks>return OperationResponse by 200 our 400 if is 200 have object but 400 have not</remarks>
+            <param name="register"></param>
+             <response code="200">send 200 by object by like
+             mobile : mobile,
+             firstName : first Name,
+             lastName : last Name,
+            UserRole : role
+            </response>
+            <response code="400">send non object</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Account.UserAuthController.ActiveMobile(SellerWebService.DataLayer.DTOs.Account.ActivateMobileDTO)">
+            <summary>
+            کد تایید کاربر
+            </summary>
+            <remarks>return OperationResponse by 200 our 400 by non object </remarks>
+            <param name="register"></param>
+             <response code="200">send 200 by non data</response>
+            <response code="400">send non object</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Account.UserAuthController.Login(SellerWebService.DataLayer.DTOs.Account.LoginUserDTO)">
+            <summary>
+             ورود کاربر
+            </summary>
+            <remarks>return OperationResponse by 200 our 400 if is 200 have object </remarks>
+            <param name="register"></param>
+             <response code="200">send 200 by like   mobile : Mobile, token :  jwt token and role in the token
+            </response>
+            <response code="400">send non object</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Account.UserAuthController.RecoverUserPassword(SellerWebService.DataLayer.DTOs.Account.ForgotPassUserDTO)">
+            <summary>
+            ارسال پسورد با کد پیامک
+            </summary>
+            <param name="forgot"></param>
+            <remarks>return OperationResponse by 200 our 400 by non object </remarks>
+             <response code="200">send 200 by non data</response>
+            <response code="400">send non object</response>
+        </member>
         <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.CreateBlankFactor(SellerWebService.DataLayer.DTOs.Factor.CreateFactorDto)">
             <summary>
             ساخت فاکتور خام
@@ -47,6 +89,41 @@
             </summary>
             <param name="factorCode"></param>
             <remarks>return full factor if is ok return ReadFullFactorDto and if is empty return [] </remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.RejectFactor(System.String)">
+            <summary>
+            رد کردن فاکتور
+            </summary>
+            <param name="factorCode">get factor code in url</param>
+            <remarks>just return 200 as success and 400 fore fail</remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.AcceptedFactor(System.String,SellerWebService.DataLayer.DTOs.Factor.AcceptedFactorDto)">
+            <summary>
+            قبول کردن فاکتور
+            </summary>
+            <param name="factorCode">get factor code in url</param>
+            <remarks>get accepted factor dto in body just return 200 as success and 400 fore fail</remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.ReadyToFinalPay(System.String)">
+            <summary>
+            اماده کردن برای پرداخت نهایی
+            </summary>
+            <param name="factorCode">get factor code in url</param>
+            <remarks>just return 200 as success and 400 fore fail</remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.Ready(System.String,SellerWebService.DataLayer.DTOs.Factor.AcceptedFactorDto)">
+            <summary>
+            قبول پرداخت دوم فاکتور
+            </summary>
+            <param name="factorCode">get factor code in url</param>
+            <remarks>get accepted factor dto but is optional in body just return 200 as success and 400 fore fail</remarks>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Factor.ManagementFactorController.Delivered(System.String)">
+            <summary>
+            ارسال شد
+            </summary>
+            <param name="factorCode">get factor code in url</param>
+            <remarks>just return 200 as success and 400 fore fail</remarks>
         </member>
         <member name="M:SellerWebService.WebApi.Controllers.GetImage.FactorGetImageController.GetSignatureImage(System.String)">
             <summary>
@@ -92,6 +169,27 @@
             <response code="200">send link of get way</response>
             <response code="400">send error of get way</response>
         </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.BankManagementController.CreateBankData(SellerWebService.DataLayer.DTOs.Store.BankDataDto)">
+            <summary>
+            ساخت اصلاعات بانکی 
+            </summary>
+            <remarks> just return 400 our 200 by non object. you can have just one and end that you only can edit that</remarks>
+            <param name="data">data bank</param>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.BankManagementController.EditBankData(SellerWebService.DataLayer.DTOs.Store.BankDataDto)">
+            <summary>
+            ادیت اصلاعات بانکی 
+            </summary>
+            <remarks>you can have just one and end that you only can edit that just return 400 our 200 by non object</remarks>
+            <param name="data">data bank</param>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.BankManagementController.GetBankData">
+            <summary>
+            گرفتن اصلاعات بانکی 
+            </summary>
+            <remarks>you can have just one and end that you only can edit that just return 400 our 200 if is 200 have bank data dto</remarks>
+            <param name="data">data bank</param>
+        </member>
         <member name="M:SellerWebService.WebApi.Controllers.Store.CustomerController.CreateCustomer(SellerWebService.DataLayer.DTOs.Customer.CreateCustomerDto)">
             <summary>
             در این قسمت ادمین یا کارمند مشتری اد میکنند
@@ -131,6 +229,73 @@
             <remarks>just return fore 200 have data but for 400 has not data</remarks>
             <response code="400">send non object</response>
             <response code="200">send 200 by list of ReadCustomerDto</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.HaveStoreDetails">
+            <summary>
+            ایا اطلاعات تماس دارد
+            </summary>
+            <remarks>just return 200 and 400</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.CreateStoreDerails(SellerWebService.DataLayer.DTOs.Store.CreateStoreDetailsDto)">
+            <summary>
+            ساخت اطلاعات فروشگاه
+            </summary>
+            <param name="storeDetails"></param>
+            <remarks>send create factor dto if is success return 200 code operation response by factor code and if not success return 400 by non data and 404 by not operation response </remarks>
+            <response code="200">return 200 by factor code</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.EditStoreDerails(SellerWebService.DataLayer.DTOs.Store.CreateStoreDetailsDto)">
+            <summary>
+            ادیت اطلاعات فروشگاه
+            </summary>
+            <param name="storeDetails"></param>
+            <remarks>send create factor dto if is success return 200 code operation response by factor code and if not success return 400 by non data and 404 by not operation response </remarks>
+            <response code="200">return 200 by factor code</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.CreateSignature(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ساخت عکس مهر
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.CreateLogo(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ساخت عکس لوگو
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.CreateStamp(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ساخت عکس مهر
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.EditSignature(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ادیت عکس امضا
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.EditStamp(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ادیت عکس مهر
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Store.StoreDetailsManagementController.EditLogo(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ادیت عکس لوگو
+            </summary>
+            <param name="image">image file</param>
+            <returns>just return 200 and 400 </returns>
         </member>
     </members>
 </doc>
