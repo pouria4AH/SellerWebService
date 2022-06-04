@@ -1,12 +1,16 @@
 ﻿global using System.ComponentModel.DataAnnotations;
 using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Factor;
+using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {
     public class Product : BaseEntity
     {
         #region prop
+
+        public long StoreDataId { get; set; }
+
         [Display(Name = "نام محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -66,13 +70,13 @@ namespace SellerWebService.DataLayer.Entities.Products
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Keywords { get; set; }
 
-        [Display(Name = "لینک خارجی")]
-        public string? ExrernalLink { get; set; }
+        //[Display(Name = "لینک خارجی")]
+        //public string? ExrernalLink { get; set; }
 
-        [Display(Name = "لینک داخلی")]
-        public string? InternalLink { get; set; }
+        //[Display(Name = "لینک داخلی")]
+        //public string? InternalLink { get; set; }
 
-        public string CountArray { get; set; }
+        //public string CountArray { get; set; }
         public CountState StateForCount { get; set; }
         #endregion
 
@@ -81,6 +85,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         public ICollection<ProductGallery> ProductGalleries { get; set; }
+        public StoreData StoreData { get; set; }
         #endregion
 
     }

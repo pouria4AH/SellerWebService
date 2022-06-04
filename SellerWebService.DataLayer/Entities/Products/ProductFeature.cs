@@ -1,11 +1,14 @@
 ﻿using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Factor;
+using SellerWebService.DataLayer.Entities.Store;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {
     public class ProductFeature : BaseEntity
     {
         #region props
+        public long StoreDataId { get; set; }
+
         public long GroupForProductFeatureId { get; set; }
         //public long ProductId { get; set; }
         [Display(Name = "نام ویژگی")]
@@ -27,6 +30,8 @@ namespace SellerWebService.DataLayer.Entities.Products
         #region relations
 
         public GroupForProductFeature GroupForProductFeature { get; set; }
+
+        public StoreData StoreData { get; set; }
         //public ICollection<FactorFeatureSelected> FactorFeatureSelecteds { get; set; }
         //public Product Product { get; set; }
         #endregion

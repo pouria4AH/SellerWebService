@@ -126,7 +126,7 @@ namespace SellerWebService.Application.Implementations
         {
 
             var checkForExisted = await _productCategoryRepository.GetQuery().AsQueryable()
-                .AnyAsync(x => x.Name == productCategory.Name || x.SeoTitle == productCategory.SeoTitle);
+                .AnyAsync(x => x.Name == productCategory.Name );
             if (checkForExisted) return CreateOurEditProductCategoryResult.IsExisted;
 
             if (productCategory.Picture == null) return CreateOurEditProductCategoryResult.IsNotImage;
@@ -140,16 +140,7 @@ namespace SellerWebService.Application.Implementations
                 var newCategory = new ProductCategory
                 {
                     Name = productCategory.Name,
-                    ExrernalLink = productCategory.ExrernalLink,
-                    InternalLink = productCategory.InternalLink,
-                    Keywords = productCategory.Keywords,
-                    MetaDescription = productCategory.MetaDescription,
                     Description = productCategory.Description,
-                    PictureName = imageName,
-                    PictureAlt = productCategory.PictureAlt,
-                    PictureTitle = productCategory.PictureTitle,
-                    SeoTitle = productCategory.SeoTitle,
-                    ShortDescription = productCategory.ShortDescription,
                     IsActive = productCategory.IsActive
                 };
                 await _productCategoryRepository.AddEntity(newCategory);
@@ -168,18 +159,9 @@ namespace SellerWebService.Application.Implementations
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    ExrernalLink = x.ExrernalLink,
-                    InternalLink = x.InternalLink,
                     IsActive = x.IsActive,
-                    Keywords = x.Keywords,
-                    MetaDescription = x.MetaDescription,
-                    PictureName = x.PictureName,
                     OriginAddress = PathExtension.ProductCategoryOrigin,
                     ThumbAddress = PathExtension.ProductCategoryThumb,
-                    PictureAlt = x.PictureAlt,
-                    PictureTitle = x.PictureTitle,
-                    SeoTitle = x.SeoTitle,
-                    ShortDescription = x.ShortDescription
                 })
                 .ToListAsync();
 
@@ -191,31 +173,9 @@ namespace SellerWebService.Application.Implementations
             var mainCategory = await _productCategoryRepository.GetEntityById(productCategory.Id);
             if (mainCategory == null || mainCategory.IsDelete) return CreateOurEditProductCategoryResult.NotFound;
 
-            if (productCategory.Picture != null)
-            {
-                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productCategory.Picture.FileName);
-                var res = productCategory.Picture.AddImageToServer(imageName, PathExtension.ProductCategoryOriginServer,
-                    150, 150,
-                    PathExtension.ProductCategoryThumbServer, mainCategory.PictureName);
-                if (res)
-                {
-                    mainCategory.PictureName = imageName;
-                }
-            }
-
-            mainCategory.Keywords = productCategory.Keywords;
-            mainCategory.MetaDescription = productCategory.MetaDescription;
-            //mainCategory.PictureName = productCategory.Picture;
-            mainCategory.PictureAlt = productCategory.PictureAlt;
-            mainCategory.PictureTitle = productCategory.PictureTitle;
-            mainCategory.SeoTitle = productCategory.SeoTitle;
-            mainCategory.ShortDescription = productCategory.ShortDescription;
             mainCategory.Description = productCategory.Description;
-            mainCategory.ExrernalLink = productCategory.ExrernalLink;
-            mainCategory.InternalLink = productCategory.InternalLink;
             mainCategory.Name = productCategory.Name;
             mainCategory.IsActive = productCategory.IsActive;
-
 
             _productCategoryRepository.EditEntity(mainCategory);
             await _productCategoryRepository.SaveChanges();
@@ -232,18 +192,9 @@ namespace SellerWebService.Application.Implementations
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description,
-                ExrernalLink = category.ExrernalLink,
-                InternalLink = category.InternalLink,
                 IsActive = category.IsActive,
-                Keywords = category.Keywords,
-                MetaDescription = category.MetaDescription,
-                PictureName = category.PictureName,
                 OriginAddress = PathExtension.ProductCategoryOrigin,
                 ThumbAddress = PathExtension.ProductCategoryThumb,
-                PictureAlt = category.PictureAlt,
-                PictureTitle = category.PictureTitle,
-                SeoTitle = category.SeoTitle,
-                ShortDescription = category.ShortDescription
             };
         }
 
@@ -289,8 +240,6 @@ namespace SellerWebService.Application.Implementations
                     Description = product.Description,
                     DefaultPrice = product.DefaultPrice,
                     ShortDescription = product.ShortDescription,
-                    ExrernalLink = product.ExrernalLink,
-                    InternalLink = product.InternalLink,
                     Keywords = product.Keywords,
                     MetaDescription = product.MetaDescription,
                     PictureAlt = product.PictureAlt,
@@ -302,13 +251,6 @@ namespace SellerWebService.Application.Implementations
                 };
                 if (product.Size != null) newProduct.Size = product.Size;
 
-                string countArray = "";
-                foreach (var count in product.Counts)
-                {
-                    countArray += count.ToString() + ",";
-                }
-
-                newProduct.CountArray = countArray;
 
                 await _productRepository.AddEntity(newProduct);
                 await _productRepository.SaveChanges();
@@ -335,10 +277,7 @@ namespace SellerWebService.Application.Implementations
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    CountArray = x.CountArray,
                     DefaultPrice = x.DefaultPrice,
-                    ExrernalLink = x.ExrernalLink,
-                    InternalLink = x.InternalLink,
                     Keywords = x.Keywords,
                     MetaDescription = x.MetaDescription,
                     PictureAlt = x.PictureAlt,
@@ -365,10 +304,7 @@ namespace SellerWebService.Application.Implementations
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
-                CountArray = product.CountArray,
                 DefaultPrice = product.DefaultPrice,
-                ExrernalLink = product.ExrernalLink,
-                InternalLink = product.InternalLink,
                 Keywords = product.Keywords,
                 MetaDescription = product.MetaDescription,
                 PictureAlt = product.PictureAlt,
@@ -418,8 +354,6 @@ namespace SellerWebService.Application.Implementations
             mainProduct.ShortDescription = product.ShortDescription;
             mainProduct.Description = product.Description;
             mainProduct.Size = product.Size;
-            mainProduct.ExrernalLink = product.ExrernalLink;
-            mainProduct.InternalLink = product.InternalLink;
             mainProduct.DefaultPrice = product.DefaultPrice;
             mainProduct.StateForCount = product.StateForCount;
             mainProduct.Keywords = product.Keywords;
@@ -432,16 +366,6 @@ namespace SellerWebService.Application.Implementations
             await RemoveSelectedCategory(product.Id);
             await AddSelectedCategory(product.Id, product.selectedCategories);
 
-            if (product.Counts.Any() || product.Counts != null)
-            {
-                string countArray = "";
-                foreach (var count in product.Counts)
-                {
-                    countArray += count.ToString() + ",";
-                }
-
-                mainProduct.CountArray = countArray;
-            }
             _productRepository.EditEntity(mainProduct);
             await _productRepository.SaveChanges();
             return CreateOurEditProductResult.Success;
