@@ -1,5 +1,6 @@
 ﻿using _0_framework.Entities;
 using SellerWebService.DataLayer.Entities.Account;
+using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.DataLayer.Entities.Store
 {
@@ -58,6 +59,10 @@ namespace SellerWebService.DataLayer.Entities.Store
         public ICollection<StoreDetails> StoreDetails { get; set; }
         public ICollection<StorePayment> StorePayments { get; set; }
         public ICollection<BankData> BankDatas { get; set; }
+        public ICollection<Product> Products { get; set; }
+        //public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<ProductFeature> ProductFeatures { get; set; }
+        public ICollection<ProductFeatureCategory> ProductFeatureCategories { get; set; }
 
         #endregion
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _0_framework.Entities;
+﻿using _0_framework.Entities;
 
 namespace SellerWebService.DataLayer.Entities.Products
 {

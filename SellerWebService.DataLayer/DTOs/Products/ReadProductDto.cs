@@ -55,7 +55,7 @@ namespace SellerWebService.DataLayer.DTOs.Products
         public string CountArray { get; set; }
 
         [Display(Name = "وضعیت تیراژ")]
-        public CountState StateForCount { get; set; }
+        //public CountState StateForCount { get; set; }
 
         public string OriginAddress { get; set; }
 

@@ -77,23 +77,23 @@ namespace SellerWebService.DataLayer.Entities.Products
         //public string? InternalLink { get; set; }
 
         //public string CountArray { get; set; }
-        public CountState StateForCount { get; set; }
+        //public CountState StateForCount { get; set; }
         #endregion
 
         #region relations
 
-        public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        //public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         public ICollection<ProductGallery> ProductGalleries { get; set; }
         public StoreData StoreData { get; set; }
         #endregion
 
     }
-    public enum CountState
-    {
-        Single,
-        List,
-        Together,
+    //public enum CountState
+    //{
+    //    Single,
+    //    List,
+    //    Together,
 
-    }
+    //}
 }

@@ -9,7 +9,7 @@ namespace SellerWebService.DataLayer.Entities.Products
         #region prop
 
         //public long? ParentId { get; set; } = null;
-        public long StoreDataId { get; set; }
+        //public long StoreDataId { get; set; }
 
         [Display(Name = "نام دسته محصول")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -67,8 +67,8 @@ namespace SellerWebService.DataLayer.Entities.Products
 
         #region relations
 
-        public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-        public StoreData StoreData { get; set; }
+        //public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        //public StoreData StoreData { get; set; }
         //public ProductCategory Parent { get; set; }
 
         #endregion

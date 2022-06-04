@@ -15,8 +15,8 @@ namespace SellerWebService.DataLayer.Context
         }
         #region products
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductCategory> ProductCategories { get; set; }
-        public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        //public DbSet<ProductCategory> ProductCategories { get; set; }
+        //public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public DbSet<ProductFeatureCategory> ProductFeatureCategories { get; set; }
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         public DbSet<GroupForProductFeature> GroupForProductFeatures { get; set; }

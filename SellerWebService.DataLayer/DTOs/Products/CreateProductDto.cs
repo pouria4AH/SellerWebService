@@ -67,7 +67,7 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Display(Name = "لینک داخلی")]
         public string? InternalLink { get; set; }
 
-        public CountState StateForCount { get; set; }
+        //public CountState StateForCount { get; set; }
         public List<long> Counts { get; set; }
         public List<long> selectedCategories { get; set; }
     }
