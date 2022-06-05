@@ -4,93 +4,99 @@ using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
+using SellerWebService.DataLayer.Entities.Store;
 using SellerWebService.DataLayer.Repository;
 
 namespace SellerWebService.Application.Implementations
 {
     public class ProductService : IProductService
     {
-        //#region ctor
+        #region ctor
 
-        //private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
+        private readonly IGenericRepository<ProductFeatureCategory> _productFeatureCategoryRepository;
         //private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
-        //private readonly IGenericRepository<Product> _productRepository;
-        //private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
-        //private readonly IGenericRepository<GroupForProductFeature> _groupForProductFeatureRepository;
-        //private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
-        //private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
+        private readonly IGenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<GroupForProductFeature> _groupForProductFeatureRepository;
+        private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
+        private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
+        private readonly IGenericRepository<StoreData> _storeDataRepository;
 
-        //public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
-        //    IGenericRepository<ProductCategory> productCategoryRepository,
-        //    IGenericRepository<Product> productRepository,
-        //    IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository,
-        //    IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository, IGenericRepository<ProductFeature> productFeatureRepository, IGenericRepository<ProductGallery> productGalleryRepository)
-        //{
-        //    _productFeatureCategoryRepository = productFeatureCategoryRepository;
-        //    _productCategoryRepository = productCategoryRepository;
-        //    _productRepository = productRepository;
-        //    _productSelectedCategoryRepository = productSelectedCategoryRepository;
-        //    _groupForProductFeatureRepository = groupForProductFeatureRepository;
-        //    _productFeatureRepository = productFeatureRepository;
-        //    _productGalleryRepository = productGalleryRepository;
-        //}
+        public ProductService(IGenericRepository<ProductFeatureCategory> productFeatureCategoryRepository,
+            //IGenericRepository<ProductCategory> productCategoryRepository,
+            IGenericRepository<Product> productRepository,
+            IGenericRepository<GroupForProductFeature> groupForProductFeatureRepository, IGenericRepository<ProductFeature> productFeatureRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<StoreData> storeDataRepository)
+        {
+            _productFeatureCategoryRepository = productFeatureCategoryRepository;
+            //_productCategoryRepository = productCategoryRepository;
+            _productRepository = productRepository;
+            _groupForProductFeatureRepository = groupForProductFeatureRepository;
+            _productFeatureRepository = productFeatureRepository;
+            _productGalleryRepository = productGalleryRepository;
+            _storeDataRepository = storeDataRepository;
+        }
 
-        //#endregion
+        #endregion
 
-        //#region product feature category
+        #region product feature category
 
-        //public async Task<List<EditProductFeatureCategoryDto>> GetProductFeatureCategories()
-        //{
-        //    return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-        //        .Where(x => !x.IsDelete)
-        //        .Select(x =>
-        //            new EditProductFeatureCategoryDto
-        //            {
-        //                Id = x.Id,
-        //                Description = x.Description,
-        //                Name = x.Name
-        //            }).ToListAsync();
-        //}
+        public async Task<List<EditProductFeatureCategoryDto>> GetProductFeatureCategories(Guid storeCode)
+        {
+            return await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+                .Include(x => x.StoreData)
+                .Where(x => !x.IsDelete && x.StoreData.UniqueCode == storeCode)
+                .Select(x =>
+                    new EditProductFeatureCategoryDto
+                    {
+                        Id = x.Id,
+                        Description = x.Description,
+                        Name = x.Name
+                    }).ToListAsync();
+        }
 
-        //public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(
-        //    CreateProductFeatureCategoryDto featureCategory)
-        //{
-        //    if (featureCategory != null)
-        //    {
-        //        var checkExisted = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-        //            .AnyAsync(x => x.Name == featureCategory.Name);
-        //        if (checkExisted) return CreateOurEditProductFeatureCategoryResult.IsExisted;
+        public async Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(
+            CreateProductFeatureCategoryDto featureCategory, Guid storeCode)
+        {
+            if (featureCategory != null)
+            {
+                var checkExisted = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+                    .Include(x => x.StoreData)
+                    .AnyAsync(x => x.Name == featureCategory.Name && x.StoreData.UniqueCode == storeCode);
+                if (checkExisted) return CreateOurEditProductFeatureCategoryResult.IsExisted;
+                var store = await _storeDataRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => !x.IsDelete && x.UniqueCode == storeCode);
+                if (store == null) return CreateOurEditProductFeatureCategoryResult.Error;
 
-        //        ProductFeatureCategory newfeatureCategory = new ProductFeatureCategory
-        //        {
-        //            Name = featureCategory.Name,
-        //            Description = featureCategory.Description
-        //        };
-        //        await _productFeatureCategoryRepository.AddEntity(newfeatureCategory);
-        //        await _productFeatureCategoryRepository.SaveChanges();
-        //        return CreateOurEditProductFeatureCategoryResult.Success;
-        //    }
+                ProductFeatureCategory newfeatureCategory = new ProductFeatureCategory
+                {
+                    StoreDataId = store.Id,
+                    Name = featureCategory.Name,
+                    Description = featureCategory.Description
+                };
+                await _productFeatureCategoryRepository.AddEntity(newfeatureCategory);
+                await _productFeatureCategoryRepository.SaveChanges();
+                return CreateOurEditProductFeatureCategoryResult.Success;
+            }
 
-        //    return CreateOurEditProductFeatureCategoryResult.Error;
-        //}
+            return CreateOurEditProductFeatureCategoryResult.Error;
+        }
 
-        //public async Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(
-        //    EditProductFeatureCategoryDto featureCategory)
-        //{
-        //    if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error;
+        public async Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(
+            EditProductFeatureCategoryDto featureCategory, Guid storeCode)
+        {
+            if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error;
 
-        //    var category = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-        //        .SingleOrDefaultAsync(x => x.Id == featureCategory.Id && !x.IsDelete);
+            var category = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
+                .Include(x=>x.StoreData)
+                .SingleOrDefaultAsync(x => x.Id == featureCategory.Id && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
 
-        //    if (category == null) return CreateOurEditProductFeatureCategoryResult.NotFound;
-        //    category.Description = featureCategory.Description;
-        //    category.Name = featureCategory.Name;
-        //    _productFeatureCategoryRepository.EditEntity(category);
-        //    await _productFeatureCategoryRepository.SaveChanges();
-        //    return CreateOurEditProductFeatureCategoryResult.Success;
-        //}
+            if (category == null) return CreateOurEditProductFeatureCategoryResult.NotFound;
+            category.Description = featureCategory.Description;
+            category.Name = featureCategory.Name;
+            _productFeatureCategoryRepository.EditEntity(category);
+            await _productFeatureCategoryRepository.SaveChanges();
+            return CreateOurEditProductFeatureCategoryResult.Success;
+        }
 
-        //#endregion
+        #endregion
 
         //#region selected category
 
@@ -566,18 +572,19 @@ namespace SellerWebService.Application.Implementations
         //}
         //#endregion
 
-        //#region dipose
+        #region dipose
 
-        //public async ValueTask DisposeAsync()
-        //{
-        //   /* if (_productFeatureCategoryRepository != null)*/ await _productFeatureCategoryRepository.DisposeAsync();
-        //   /* if (_productCategoryRepository != null)*/ await _productCategoryRepository.DisposeAsync();
-        //   /* if (_productRepository != null)*/ await _productRepository.DisposeAsync();
-        //   /* if (_productSelectedCategoryRepository != null)*/ await _productSelectedCategoryRepository.DisposeAsync();
-        //    /*if (_groupForProductFeatureRepository != null)*/ await _groupForProductFeatureRepository.DisposeAsync();
-        //}
+        public async ValueTask DisposeAsync()
+        {
+            if (_productFeatureCategoryRepository != null)
+                await _productFeatureCategoryRepository.DisposeAsync();
+            if (_productRepository != null)
+                await _productRepository.DisposeAsync();
+            if (_groupForProductFeatureRepository != null)
+                await _groupForProductFeatureRepository.DisposeAsync();
+        }
 
-        //#endregion
+        #endregion
     }
 }
 

@@ -5,13 +5,13 @@ using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.Application.interfaces
 {
-    public interface IProductService /*: IAsyncDisposable*/
+    public interface IProductService : IAsyncDisposable
     {
-        //#region product feature category
-        //Task<List<EditProductFeatureCategoryDto>> GetProductFeatureCategories();
-        //Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateProductFeatureCategoryDto featureCategory);
-        //Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory);
-        //#endregion
+        #region product feature category
+        Task<List<EditProductFeatureCategoryDto>> GetProductFeatureCategories(Guid storeCode);
+        Task<CreateOurEditProductFeatureCategoryResult> CreateFeatureCategory(CreateProductFeatureCategoryDto featureCategory, Guid storeCode);
+        Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory, Guid storeCode);
+        #endregion
 
         //#region selected category
         //Task AddSelectedCategory(long productId, List<long> selectedCategoryId);
