@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SellerWebService.DataLayer.DTOs;
-using SellerWebService.DataLayer.DTOs.Products;
+﻿using SellerWebService.DataLayer.DTOs.Products;
 using SellerWebService.DataLayer.Entities.Products;
 
 namespace SellerWebService.Application.interfaces

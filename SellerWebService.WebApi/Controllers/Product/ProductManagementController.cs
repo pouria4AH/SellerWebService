@@ -2,7 +2,6 @@
 using _0_framework.Http;
 using _0_framework.Messages;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
