@@ -13,12 +13,12 @@ namespace SellerWebService.Application.interfaces
         Task<CreateOurEditProductFeatureCategoryResult> EditFeatureCategory(EditProductFeatureCategoryDto featureCategory, Guid storeCode);
         #endregion
 
-        //#region selected category
+        #region selected category
         //Task AddSelectedCategory(long productId, List<long> selectedCategoryId);
         //Task RemoveSelectedCategory(long productId);
-        //#endregion
+        #endregion
 
-        //#region product category
+        #region product category
 
         //Task<CreateOurEditProductCategoryResult> CreateProductCategory(CreateProductCategoryDto productCategory);
         ////Task<EditProductCategoryDto> GetProductCategory(long productId);
@@ -27,17 +27,17 @@ namespace SellerWebService.Application.interfaces
         //Task<ReadProductCategoryDto> GetProductCategoryById(long id);
         //Task<bool> ChangeProductCategoryActiveState(long id);
 
-        //#endregion
+        #endregion
 
-        //#region product
+        #region product
 
-        //Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product);
-        //Task<List<ReadProductDto>> GetAllProduct();
-        //Task<ReadProductDto> GetProductById(long id);
-        //Task<CreateOurEditProductResult> EditProduct(EditProductDto product);
-        //Task<bool> ChangeProductActiveState(long id);
+        Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product, Guid storeCode);
+        Task<List<ReadProductDto>> GetAllProduct(Guid storeCode);
+        Task<ReadProductDto> GetProductById(long id);
+        Task<CreateOurEditProductResult> EditProduct(EditProductDto product, Guid storeCode);
+        Task<bool> ChangeProductActiveState(long id, Guid storeCode);
 
-        //#endregion
+        #endregion
 
         //#region product feature
         //Task<CreateGroupProductFeatureResult> CreateGroupOfProductFeature(

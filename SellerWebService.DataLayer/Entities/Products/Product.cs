@@ -30,9 +30,9 @@ namespace SellerWebService.DataLayer.Entities.Products
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? Size { get; set; }
 
-        [Display(Name = "پرداخت اولیه")]
-        [Range(0,100)]
-        public double Prepayment { get; set; }
+        //[Display(Name = "پرداخت اولیه")]
+        //[Range(0,100)]
+        //public double Prepayment { get; set; }
 
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

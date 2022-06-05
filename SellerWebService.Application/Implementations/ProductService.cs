@@ -98,7 +98,7 @@ namespace SellerWebService.Application.Implementations
 
         #endregion
 
-        //#region selected category
+        #region selected category
 
         //public async Task AddSelectedCategory(long productId, List<long> selectedCategories)
         //{
@@ -123,9 +123,9 @@ namespace SellerWebService.Application.Implementations
         //    _productSelectedCategoryRepository.DeletePermanentEntities(selectedCategory);
         //}
 
-        //#endregion
+        #endregion
 
-        //#region product category
+        #region product category
 
         //public async Task<CreateOurEditProductCategoryResult> CreateProductCategory(
         //    CreateProductCategoryDto productCategory)
@@ -215,188 +215,181 @@ namespace SellerWebService.Application.Implementations
         //    return true;
         //}
 
-        //#endregion
+        #endregion\
 
-        //#region product
+        #region product
 
-        //public async Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product)
-        //{
-        //    try
-        //    {
-        //        bool isExisted = await _productRepository.GetQuery().AsQueryable().AnyAsync(x =>
-        //            x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete);
-        //        if (isExisted) return CreateOurEditProductResult.IsExisted;
+        public async Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product, Guid storeCode)
+        {
+            try
+            {
+                bool isExisted = await _productRepository.GetQuery().AsQueryable()
+                    .Include(x=>x.StoreData)
+                    .AnyAsync(x =>
+                    x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
+                if (isExisted) return CreateOurEditProductResult.IsExisted;
 
-        //        if (product.StateForCount != CountState.Single)
-        //        {
-        //            if (product.Counts == null || !product.Counts.Any())
-        //                return CreateOurEditProductResult.CountListIsNotExisted;
-        //        }
+                //if (product.StateForCount != CountState.Single)
+                //{
+                //    if (product.Counts == null || !product.Counts.Any())
+                //        return CreateOurEditProductResult.CountListIsNotExisted;
+                //}
+                var store = await _storeDataRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
+                if(store == null) return CreateOurEditProductResult.Error;
+                if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
 
-        //        if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
-        //        var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
-        //        var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-        //            PathExtension.ProductThumbServer);
-        //        if (!res) return CreateOurEditProductResult.IsNotImage;
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
+                var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                    PathExtension.ProductThumbServer);
+                if (!res) return CreateOurEditProductResult.IsNotImage;
 
-        //        var newProduct = new Product
-        //        {
-        //            Name = product.Name,
-        //            SeoTitle = product.SeoTitle,
-        //            Description = product.Description,
-        //            DefaultPrice = product.DefaultPrice,
-        //            ShortDescription = product.ShortDescription,
-        //            Keywords = product.Keywords,
-        //            MetaDescription = product.MetaDescription,
-        //            PictureAlt = product.PictureAlt,
-        //            PictureTitle = product.PictureTitle,
-        //            PictureName = imageName,
-        //            IsActive = product.IsActive,
-        //            StateForCount = product.StateForCount,
-        //            Prepayment = product.Prepayment
-        //        };
-        //        if (product.Size != null) newProduct.Size = product.Size;
+                var newProduct = new Product
+                {
+                    StoreDataId = store.Id,
+                    Name = product.Name,
+                    SeoTitle = product.SeoTitle,
+                    Description = product.Description,
+                    DefaultPrice = product.DefaultPrice,
+                    ShortDescription = product.ShortDescription,
+                    Keywords = product.Keywords,
+                    MetaDescription = product.MetaDescription,
+                    PictureAlt = product.PictureAlt,
+                    PictureTitle = product.PictureTitle,
+                    PictureName = imageName,
+                    IsActive = product.IsActive,
+                    //StateForCount = product.StateForCount,
+                    //Prepayment = product.Prepayment
+                };
+                if (product.Size != null) newProduct.Size = product.Size;
 
+                await _productRepository.AddEntity(newProduct);
+                await _productRepository.SaveChanges();
 
-        //        await _productRepository.AddEntity(newProduct);
-        //        await _productRepository.SaveChanges();
+                //if (product.selectedCategories.Any())
+                //    await AddSelectedCategory(newProduct.Id, product.selectedCategories);
 
+                return CreateOurEditProductResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOurEditProductResult.Error;
+            }
+        }
 
-        //        if (product.selectedCategories.Any())
-        //            await AddSelectedCategory(newProduct.Id, product.selectedCategories);
+        public async Task<List<ReadProductDto>> GetAllProduct(Guid storeCode)
+        {
+            return await _productRepository.GetQuery().AsQueryable()
+                .Include(x=>x.StoreData)
+                .Where(x => !x.IsDelete && x.StoreData.UniqueCode == storeCode)
+                .Select(x => new ReadProductDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    DefaultPrice = x.DefaultPrice,
+                    Keywords = x.Keywords,
+                    MetaDescription = x.MetaDescription,
+                    PictureAlt = x.PictureAlt,
+                    PictureTitle = x.PictureTitle,
+                    PictureName = x.PictureName,
+                    IsActive = x.IsActive,
+                    SeoTitle = x.SeoTitle,
+                    ShortDescription = x.ShortDescription,
+                    Size = x.Size,
+                    //Prepayment = x.Prepayment
+                    //OriginName = PathExtension.ProductOrigin,
+                    //CategoriesId = x.ProductSelectedCategories.Select(z => z.ProductCategoryId).ToList(),
+                    //StateForCount = x.StateForCount,
+                }).ToListAsync();
+        }
 
-        //        return CreateOurEditProductResult.Success;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return CreateOurEditProductResult.Error;
-        //    }
-        //}
+        public async Task<ReadProductDto> GetProductById(long id)
+        {
+            var product = await _productRepository.GetEntityById(id);
+            if (product == null) return null;
+            return new ReadProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                DefaultPrice = product.DefaultPrice,
+                Keywords = product.Keywords,
+                MetaDescription = product.MetaDescription,
+                PictureAlt = product.PictureAlt,
+                PictureTitle = product.PictureTitle,
+                PictureName = product.PictureName,
+                IsActive = product.IsActive,
+                SeoTitle = product.SeoTitle,
+                ShortDescription = product.ShortDescription,
+                Size = product.Size,
+            };
+        }
 
-        //public async Task<List<ReadProductDto>> GetAllProduct()
-        //{
-        //    return await _productRepository.GetQuery().AsQueryable()
-        //        .Where(x => !x.IsDelete)
-        //        //.Include(x => x.ProductSelectedCategories)
-        //        .Select(x => new ReadProductDto
-        //        {
-        //            Id = x.Id,
-        //            Name = x.Name,
-        //            Description = x.Description,
-        //            DefaultPrice = x.DefaultPrice,
-        //            Keywords = x.Keywords,
-        //            MetaDescription = x.MetaDescription,
-        //            PictureAlt = x.PictureAlt,
-        //            PictureTitle = x.PictureTitle,
-        //            PictureName = x.PictureName,
-        //            IsActive = x.IsActive,
-        //            SeoTitle = x.SeoTitle,
-        //            ShortDescription = x.ShortDescription,
-        //            Size = x.Size,
-        //            OriginAddress = PathExtension.ProductOrigin,
-        //            ThumbAddress = PathExtension.ProductThumb,
-        //            //CategoriesId = x.ProductSelectedCategories.Select(z => z.ProductCategoryId).ToList(),
-        //            StateForCount = x.StateForCount,
-        //            Prepayment = x.Prepayment
-        //        }).ToListAsync();
-        //}
+        public async Task<CreateOurEditProductResult> EditProduct(EditProductDto product, Guid storeCode)
+        {
+            var mainProduct = await _productRepository.GetQuery().AsQueryable()
+                .Include(x=>x.StoreData)
+                .SingleOrDefaultAsync(x=>x.Id == product.Id && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
+            if (mainProduct == null ) return CreateOurEditProductResult.NotFound;
 
-        //public async Task<ReadProductDto> GetProductById(long id)
-        //{
-        //    var product = await _productRepository.GetEntityById(id);
-        //    if (product == null) return null;
-        //    return new ReadProductDto
-        //    {
-        //        Id = product.Id,
-        //        Name = product.Name,
-        //        Description = product.Description,
-        //        DefaultPrice = product.DefaultPrice,
-        //        Keywords = product.Keywords,
-        //        MetaDescription = product.MetaDescription,
-        //        PictureAlt = product.PictureAlt,
-        //        PictureTitle = product.PictureTitle,
-        //        PictureName = product.PictureName,
-        //        IsActive = product.IsActive,
-        //        SeoTitle = product.SeoTitle,
-        //        ShortDescription = product.ShortDescription,
-        //        Size = product.Size,
-        //        OriginAddress = PathExtension.ProductOrigin,
-        //        ThumbAddress = PathExtension.ProductThumb,
-        //        CategoriesId = await _productSelectedCategoryRepository.GetQuery().AsQueryable()
-        //            .Where(x => x.ProductId == id).Select(x => x.ProductCategoryId).ToListAsync(),
-        //        StateForCount = product.StateForCount,
-        //        Prepayment = product.Prepayment
-        //    };
-        //}
+            if (product.Picture != null)
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
+                var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                    PathExtension.ProductThumbServer, mainProduct.PictureName);
+                if (res)
+                {
+                    mainProduct.PictureName = imageName;
+                }
+                else
+                {
+                    return CreateOurEditProductResult.IsNotImage;
+                }
+            }
 
-        //public async Task<CreateOurEditProductResult> EditProduct(EditProductDto product)
-        //{
-        //    var mainProduct = await _productRepository.GetEntityById(product.Id);
-        //    if (mainProduct == null || mainProduct.IsDelete) return CreateOurEditProductResult.NotFound;
+            mainProduct.IsActive = product.IsActive;
+            mainProduct.SeoTitle = product.SeoTitle;
+            mainProduct.ShortDescription = product.ShortDescription;
+            mainProduct.Description = product.Description;
+            mainProduct.Size = product.Size;
+            mainProduct.DefaultPrice = product.DefaultPrice;
+            //mainProduct.StateForCount = product.StateForCount;
+            mainProduct.Keywords = product.Keywords;
+            mainProduct.MetaDescription = product.MetaDescription;
+            mainProduct.Name = product.Name;
+            mainProduct.PictureAlt = product.PictureAlt;
+            mainProduct.PictureTitle = product.PictureTitle;
+            //mainProduct.Prepayment = product.Prepayment;
+            
+            //await RemoveSelectedCategory(product.Id);
+            //await AddSelectedCategory(product.Id, product.selectedCategories);
 
-        //    if (product.StateForCount != CountState.Single)
-        //    {
-        //        if (product.Counts == null || !product.Counts.Any())
-        //            return CreateOurEditProductResult.CountListIsNotExisted;
-        //    }
+            _productRepository.EditEntity(mainProduct);
+            await _productRepository.SaveChanges();
+            return CreateOurEditProductResult.Success;
 
-        //    if (product.Picture != null)
-        //    {
-        //        var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
-        //        var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-        //            PathExtension.ProductThumbServer, mainProduct.PictureName);
-        //        if (res)
-        //        {
-        //            mainProduct.PictureName = imageName;
-        //        }
-        //        else
-        //        {
-        //            return CreateOurEditProductResult.IsNotImage;
-        //        }
-        //    }
+        }
 
-        //    mainProduct.IsActive = product.IsActive;
-        //    mainProduct.SeoTitle = product.SeoTitle;
-        //    mainProduct.ShortDescription = product.ShortDescription;
-        //    mainProduct.Description = product.Description;
-        //    mainProduct.Size = product.Size;
-        //    mainProduct.DefaultPrice = product.DefaultPrice;
-        //    mainProduct.StateForCount = product.StateForCount;
-        //    mainProduct.Keywords = product.Keywords;
-        //    mainProduct.MetaDescription = product.MetaDescription;
-        //    mainProduct.Name = product.Name;
-        //    mainProduct.PictureAlt = product.PictureAlt;
-        //    mainProduct.PictureTitle = product.PictureTitle;
-        //    mainProduct.Prepayment = product.Prepayment;
-
-        //    await RemoveSelectedCategory(product.Id);
-        //    await AddSelectedCategory(product.Id, product.selectedCategories);
-
-        //    _productRepository.EditEntity(mainProduct);
-        //    await _productRepository.SaveChanges();
-        //    return CreateOurEditProductResult.Success;
-
-        //}
-
-        //public async Task<bool> ChangeProductActiveState(long id)
-        //{
-        //    try
-        //    {
-        //        var product = await _productRepository.GetEntityById(id);
-        //        if (product == null) return false;
-        //        product.IsActive = !product.IsActive;
-        //        _productRepository.EditEntity(product);
-        //        await _productRepository.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
+        public async Task<bool> ChangeProductActiveState(long id, Guid storeCode)
+        {
+            try
+            {
+                var product = await _productRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x=>!x.IsDelete && x.Id == id && x.StoreData.UniqueCode == storeCode);
+                if (product == null) return false;
+                product.IsActive = !product.IsActive;
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
 
-        //#endregion
+        #endregion
 
         //#region product feature
 

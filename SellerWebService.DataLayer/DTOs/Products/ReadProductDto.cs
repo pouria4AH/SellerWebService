@@ -18,8 +18,8 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Display(Name = "سایز پیش فرض")]
         public string? Size { get; set; }
 
-        [Display(Name = "پرداخت اولیه")]
-        public double Prepayment { get; set; }
+        //[Display(Name = "پرداخت اولیه")]
+        //public double Prepayment { get; set; }
 
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
@@ -45,21 +45,21 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Display(Name = "کیبورد")]
         public string Keywords { get; set; }
 
-        [Display(Name = "لینک خارجی")]
-        public string? ExrernalLink { get; set; }
+        //[Display(Name = "لینک خارجی")]
+        //public string? ExrernalLink { get; set; }
 
-        [Display(Name = "لینک داخلی")]
-        public string? InternalLink { get; set; }
+        //[Display(Name = "لینک داخلی")]
+        //public string? InternalLink { get; set; }
 
-        [Display(Name = "لیست تیراژ")]
-        public string CountArray { get; set; }
+        //[Display(Name = "لیست تیراژ")]
+        //public string CountArray { get; set; }
 
-        [Display(Name = "وضعیت تیراژ")]
+        //[Display(Name = "وضعیت تیراژ")]
         //public CountState StateForCount { get; set; }
 
-        public string OriginAddress { get; set; }
+        //public string PictureName { get; set; }
 
-        public string ThumbAddress { get; set; }
-        public List<long> CategoriesId { get; set; }
+        //public string ThumbName { get; set; }
+        //public List<long> CategoriesId { get; set; }
     }
 }
