@@ -513,65 +513,71 @@ namespace SellerWebService.Application.Implementations
         #endregion
 
         #region product gallery
-        //public async Task<List<ProductGallery>> GetAllProductGallery(long id)
-        //{
-        //    return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == id).ToListAsync();
-        //}
-        //public async Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit, long productId)
-        //{
-        //    var product = await _productRepository.GetEntityById(productId);
-        //    if (product == null) return CreateOurEditProductGalleryResult.ProductNotFound;
-        //    if (createOurEdit.Image == null || !createOurEdit.Image.IsImage()) return CreateOurEditProductGalleryResult.ImageIsNull;
+        public async Task<List<ProductGallery>> GetAllProductGallery(long id)
+        {
+            return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == id).ToListAsync();
+        }
 
-        //    var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(createOurEdit.Image.FileName);
-        //    createOurEdit.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
-        //        PathExtension.ProductGalleryThumbServer);
-        //    await _productGalleryRepository.AddEntity(new ProductGallery
-        //    {
-        //        ProductId = productId,
-        //        ImageName = imageName,
-        //        DisplayPriority = createOurEdit.DisplayPriority,
-        //        PictureAlt = createOurEdit.PictureAlt,
-        //        PictureTitle = createOurEdit.PictureTitle,
-        //    });
-        //    await _productGalleryRepository.SaveChanges();
-        //    return CreateOurEditProductGalleryResult.Success;
-        //}
-        //public async Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId)
-        //{
-        //    var gallery = await _productGalleryRepository.GetQuery()
-        //        .Include(x => x.Product)
-        //        .SingleOrDefaultAsync(x => x.Id == galleryId);
-        //    if (gallery == null) return null;
-        //    return new CreateOurEditProductGalleryDTO
-        //    {
-        //        ImageName = gallery.ImageName,
-        //        DisplayPriority = gallery.DisplayPriority,
-        //        PictureTitle = gallery.PictureTitle,
-        //        PictureAlt = gallery.PictureAlt,
-        //    };
-        //}
-        //public async Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId, CreateOurEditProductGalleryDTO gallery)
-        //{
-        //    var mainGallery = await _productGalleryRepository.GetQuery()
-        //        .Include(x => x.Product)
-        //        .SingleOrDefaultAsync(x => x.Id == galleryId);
-        //    if (mainGallery == null) return CreateOurEditProductGalleryResult.ProductNotFound;
-        //    if (gallery.Image != null && gallery.Image.IsImage())
-        //    {
-        //        var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(gallery.Image.FileName);
-        //        gallery.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
-        //            PathExtension.ProductGalleryThumbServer, mainGallery.ImageName);
 
-        //        mainGallery.ImageName = imageName;
-        //    }
-        //    mainGallery.DisplayPriority = gallery.DisplayPriority;
-        //    mainGallery.PictureTitle = gallery.PictureTitle;
-        //    mainGallery.PictureAlt = gallery.PictureAlt;
-        //    _productGalleryRepository.EditEntity(mainGallery);
-        //    await _productGalleryRepository.SaveChanges();
-        //    return CreateOurEditProductGalleryResult.Success;
-        //}
+        public async Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit, long productId, Guid storeCode)
+        {
+            var product = await _productRepository.GetQuery().AsQueryable()
+                .Include(x=>x.StoreData)
+                .SingleOrDefaultAsync(x=>x.Id == productId && x.StoreData.UniqueCode == storeCode );
+            if (product == null) return CreateOurEditProductGalleryResult.ProductNotFound;
+            if (createOurEdit.Image == null || !createOurEdit.Image.IsImage()) return CreateOurEditProductGalleryResult.ImageIsNull;
+
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(createOurEdit.Image.FileName);
+            createOurEdit.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                PathExtension.ProductGalleryThumbServer);
+            await _productGalleryRepository.AddEntity(new ProductGallery
+            {
+                ProductId = productId,
+                ImageName = imageName,
+                DisplayPriority = createOurEdit.DisplayPriority,
+                PictureAlt = createOurEdit.PictureAlt,
+                PictureTitle = createOurEdit.PictureTitle,
+            });
+            await _productGalleryRepository.SaveChanges();
+            return CreateOurEditProductGalleryResult.Success;
+        }
+        public async Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId, Guid storeCode)
+        {
+            var gallery = await _productGalleryRepository.GetQuery()
+                .Include(x => x.Product)
+                .ThenInclude(x=>x.StoreData)
+                .SingleOrDefaultAsync(x => x.Id == galleryId && x.Product.StoreData.UniqueCode == storeCode);
+            if (gallery == null) return null;
+            return new CreateOurEditProductGalleryDTO
+            {
+                ImageName = gallery.ImageName,
+                DisplayPriority = gallery.DisplayPriority,
+                PictureTitle = gallery.PictureTitle,
+                PictureAlt = gallery.PictureAlt,
+            };
+        }
+        public async Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId, CreateOurEditProductGalleryDTO gallery, Guid storeCode)
+        {
+            var mainGallery = await _productGalleryRepository.GetQuery()
+                .Include(x => x.Product)
+                .ThenInclude(x=>x.StoreData)
+                .SingleOrDefaultAsync(x => x.Id == galleryId && !x.IsDelete && x.Product.StoreData.UniqueCode == storeCode);
+            if (mainGallery == null) return CreateOurEditProductGalleryResult.ProductNotFound;
+            if (gallery.Image != null && gallery.Image.IsImage())
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(gallery.Image.FileName);
+                gallery.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                    PathExtension.ProductGalleryThumbServer, mainGallery.ImageName);
+
+                mainGallery.ImageName = imageName;
+            }
+            mainGallery.DisplayPriority = gallery.DisplayPriority;
+            mainGallery.PictureTitle = gallery.PictureTitle;
+            mainGallery.PictureAlt = gallery.PictureAlt;
+            _productGalleryRepository.EditEntity(mainGallery);
+            await _productGalleryRepository.SaveChanges();
+            return CreateOurEditProductGalleryResult.Success;
+        }
         #endregion
 
         #region dipose
@@ -584,6 +590,12 @@ namespace SellerWebService.Application.Implementations
                 await _productRepository.DisposeAsync();
             if (_groupForProductFeatureRepository != null)
                 await _groupForProductFeatureRepository.DisposeAsync();
+            if (_productFeatureRepository != null)
+                await _productFeatureRepository.DisposeAsync();
+            if (_productGalleryRepository != null)
+                await _productGalleryRepository.DisposeAsync();
+            if (_storeDataRepository != null)
+                await _storeDataRepository.DisposeAsync();
         }
 
         #endregion

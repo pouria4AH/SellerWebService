@@ -49,15 +49,15 @@ namespace SellerWebService.Application.interfaces
 
         #endregion
 
-        //#region product gallery
+        #region product gallery
 
-        //Task<List<ProductGallery>> GetAllProductGallery(long id);
-        //Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId);
-        //Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit,
-        //    long productId);
-        //Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId,
-        //    CreateOurEditProductGalleryDTO gallery);
+        Task<List<ProductGallery>> GetAllProductGallery(long id);
+        Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId,Guid storeCode);
+        Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit,
+            long productId, Guid storeCode);
+        Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId,
+            CreateOurEditProductGalleryDTO gallery, Guid storeCode);
 
-        //#endregion
+        #endregion
     }
 }
