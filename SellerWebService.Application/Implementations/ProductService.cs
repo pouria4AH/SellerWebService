@@ -85,7 +85,7 @@ namespace SellerWebService.Application.Implementations
             if (featureCategory == null) return CreateOurEditProductFeatureCategoryResult.Error;
 
             var category = await _productFeatureCategoryRepository.GetQuery().AsQueryable()
-                .Include(x=>x.StoreData)
+                .Include(x => x.StoreData)
                 .SingleOrDefaultAsync(x => x.Id == featureCategory.Id && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
 
             if (category == null) return CreateOurEditProductFeatureCategoryResult.NotFound;
@@ -224,7 +224,7 @@ namespace SellerWebService.Application.Implementations
             try
             {
                 bool isExisted = await _productRepository.GetQuery().AsQueryable()
-                    .Include(x=>x.StoreData)
+                    .Include(x => x.StoreData)
                     .AnyAsync(x =>
                     x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
                 if (isExisted) return CreateOurEditProductResult.IsExisted;
@@ -236,7 +236,7 @@ namespace SellerWebService.Application.Implementations
                 //}
                 var store = await _storeDataRepository.GetQuery().AsQueryable()
                     .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
-                if(store == null) return CreateOurEditProductResult.Error;
+                if (store == null) return CreateOurEditProductResult.Error;
                 if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
 
                 var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
@@ -280,7 +280,7 @@ namespace SellerWebService.Application.Implementations
         public async Task<List<ReadProductDto>> GetAllProduct(Guid storeCode)
         {
             return await _productRepository.GetQuery().AsQueryable()
-                .Include(x=>x.StoreData)
+                .Include(x => x.StoreData)
                 .Where(x => !x.IsDelete && x.StoreData.UniqueCode == storeCode)
                 .Select(x => new ReadProductDto
                 {
@@ -329,9 +329,9 @@ namespace SellerWebService.Application.Implementations
         public async Task<CreateOurEditProductResult> EditProduct(EditProductDto product, Guid storeCode)
         {
             var mainProduct = await _productRepository.GetQuery().AsQueryable()
-                .Include(x=>x.StoreData)
-                .SingleOrDefaultAsync(x=>x.Id == product.Id && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
-            if (mainProduct == null ) return CreateOurEditProductResult.NotFound;
+                .Include(x => x.StoreData)
+                .SingleOrDefaultAsync(x => x.Id == product.Id && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
+            if (mainProduct == null) return CreateOurEditProductResult.NotFound;
 
             if (product.Picture != null)
             {
@@ -361,7 +361,7 @@ namespace SellerWebService.Application.Implementations
             mainProduct.PictureAlt = product.PictureAlt;
             mainProduct.PictureTitle = product.PictureTitle;
             //mainProduct.Prepayment = product.Prepayment;
-            
+
             //await RemoveSelectedCategory(product.Id);
             //await AddSelectedCategory(product.Id, product.selectedCategories);
 
@@ -375,7 +375,7 @@ namespace SellerWebService.Application.Implementations
         {
             try
             {
-                var product = await _productRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x=>!x.IsDelete && x.Id == id && x.StoreData.UniqueCode == storeCode);
+                var product = await _productRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => !x.IsDelete && x.Id == id && x.StoreData.UniqueCode == storeCode);
                 if (product == null) return false;
                 product.IsActive = !product.IsActive;
                 _productRepository.EditEntity(product);
@@ -391,119 +391,128 @@ namespace SellerWebService.Application.Implementations
 
         #endregion
 
-        //#region product feature
+        #region product feature
 
-        //public async Task<CreateGroupProductFeatureResult> CreateGroupOfProductFeature(
-        //    CreateGroupProductFeatureDto groupProductFeature)
-        //{
-        //    try
-        //    {
-        //        var checkExiskted = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x =>
-        //            groupProductFeature.ProductId == x.ProductId &&
-        //            x.ProductFeatureCategoryId == groupProductFeature.ProductFeatureCategoryId && !x.IsDelete);
-        //        if (checkExiskted) return CreateGroupProductFeatureResult.IsExisted;
-        //        //var product = await _productRepository.GetEntityById(groupProductFeature.ProductId);
-        //        //var category =
-        //        //    await _productFeatureCategoryRepository.GetEntityById(groupProductFeature.ProductFeatureCategoryId);
-        //        //if (category == null || product == null) return CreateGroupProductFeatureResult.NotFound;
-        //        var newGroup = new GroupForProductFeature
-        //        {
-        //            ProductId = groupProductFeature.ProductId,
-        //            ProductFeatureCategoryId = groupProductFeature.ProductFeatureCategoryId,
-        //            Order = groupProductFeature.Order
-        //        };
-        //        var orderCheck = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x => x.ProductId == groupProductFeature.ProductId && x.Order == groupProductFeature.Order && !x.IsDelete);
-        //        if(orderCheck) return CreateGroupProductFeatureResult.IsExisted;
-        //        await _groupForProductFeatureRepository.AddEntity(newGroup);
-        //        await _groupForProductFeatureRepository.SaveChanges();
-        //        return CreateGroupProductFeatureResult.Success;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return CreateGroupProductFeatureResult.Error;
-        //    }
-        //}
+        public async Task<CreateGroupProductFeatureResult> CreateGroupOfProductFeature(
+            CreateGroupProductFeatureDto groupProductFeature, Guid storeCode)
+        {
+            try
+            {
+                var checkExiskted = await _groupForProductFeatureRepository.GetQuery().AsQueryable()
+                    .Include(x => x.StoreData)
+                    .AnyAsync(x =>
+                    groupProductFeature.ProductId == x.ProductId &&
+                    x.ProductFeatureCategoryId == groupProductFeature.ProductFeatureCategoryId &&
+                    !x.IsDelete && x.StoreData.UniqueCode == storeCode);
+                if (checkExiskted) return CreateGroupProductFeatureResult.IsExisted;
+                var product = await _productRepository.GetQuery().AsQueryable().Include(x => x.StoreData).SingleOrDefaultAsync(x => x.Id == groupProductFeature.ProductId);
 
-        //public async Task<bool> DeleteGroup(long groupId)
-        //{
-        //    try
-        //    {
-        //        var group = await _groupForProductFeatureRepository.GetEntityById(groupId);
-        //        if (group == null) return false;
-        //        group.IsDelete = true;
-        //        _groupForProductFeatureRepository.EditEntity(group);
-        //        await _groupForProductFeatureRepository.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
+                if (product == null && product.StoreData.UniqueCode != storeCode)
+                    return CreateGroupProductFeatureResult.Error;
 
-        //public async Task<List<ReadGroupProductFeatureDto>> GetGroupsForProduct(long productId)
-        //{
-        //    return await _groupForProductFeatureRepository.GetQuery().Include(x => x.ProductFeatures).AsQueryable()
-        //         .Where(x => x.ProductId == productId)
-        //         .Select(x => new ReadGroupProductFeatureDto
-        //         {
-        //             Id = x.Id,
-        //             Order = x.Order,
-        //             ProductFeatureCategoryId = x.ProductFeatureCategoryId,
-        //             ProductId = x.ProductId,
-        //             ProductFeatures = x.ProductFeatures.Where(x => !x.IsDelete).Select(x => new EditProductFeatureDto
-        //             {
-        //                 Id = x.Id,
-        //                 Description = x.Description,
-        //                 ExtraPrice = x.ExtraPrice,
-        //                 Name = x.Name
-        //             }).ToList()
-        //         }).ToListAsync();
-        //}
+                var newGroup = new GroupForProductFeature
+                {
+                    StoreDataId = product.StoreDataId,
+                    ProductId = groupProductFeature.ProductId,
+                    ProductFeatureCategoryId = groupProductFeature.ProductFeatureCategoryId,
+                    Order = groupProductFeature.Order
+                };
+                var orderCheck = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x => x.ProductId == groupProductFeature.ProductId && x.Order == groupProductFeature.Order && !x.IsDelete);
+                if (orderCheck) return CreateGroupProductFeatureResult.IsExisted;
+                await _groupForProductFeatureRepository.AddEntity(newGroup);
+                await _groupForProductFeatureRepository.SaveChanges();
+                return CreateGroupProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateGroupProductFeatureResult.Error;
+            }
+        }
 
-        //public async Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature)
-        //{
-        //    try
-        //    {
-        //        var newFeature = new ProductFeature
-        //        {
-        //            Name = feature.Name,
-        //            Description = feature.Description,
-        //            ExtraPrice = feature.ExtraPrice,
-        //            GroupForProductFeatureId = feature.GroupForProductFeatureId
-        //        };
-        //        await _productFeatureRepository.AddEntity(newFeature);
-        //        await _productFeatureRepository.SaveChanges();
-        //        return CreateOrEditProductFeatureResult.Success;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return CreateOrEditProductFeatureResult.Error;
-        //    }
-        //}
+        public async Task<bool> DeleteGroup(long groupId, Guid storeCode)
+        {
+            try
+            {
+                var group = await _groupForProductFeatureRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => !x.IsDelete && x.Id == groupId && x.StoreData.UniqueCode == storeCode);
+                if (group == null) return false;
+                _groupForProductFeatureRepository.DeleteEntity(group);
+                await _groupForProductFeatureRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
-        //public async Task<CreateOrEditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature)
-        //{
-        //    try
-        //    {
-        //        var productFeature = await _productFeatureRepository.GetEntityById(feature.Id);
-        //        if (productFeature == null) return CreateOrEditProductFeatureResult.NotFound;
-        //        productFeature.Name = feature.Name;
-        //        productFeature.Description = feature.Description;
-        //        productFeature.ExtraPrice = feature.ExtraPrice;
-        //        _productFeatureRepository.EditEntity(productFeature);
-        //        await _productFeatureRepository.SaveChanges();
-        //        return CreateOrEditProductFeatureResult.Success;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return CreateOrEditProductFeatureResult.Error;
-        //    }
-        //}
+        public async Task<List<ReadGroupProductFeatureDto>> GetGroupsForProduct(long productId)
+        {
+            return await _groupForProductFeatureRepository.GetQuery().Include(x => x.ProductFeatures).AsQueryable()
+                 .Where(x => x.ProductId == productId)
+                 .Select(x => new ReadGroupProductFeatureDto
+                 {
+                     Id = x.Id,
+                     Order = x.Order,
+                     ProductFeatureCategoryId = x.ProductFeatureCategoryId,
+                     ProductId = x.ProductId,
+                     ProductFeatures = x.ProductFeatures.Where(x => !x.IsDelete).Select(x => new EditProductFeatureDto
+                     {
+                         Id = x.Id,
+                         Description = x.Description,
+                         ExtraPrice = x.ExtraPrice,
+                         Name = x.Name
+                     }).ToList()
+                 }).ToListAsync();
+        }
 
-        //#endregion
+        public async Task<CreateOrEditProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature, Guid storeCode)
+        {
+            try
+            {
+                var store = await _storeDataRepository.GetQuery().AsQueryable()
+                    .SingleOrDefaultAsync(x => !x.IsDelete && x.UniqueCode == storeCode);
+                if(store == null) return CreateOrEditProductFeatureResult.NotFound;
+                var newFeature = new ProductFeature
+                {
+                    StoreDataId = store.Id,
+                    Name = feature.Name,
+                    Description = feature.Description,
+                    ExtraPrice = feature.ExtraPrice,
+                    GroupForProductFeatureId = feature.GroupForProductFeatureId
+                };
+                await _productFeatureRepository.AddEntity(newFeature);
+                await _productFeatureRepository.SaveChanges();
+                return CreateOrEditProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOrEditProductFeatureResult.Error;
+            }
+        }
 
-        //#region product gallery
+        public async Task<CreateOrEditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature, Guid storeCode)
+        {
+            try
+            {
+                var productFeature = await _productFeatureRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x=>!x.IsDelete && x.Id == feature.Id && x.StoreData.UniqueCode == storeCode);
+                if (productFeature == null) return CreateOrEditProductFeatureResult.NotFound;
+                productFeature.Name = feature.Name;
+                productFeature.Description = feature.Description;
+                productFeature.ExtraPrice = feature.ExtraPrice;
+                _productFeatureRepository.EditEntity(productFeature);
+                await _productFeatureRepository.SaveChanges();
+                return CreateOrEditProductFeatureResult.Success;
+            }
+            catch (Exception e)
+            {
+                return CreateOrEditProductFeatureResult.Error;
+            }
+        }
+
+        #endregion
+
+        #region product gallery
         //public async Task<List<ProductGallery>> GetAllProductGallery(long id)
         //{
         //    return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == id).ToListAsync();
@@ -563,7 +572,7 @@ namespace SellerWebService.Application.Implementations
         //    await _productGalleryRepository.SaveChanges();
         //    return CreateOurEditProductGalleryResult.Success;
         //}
-        //#endregion
+        #endregion
 
         #region dipose
 

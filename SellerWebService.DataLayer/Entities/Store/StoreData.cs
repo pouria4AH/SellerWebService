@@ -63,7 +63,7 @@ namespace SellerWebService.DataLayer.Entities.Store
         //public ICollection<ProductCategory> ProductCategories { get; set; }
         public ICollection<ProductFeature> ProductFeatures { get; set; }
         public ICollection<ProductFeatureCategory> ProductFeatureCategories { get; set; }
-
+        public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         #endregion
     }
 }
