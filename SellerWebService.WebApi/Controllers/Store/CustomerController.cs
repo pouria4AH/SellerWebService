@@ -1,4 +1,5 @@
-﻿using _0_framework.Account;
+﻿using System.Security.Principal;
+using _0_framework.Account;
 using _0_framework.Http;
 using _0_framework.Messages;
 using Microsoft.AspNetCore.Authorization;
@@ -140,7 +141,7 @@ namespace SellerWebService.WebApi.Controllers.Store
             {
                 if (!string.IsNullOrEmpty(search.Mobile) && !string.IsNullOrEmpty(search.firstName) &&
                     !string.IsNullOrEmpty(search.lastName)) return BadRequest();
-                var res = await _customerService.SearchForCustomer(search, User.GetUserStoreCode());
+                var res = await _customerService.SearchForCustomer(search, IdentityExtensions.GetStoreCode((IPrincipal)User));
                 if (res != null && res.Any()) return Ok(res);
                 return BadRequest();
             }

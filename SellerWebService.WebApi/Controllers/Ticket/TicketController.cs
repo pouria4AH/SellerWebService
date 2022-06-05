@@ -1,4 +1,5 @@
-﻿using _0_framework.Account;
+﻿using System.Security.Principal;
+using _0_framework.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
@@ -47,7 +48,7 @@ namespace SellerWebService.WebApi.Controllers.Ticket
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _ticketService.SendFromSeller(ticket,User.GetUserStoreCode());
+                    var res = await _ticketService.SendFromSeller(ticket,IdentityExtensions.GetStoreCode((IPrincipal)User));
                     if (res) return Ok();
                     return BadRequest();
                 }

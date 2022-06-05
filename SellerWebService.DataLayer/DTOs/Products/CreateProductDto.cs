@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http;
-using SellerWebService.DataLayer.Entities.Products;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace SellerWebService.DataLayer.DTOs.Products
 {
@@ -61,15 +58,15 @@ namespace SellerWebService.DataLayer.DTOs.Products
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Keywords { get; set; }
 
-        [Display(Name = "لینک خارجی")]
-        public string? ExrernalLink { get; set; }
+        //[Display(Name = "لینک خارجی")]
+        //public string? ExrernalLink { get; set; }
 
-        [Display(Name = "لینک داخلی")]
-        public string? InternalLink { get; set; }
+        //[Display(Name = "لینک داخلی")]
+        //public string? InternalLink { get; set; }
 
         //public CountState StateForCount { get; set; }
-        public List<long> Counts { get; set; }
-        public List<long> selectedCategories { get; set; }
+        //public List<long> Counts { get; set; }
+        //public List<long> selectedCategories { get; set; }
     }
     public enum CreateOurEditProductResult
     {

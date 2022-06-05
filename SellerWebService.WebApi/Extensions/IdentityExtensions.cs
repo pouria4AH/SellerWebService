@@ -32,7 +32,7 @@ namespace SellerWebService.WebApi.Extensions
 
             return default(Guid);
         }
-        public static Guid GetUserStoreCode(this IPrincipal principal)
+        public static Guid GetStoreCode(this IPrincipal principal)
         {
             var user = (ClaimsPrincipal)principal;
             return user.GetStoreCode();

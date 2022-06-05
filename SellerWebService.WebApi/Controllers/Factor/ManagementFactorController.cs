@@ -1,4 +1,5 @@
-﻿using _0_framework.Account;
+﻿using System.Security.Principal;
+using _0_framework.Account;
 using _0_framework.Http;
 using _0_framework.Messages;
 using Microsoft.AspNetCore.Authorization;
@@ -166,7 +167,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
             try
             {
                 var res = await _factorService.AcceptedFactor(accepted, Guid.Parse(factorCode),
-                    User.GetUserStoreCode());
+                    IdentityExtensions.GetStoreCode((IPrincipal)User));
                 if (res) return Ok();
                 return BadRequest();
             }
@@ -185,7 +186,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         {
             try
             {
-                var res = await _factorService.ReadyToFinalPayedFactor(Guid.Parse(factorCode), User.GetUserStoreCode());
+                var res = await _factorService.ReadyToFinalPayedFactor(Guid.Parse(factorCode), IdentityExtensions.GetStoreCode((IPrincipal)User));
                 if (res) return Ok();
                 return BadRequest();
             }
@@ -204,7 +205,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         {
             try
             {
-                var res = await _factorService.ReadyFactor(accepted, Guid.Parse(factorCode), User.GetUserStoreCode());
+                var res = await _factorService.ReadyFactor(accepted, Guid.Parse(factorCode), IdentityExtensions.GetStoreCode((IPrincipal)User));
                 if (res) return Ok();
                 return BadRequest();
             }
@@ -223,7 +224,7 @@ namespace SellerWebService.WebApi.Controllers.Factor
         {
             try
             {
-                var res = await _factorService.DeliveredFactor(Guid.Parse(factorCode), User.GetUserStoreCode());
+                var res = await _factorService.DeliveredFactor(Guid.Parse(factorCode), IdentityExtensions.GetStoreCode((IPrincipal)User));
                 if (res) return Ok();
                 return BadRequest();
             }
