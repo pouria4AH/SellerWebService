@@ -418,7 +418,7 @@ namespace SellerWebService.Application.Implementations
                     Order = groupProductFeature.Order
                 };
                 var orderCheck = await _groupForProductFeatureRepository.GetQuery().AsQueryable().AnyAsync(x => x.ProductId == groupProductFeature.ProductId && x.Order == groupProductFeature.Order && !x.IsDelete);
-                if (orderCheck) return CreateGroupProductFeatureResult.IsExisted;
+                if (orderCheck) return CreateGroupProductFeatureResult.OrderExisted;
                 await _groupForProductFeatureRepository.AddEntity(newGroup);
                 await _groupForProductFeatureRepository.SaveChanges();
                 return CreateGroupProductFeatureResult.Success;

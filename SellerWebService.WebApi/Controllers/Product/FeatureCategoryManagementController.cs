@@ -1,6 +1,7 @@
-﻿using _0_framework.Http;
+﻿using _0_framework.Account;
+using _0_framework.Http;
 using _0_framework.Messages;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellerWebService.Application.interfaces;
 using SellerWebService.DataLayer.DTOs.Products;
@@ -10,6 +11,7 @@ namespace SellerWebService.WebApi.Controllers.Product
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = AccountRole.SellerEmployee+" "+ AccountRole.Seller)]
     public class FeatureCategoryManagementController : ControllerBase
     {
 

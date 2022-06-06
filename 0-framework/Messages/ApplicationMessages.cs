@@ -23,5 +23,8 @@
         public const string StoreIsExists = "قبلا فروشگاهی با این مشخصات ثبت شده است";
         public const string PaymentIsSuccess = "عملیات پرداخت موفق آمیز بود و اکانت شما به زودی فعال میشود";
         public const string PaymentIsFailed = "عملیات پرداخت با شکست مواجه شد در صورت کسر مبلغ بعد 24 ساعت به حساب شما باز میگردد";
+        public const string StoreNotFound = "فروشگاهی با این مشخصات یافت نشد";
+        //-------------------------------------------------- product feature ---------------------------------------------
+        public const string OrderIsExist = "این ترتیب قبلا وجود دارد";
     }
 }
