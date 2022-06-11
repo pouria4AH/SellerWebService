@@ -2,6 +2,9 @@
     font-family: Byekan;
     src: url('../B_Yekan/Yekan.ttf') format('truetype');
 }
+span.text-warning {
+    font-weight: 400;
+}
 label span.text-danger {
     font-size: 20px;
     font-weight:  bold;

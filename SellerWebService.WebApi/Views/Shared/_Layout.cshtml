@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/notifications.css">
+    <title>سلام سبز</title>
+</head>
+<body>
+@RenderBody()
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/notifications.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<partial name="_SiteMessages"/>
+</body>
+<script>
+    const junk = document.querySelector(".fixed-button");
+    junk.remove();
+    function ShowMessage(title, text, theme) {
+        window.createNotification({
+            closeOnClick: true,
+            displayCloseButton: false,
+            positionClass: 'nfc-bottom-right',
+            showDuration: 4000,
+            theme: theme !== '' ? theme : 'success'
+        })({
+            title: title !== '' ? title : 'اعلان',
+            message: decodeURI(text)
+        });
+    }
+</script>
+</html>

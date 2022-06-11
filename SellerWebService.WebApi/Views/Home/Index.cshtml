@@ -1,64 +1,54 @@
-﻿<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="css/style.css">
-
-    <title>سلام سبز</title>
-</head>
-<body>
-    <div class="container">
-        <div class="">
-            <img src="/img/logo.svg" class="img-fluid logo my-4">
-        </div>
-        <h1 class="mb-4 text-light">با ثبت نام در سلام سبز پنل سه ماهه رایگان بگیرید </h1>
-        <p class="text-warning">توجه داشته باشید این طرح فقظ در مرحله پیش ثبت نام موجود است</p>
-        <div class="p-5 bg-gradient">
-            <form class="text-light">
-                <div class="row ">
-                    <div class="col-sm-6 form-group mb-3">
-                        <label class="form-label ">نام <span class="text-danger">*</span></label>
-                        <input class="form-control text-light">
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-6 form-group mb-3">
-                        <label class="form-label "> نام خانوادگی <span class="text-danger">*</span></label>
-                        <input class="form-control">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 form-group mb-3">
-                        <label class="form-label ">شماره همراه <span class="text-danger">*</span></label>
-                        
-                        <input class="form-control">
-                    </div>
-                </div> 
-                <div class="row">
-                    <div class="col-sm-12 form-group mb-3">
-                        <label class="form-label ">شماره ثابت</label>
-                        <input class="form-control text-light">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 form-group mb-3">
-                        <label class="form-label "> نام شرکت<span class="text-danger">*</span> </label>
-                        <input class="form-control">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 form-group mb-3">
-                        <label class="form-label ">ایمیل</label>
-                        <input class="form-control text-light">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-4 w-100 form-control">ثبت و گرفتن پنل رایگان</button>
-            </form>
-        </div>
+﻿@model SellerWebService.DataLayer.DTOs.Presell.CreatePresellDto
+<div class="container">
+    <div class="">
+        <img src="/img/logo.svg" class="img-fluid logo my-4">
     </div>
-</body>
-<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
-</html>
+    <h1 class="mb-4 text-light">با ثبت نام در سلام سبز پنل سه ماهه رایگان بگیرید </h1>
+    <p class="text-warning">توجه داشته باشید این طرح فقظ در مرحله پیش ثبت نام موجود است</p>
+    <div class="p-5 bg-gradient">
+        <form class="text-light" 
+              method="post" asp-controller="Home" asp-action="Index">
+            <div class="row ">
+                <div class="col-sm-6 form-group mb-3">
+                    <label class="form-label ">نام <span class="text-danger">*</span></label>
+                    <input class="form-control" asp-for="FirstName">
+                    <span class="text-warning" asp-validation-for="FirstName"></span>
+                </div>
+                <div class="col-sm-6 form-group mb-3">
+                    <label class="form-label" > نام خانوادگی <span class="text-danger">*</span></label>
+                    <input class="form-control" asp-for="LastName">
+                    <span class="text-warning" asp-validation-for="LastName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group mb-3">
+                    <label class="form-label ">شماره همراه <span class="text-danger">*</span></label>
+                    <input class="form-control" asp-for="Mobile">
+                    <span class="text-warning" asp-validation-for="Mobile"></span>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 form-group mb-3">
+                    <label class="form-label ">شماره ثابت</label>
+                    <input class="form-control" asp-for="Phone">
+                    <span class="text-warning" asp-validation-for="Phone"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group mb-3">
+                    <label class="form-label"> نام شرکت<span class="text-danger">*</span> </label>
+                    <input class="form-control" asp-for="CompanyName">
+                    <span class="text-warning" asp-validation-for="CompanyName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group mb-3">
+                    <label class="form-label" asp-for="Email">ایمیل</label>
+                    <input class="form-control" asp-for="Email">
+                    <span class="text-warning" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <button type="submit"  class="btn btn-primary mt-4 w-100 form-control">ثبت و گرفتن پنل رایگان</button>
+        </form>
+    </div>
+</div>  
