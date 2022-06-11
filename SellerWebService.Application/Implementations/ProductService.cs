@@ -517,8 +517,6 @@ namespace SellerWebService.Application.Implementations
         {
             return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == id).ToListAsync();
         }
-
-
         public async Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit, long productId, Guid storeCode)
         {
             var product = await _productRepository.GetQuery().AsQueryable()

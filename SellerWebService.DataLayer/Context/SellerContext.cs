@@ -3,6 +3,7 @@ using SellerWebService.DataLayer.Entities.Account;
 using SellerWebService.DataLayer.Entities.Factor;
 using SellerWebService.DataLayer.Entities.Products;
 using SellerWebService.DataLayer.Entities.Store;
+using SellerWebService.DataLayer.Entities.TempV2;
 using SellerWebService.DataLayer.Entities.Tickets;
 
 namespace SellerWebService.DataLayer.Context
@@ -41,6 +42,7 @@ namespace SellerWebService.DataLayer.Context
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketsMessage> TicketsMessages { get; set; }
         #endregion
+        public DbSet<Presell> Presells { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))

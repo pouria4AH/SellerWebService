@@ -1,0 +1,25 @@
+@font-face {
+    font-family: Byekan;
+    src: url('../B_Yekan/Yekan.ttf') format('truetype');
+}
+label span.text-danger {
+    font-size: 20px;
+    font-weight:  bold;
+    margin-right: 5px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #6956E5;
+    font-family: 'Byekan' 
+}
+
+.logo {
+    width: 30%;
+    margin: auto;
+    display: block;
+}
