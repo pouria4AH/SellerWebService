@@ -1,8 +1,6 @@
-﻿using _0_framework.Entities;
-
-namespace SellerWebService.DataLayer.Entities.TempV2
+﻿namespace SellerWebService.DataLayer.DTOs.Presell
 {
-    public class Presell : BaseEntity
+    public class CreatePresellDto
     {
         [Display(Name = "نام")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -35,7 +33,12 @@ namespace SellerWebService.DataLayer.Entities.TempV2
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [RegularExpression(@"^0[0-9]{2,}[0-9]{7,}$", ErrorMessage = "لطفا یک شماره معتبر وارد کنید")]
         public string? Phone { get; set; }
+    }
 
-
+    public enum presellResult
+    {
+        Error,
+        Success,
+        Exists,
     }
 }

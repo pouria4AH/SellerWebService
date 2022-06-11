@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SellerWebService.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using SellerWebService.DataLayer.Context;
 namespace SellerWebService.DataLayer.Migrations
 {
     [DbContext(typeof(SellerContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20220611095431_phoneNull")]
+    partial class phoneNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
