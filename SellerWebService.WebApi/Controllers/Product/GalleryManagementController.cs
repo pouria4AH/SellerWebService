@@ -11,30 +11,30 @@ namespace SellerWebService.WebApi.Controllers.Product
     [Authorize(Roles = AccountRole.Seller + " " + AccountRole.SellerEmployee)]
     public class GalleryManagementController : ControllerBase
     {
-        #region ctor
+        //#region ctor
 
-        private readonly IProductService _productService;
+        //private readonly IProductService _productService;
 
-        public GalleryManagementController(IProductService productService)
-        {
-            _productService = productService;
-        }
+        //public GalleryManagementController(IProductService productService)
+        //{
+        //    _productService = productService;
+        //}
 
-        #endregion
+        //#endregion
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetAllProductGallery([FromRoute] long id)
-        {
-            try
-            {
-                var res = await _productService.GetAllProductGallery(id);
-                if (res == null || !res.Any()) return BadRequest();
-                return Ok(res);
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult> GetAllProductGallery([FromRoute] long id)
+        //{
+        //    try
+        //    {
+        //        var res = await _productService.GetAllProductGallery(id);
+        //        if (res == null || !res.Any()) return BadRequest();
+        //        return Ok(res);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
     }
 }
