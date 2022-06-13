@@ -10,6 +10,9 @@ label span.text-danger {
     font-weight:  bold;
     margin-right: 5px;
 }
+span.code {
+    font-size: 12px
+}
 * {
     margin: 0;
     padding: 0;

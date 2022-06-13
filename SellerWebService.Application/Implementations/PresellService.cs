@@ -23,7 +23,7 @@ namespace SellerWebService.Application.Implementations
             try
             {
                 var c = await _presellRepository.GetQuery().AsQueryable().AnyAsync(x =>
-                    !x.IsDelete && (x.Mobile == presell.Mobile || x.Phone == presell.Phone));
+                    !x.IsDelete && (x.Mobile == presell.Mobile));
                 if (c) return presellResult.Exists;
 
                 var newPresell = new Presell

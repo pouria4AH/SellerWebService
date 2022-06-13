@@ -4,7 +4,7 @@
         <img src="/img/logo.png" class="img-fluid logo my-4">
     </div>
     <h1 class="mb-4 text-light">با ثبت نام در سلام سبز پنل سه ماهه رایگان بگیرید </h1>
-    <p class="text-warning">توجه داشته باشید این طرح فقظ در مرحله پیش ثبت نام موجود است</p>
+    <p class="text-warning">توجه داشته باشید این طرح فقط در مرحله پیش ثبت نام موجود است</p>
     <div class="p-5 bg-gradient">
         <form class="text-light" 
               method="post" asp-controller="Home" asp-action="Index">
@@ -29,7 +29,7 @@
             </div> 
             <div class="row">
                 <div class="col-sm-12 form-group mb-3">
-                    <label class="form-label ">شماره ثابت</label>
+                    <label class="form-label ">شماره ثابت  <span class="code">( با کد شهر)</span> </label>
                     <input class="form-control" asp-for="Phone">
                     <span class="text-warning" asp-validation-for="Phone"></span>
                 </div>

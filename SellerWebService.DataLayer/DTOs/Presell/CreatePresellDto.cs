@@ -26,7 +26,7 @@
         [Display(Name = "تلفن همراه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        [RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "لطفا یک شماره معتبر وارد کنید")]
+        [RegularExpression(@"^(\+98|0098|98|0)?9\d{9}$", ErrorMessage = "لطفا یک شماره معتبر وارد کنید")]
         public string Mobile { get; set; }
 
         [Display(Name = "تلفن همراه")]

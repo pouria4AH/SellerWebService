@@ -24,8 +24,8 @@ namespace SellerWebService.DataLayer.Context
         //public DbSet<ProductGallery> ProductGalleries { get; set; }
         #endregion
         #region users
-        public DbSet<User> Users { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        //public DbSet<User> Users { get; set; }
+        //public DbSet<Customer> Customers { get; set; }
         #endregion
         #region factor
         //public DbSet<Factor> Factors { get; set; }
