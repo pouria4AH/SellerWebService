@@ -219,7 +219,7 @@ namespace SellerWebService.Application.Implementations
 
         #region product
 
-        public async Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product, Guid storeCode)
+        public async Task<(CreateOurEditProductResult,long)> CreateProduct(CreateProductDto product, Guid storeCode)
         {
             try
             {
@@ -227,7 +227,7 @@ namespace SellerWebService.Application.Implementations
                     .Include(x => x.StoreData)
                     .AnyAsync(x =>
                     x.Name == product.Name && x.SeoTitle == product.SeoTitle && !x.IsDelete && x.StoreData.UniqueCode == storeCode);
-                if (isExisted) return CreateOurEditProductResult.IsExisted;
+                if (isExisted) return (CreateOurEditProductResult.IsExisted,0);
 
                 //if (product.StateForCount != CountState.Single)
                 //{
@@ -236,13 +236,13 @@ namespace SellerWebService.Application.Implementations
                 //}
                 var store = await _storeDataRepository.GetQuery().AsQueryable()
                     .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
-                if (store == null) return CreateOurEditProductResult.Error;
-                if (product.Picture == null) return CreateOurEditProductResult.IsNotImage;
+                if (store == null) return (CreateOurEditProductResult.Error, 0); ;
+                if (product.Picture == null) return (CreateOurEditProductResult.IsNotImage,0);
 
                 var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(product.Picture.FileName);
                 var res = product.Picture.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
                     PathExtension.ProductThumbServer);
-                if (!res) return CreateOurEditProductResult.IsNotImage;
+                if (!res) return (CreateOurEditProductResult.IsNotImage, 0);
 
                 var newProduct = new Product
                 {
@@ -269,11 +269,11 @@ namespace SellerWebService.Application.Implementations
                 //if (product.selectedCategories.Any())
                 //    await AddSelectedCategory(newProduct.Id, product.selectedCategories);
 
-                return CreateOurEditProductResult.Success;
+                return (CreateOurEditProductResult.Success, newProduct.Id);
             }
             catch (Exception e)
             {
-                return CreateOurEditProductResult.Error;
+                return (CreateOurEditProductResult.Error, 0);
             }
         }
 

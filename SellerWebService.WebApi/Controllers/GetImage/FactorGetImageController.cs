@@ -7,7 +7,7 @@ namespace SellerWebService.WebApi.Controllers.GetImage
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [Authorize]
     public class FactorGetImageController : ControllerBase
     {

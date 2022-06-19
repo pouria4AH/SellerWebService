@@ -29,7 +29,7 @@ namespace SellerWebService.Application.interfaces
 
         #region product
 
-        Task<CreateOurEditProductResult> CreateProduct(CreateProductDto product, Guid storeCode);
+        Task<(CreateOurEditProductResult, long)> CreateProduct(CreateProductDto product, Guid storeCode);
         Task<List<ReadProductDto>> GetAllProduct(Guid storeCode);
         Task<ReadProductDto> GetProductById(long id);
         Task<CreateOurEditProductResult> EditProduct(EditProductDto product, Guid storeCode);

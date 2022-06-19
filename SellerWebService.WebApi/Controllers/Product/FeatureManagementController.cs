@@ -22,8 +22,13 @@ namespace SellerWebService.WebApi.Controllers.Product
             _productService = productService;
         }
         #endregion
-
-        [HttpPost("group")]
+        /// <summary>
+        /// ساخت یک گروه از ویژگی ها برای یک محصول
+        /// </summary>
+        /// <remarks>get a CreateGroupProductFeatureDto and create a emtiy group for product feature </remarks>
+        /// <param name="group"></param>
+        /// <response code="200">return 200 operation response by non data</response>
+        /// <response code="400">return 400 operation response by non data</response>   
         public async Task<ActionResult<OperationResponse>> CreateGroup([FromBody] CreateGroupProductFeatureDto group)
         {
             try
@@ -51,7 +56,13 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
             }
         }
-
+        /// <summary>
+        /// پاک کردن گروه دسته های ویژگی
+        ///</summary>
+        /// <remarks>get id by route and delete group just return 200 and 400 http code by not data</remarks>
+        /// <param name="id"></param>
+        /// <response code="200">return 200 by non data</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpDelete("group/{id}")]
         public async Task<ActionResult> DeleteGroup([FromRoute] long id)
         {
@@ -66,7 +77,13 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// ساخت یک ویژگی در گروه
+        /// </summary>
+        /// <remarks>get a CreateProductFeatureDto and return operation response by not data </remarks>
+        /// <param name="feature"></param>
+        /// <response code="200">return 200 operation response by non data</response>
+        /// <response code="400">return 400 operation response by non data</response>
         [HttpPost("feature")]
         public async Task<ActionResult<OperationResponse>> CreateFeature([FromBody] CreateProductFeatureDto feature)
         {
@@ -93,7 +110,12 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
             }
         }
-
+        /// <summary>
+        /// ادیت کردن یک ویژگی
+        /// </summary>
+        /// <param name="feature"></param>
+        /// <response code="200">return 200 operation response by non data</response>
+        /// <response code="400">return 400 operation response by non data</response>
         [HttpPut("feature")]
         public async Task<ActionResult<OperationResponse>> EditFeature([FromBody] EditProductFeatureDto feature)
         {
@@ -120,7 +142,13 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
             }
         }
-
+        /// <summary>
+        /// گرفتن همه ی گروه های ویژگی 
+        /// </summary>
+        /// <remarks>get product id on route and return just 200 or 400 by not data</remarks>
+        /// <param name="id"></param>
+        /// <response code="200">return 200 by non data</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpGet("group/{id}")]
         public async Task<ActionResult<List<ReadGroupProductFeatureDto>>> GetAllGroup([FromRoute] long id)
         {

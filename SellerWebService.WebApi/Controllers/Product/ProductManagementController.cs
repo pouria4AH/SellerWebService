@@ -22,7 +22,12 @@ namespace SellerWebService.WebApi.Controllers.Product
             _productService = productService;
         }
         #endregion
-
+        /// <summary>
+        /// گرفتن همه محصولات
+        /// </summary>
+        /// <remarks>return all product for store by list of ReadProductDto if do not have product return 400 by not data</remarks>
+        /// <response code="200">return 200 by list of ReadProductDto</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpGet]
         public async Task<ActionResult> GetAllProduct()
         {
@@ -30,7 +35,13 @@ namespace SellerWebService.WebApi.Controllers.Product
             if (list == null || !list.Any()) return BadRequest();
             return Ok(list);
         }
-
+        /// <summary>
+        /// گرفتن یک تک محصول
+        /// </summary>
+        /// <returns>get product id on route and return ReadProductDto</returns>
+        /// <param name="id"></param>
+        /// <response code="200">return 200 by ReadProductDto</response>
+        /// <response code="400">return 400 by non data</response>
         [HttpGet("{id}")]
         public async Task<ActionResult> GetProduct([FromRoute] long id)
         {
@@ -38,7 +49,13 @@ namespace SellerWebService.WebApi.Controllers.Product
             if (product == null) return BadRequest();
             return Ok(product);
         }
-
+        /// <summary>
+        /// ساخت محصول
+        /// </summary>
+        /// <remarks>create a product and return OperationResponse if is 200 code have product id and for 400 code do not have data </remarks>
+        /// <param name="product"></param>
+        /// <response code="200">return 200 operation response and id by id key in object</response>
+        /// <response code="400">return 400 operation response by non data</response>   
         [HttpPost]
         public async Task<ActionResult<OperationResponse>> Create([FromBody] CreateProductDto product)
         {
@@ -46,7 +63,7 @@ namespace SellerWebService.WebApi.Controllers.Product
             {
                 if (ModelState.IsValid)
                 {
-                    var res = await _productService.CreateProduct(product, User.GetStoreCode());
+                    (var res,long id) = await _productService.CreateProduct(product, User.GetStoreCode());
                     switch (res)
                     {
                         case CreateOurEditProductResult.IsNotImage:
@@ -57,7 +74,7 @@ namespace SellerWebService.WebApi.Controllers.Product
                         case CreateOurEditProductResult.Error:
                             return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
                         case CreateOurEditProductResult.Success:
-                            return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, ApplicationMessages.Success, null));
+                            return Ok(OperationResponse.SendStatus(OperationResponseStatusType.Success, ApplicationMessages.Success, new { id = id}));
 
 
                     }
@@ -71,7 +88,13 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return BadRequest(OperationResponse.SendStatus(OperationResponseStatusType.Danger, ApplicationMessages.Error, null));
             }
         }
-
+        /// <summary>
+        /// ادیت کردن محصول
+        /// </summary>
+        /// <remarks>edit product by EditProductDto return 400 and 200 by OperationResponse and dont have data for all </remarks>
+        /// <param name="product"></param>
+        /// <response code="200">return 200 operation response and non data</response>
+        /// <response code="400">return 400 operation response by non data</response>   
         [HttpPut]
         public async Task<ActionResult<OperationResponse>> Edit([FromForm] EditProductDto product)
         {
@@ -104,7 +127,13 @@ namespace SellerWebService.WebApi.Controllers.Product
 
             }
         }
-
+        /// <summary>
+        /// فعال یا غیر فعال کردن محصول
+        /// </summary>
+        /// <remarks>get product id and return just 200 and 400 code </remarks>
+        /// <param name="id"></param>
+        /// <response code="200">by non data</response>
+        /// <response code="400">by non data</response>   
         [HttpPatch("{id}")]
         public async Task<ActionResult> ChangeActiveState([FromRoute] long id)
         {

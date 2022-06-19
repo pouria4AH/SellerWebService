@@ -25,8 +25,14 @@ namespace SellerWebService.WebApi.Controllers.Product
         }
         #endregion
 
+        /// <summary>
+        /// گرفتن کل لیست دسته ویژگی هر فروشگاه
+        /// </summary>
+        /// <remarks>return list of EditProductFeatureCategoryDto if is have category or return 400 by no data </remarks>
+        /// <response code="200">return 200 list of EditProductFeatureCategoryDto </response>
+        /// <response code="400">return 400 by non data</response>
         [HttpGet]
-        public async Task<ActionResult> GetCategories()
+        public async Task<ActionResult<EditProductFeatureCategoryDto>> GetCategories()
         {
             var res = await _productService.GetProductFeatureCategories(User.GetStoreCode());
             {
@@ -34,9 +40,15 @@ namespace SellerWebService.WebApi.Controllers.Product
                 return Ok(res);
             }
         }
-
+        /// <summary>
+        /// ساخت دسته محصول
+        /// </summary>
+        /// <remarks>get a CreateProductFeatureCategoryDto and create a category</remarks>
+        /// <param name="category">CreateProductFeatureCategoryDto</param>
+        /// <response code="200">return 200 by operation response and non data</response>
+        /// <response code="400">return 400 by operation response and non data</response>
         [HttpPost]
-        public async Task<ActionResult> CreateCategories([FromBody] CreateProductFeatureCategoryDto category)
+        public async Task<ActionResult<OperationResponse>> CreateCategories([FromBody] CreateProductFeatureCategoryDto category)
         {
             try
             {
@@ -62,7 +74,13 @@ namespace SellerWebService.WebApi.Controllers.Product
 
             }
         }
-
+        /// <summary>
+        /// ادیت گروه محصول
+        /// </summary>
+        /// <remarks>get a EditProductFeatureCategoryDto and create a category</remarks>
+        /// <param name="category">EditProductFeatureCategoryDto</param>
+        /// <response code="200">return 200 by operation response and non data</response>
+        /// <response code="400">return 400 by operation response and non data</response>
         [HttpPut]
         public async Task<ActionResult> EditCategories([FromBody] EditProductFeatureCategoryDto category)
         {
