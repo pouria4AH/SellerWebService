@@ -152,6 +152,159 @@
             <response code="200">have bite array is image</response>
             <response code="400">have non data</response>
         </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureCategoryManagementController.GetCategories">
+            <summary>
+            گرفتن کل لیست دسته ویژگی هر فروشگاه
+            </summary>
+            <remarks>return list of EditProductFeatureCategoryDto if is have category or return 400 by no data </remarks>
+            <response code="200">return 200 list of EditProductFeatureCategoryDto </response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureCategoryManagementController.CreateCategories(SellerWebService.DataLayer.DTOs.Products.CreateProductFeatureCategoryDto)">
+            <summary>
+            ساخت دسته محصول
+            </summary>
+            <remarks>get a CreateProductFeatureCategoryDto and create a category</remarks>
+            <param name="category">CreateProductFeatureCategoryDto</param>
+            <response code="200">return 200 by operation response and non data</response>
+            <response code="400">return 400 by operation response and non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureCategoryManagementController.EditCategories(SellerWebService.DataLayer.DTOs.Products.EditProductFeatureCategoryDto)">
+            <summary>
+            ادیت گروه محصول
+            </summary>
+            <remarks>get a EditProductFeatureCategoryDto and create a category</remarks>
+            <param name="category">EditProductFeatureCategoryDto</param>
+            <response code="200">return 200 by operation response and non data</response>
+            <response code="400">return 400 by operation response and non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureManagementController.CreateGroup(SellerWebService.DataLayer.DTOs.Products.CreateGroupProductFeatureDto)">
+            <summary>
+            ساخت یک گروه از ویژگی ها برای یک محصول
+            </summary>
+            <remarks>get a CreateGroupProductFeatureDto and create a emtiy group for product feature </remarks>
+            <param name="group"></param>
+            <response code="200">return 200 operation response by non data</response>
+            <response code="400">return 400 operation response by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureManagementController.DeleteGroup(System.Int64)">
+             <summary>
+             پاک کردن گروه دسته های ویژگی
+            </summary>
+             <remarks>get id by route and delete group just return 200 and 400 http code by not data</remarks>
+             <param name="id"></param>
+             <response code="200">return 200 by non data</response>
+             <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureManagementController.CreateFeature(SellerWebService.DataLayer.DTOs.Products.CreateProductFeatureDto)">
+            <summary>
+            ساخت یک ویژگی در گروه
+            </summary>
+            <remarks>get a CreateProductFeatureDto and return operation response by not data </remarks>
+            <param name="feature"></param>
+            <response code="200">return 200 operation response by non data</response>
+            <response code="400">return 400 operation response by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureManagementController.EditFeature(SellerWebService.DataLayer.DTOs.Products.EditProductFeatureDto)">
+            <summary>
+            ادیت کردن یک ویژگی
+            </summary>
+            <param name="feature"></param>
+            <response code="200">return 200 operation response by non data</response>
+            <response code="400">return 400 operation response by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.FeatureManagementController.GetAllGroup(System.Int64)">
+            <summary>
+            گرفتن همه ی گروه های ویژگی 
+            </summary>
+            <remarks>get product id on route and return just 200 or 400 by not data</remarks>
+            <param name="id"></param>
+            <response code="200">return 200 by non data</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.GalleryManagementController.GetAllProductGallery(System.Int64)">
+            <summary>
+            در یافت همه کالری های یک محصول
+            </summary>
+            <remarks>get product id and return 200 by list of productGallery (not dto) our is dont have gallery return 400 by non data</remarks>
+            <response code="200">by list of product gallery</response>
+            <response code="400">by non data</response>   
+            <param name="productId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.GalleryManagementController.CreateGallery(SellerWebService.DataLayer.DTOs.Products.CreateOurEditProductGalleryDTO,System.Int64)">
+            <summary>
+            ساخت یک عکس با همان گالری برای محصول
+            </summary>
+            <remarks>get CreateOurEditProductGalleryDTO on body and product id on route and return OperationResponse by non data anyway</remarks>
+            <param name="gallery"></param>
+            <param name="productId"></param>
+            <response code="200">return OperationResponse by non data</response>
+            <response code="400">return OperationResponse by non data</response>   
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.GalleryManagementController.EditGallery(SellerWebService.DataLayer.DTOs.Products.CreateOurEditProductGalleryDTO,System.Int64)">
+            <summary>
+            ادیت کردن گالری
+            </summary>
+            <remarks>get gallery id on route and CreateOurEditProductGalleryDTO on body return OperationResponse by non data anyway </remarks>
+            <param name="gallery"></param>
+            <param name="id"></param>
+            <response code="200">return OperationResponse by non data</response>
+            <response code="400">return OperationResponse by non data</response>   
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.GalleryManagementController.GetFullGallery(System.Int64)">
+            <summary>
+            گرفنن اظلاعات کامل یک گالری
+            </summary>
+            <remarks>get gallery is on route and return 200 by CreateOurEditProductGalleryDTO and if gallery dont exsist return 400 by non data</remarks>
+            <param name="id"></param>
+            <response code="200">return CreateOurEditProductGalleryDTO</response>
+            <response code="400">return non data</response>   
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.ProductManagementController.GetAllProduct">
+            <summary>
+            گرفتن همه محصولات
+            </summary>
+            <remarks>return all product for store by list of ReadProductDto if do not have product return 400 by not data</remarks>
+            <response code="200">return 200 by list of ReadProductDto</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.ProductManagementController.GetProduct(System.Int64)">
+            <summary>
+            گرفتن یک تک محصول
+            </summary>
+            <returns>get product id on route and return ReadProductDto</returns>
+            <param name="id"></param>
+            <response code="200">return 200 by ReadProductDto</response>
+            <response code="400">return 400 by non data</response>
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.ProductManagementController.Create(SellerWebService.DataLayer.DTOs.Products.CreateProductDto)">
+            <summary>
+            ساخت محصول
+            </summary>
+            <remarks>create a product and return OperationResponse if is 200 code have product id and for 400 code do not have data </remarks>
+            <param name="product"></param>
+            <response code="200">return 200 operation response and id by id key in object</response>
+            <response code="400">return 400 operation response by non data</response>   
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.ProductManagementController.Edit(SellerWebService.DataLayer.DTOs.Products.EditProductDto)">
+            <summary>
+            ادیت کردن محصول
+            </summary>
+            <remarks>edit product by EditProductDto return 400 and 200 by OperationResponse and dont have data for all </remarks>
+            <param name="product"></param>
+            <response code="200">return 200 operation response and non data</response>
+            <response code="400">return 400 operation response by non data</response>   
+        </member>
+        <member name="M:SellerWebService.WebApi.Controllers.Product.ProductManagementController.ChangeActiveState(System.Int64)">
+            <summary>
+            فعال یا غیر فعال کردن محصول
+            </summary>
+            <remarks>get product id and return just 200 and 400 code </remarks>
+            <param name="id"></param>
+            <response code="200">by non data</response>
+            <response code="400">by non data</response>   
+        </member>
         <member name="M:SellerWebService.WebApi.Controllers.Store.AddStoreController.CreateStore(SellerWebService.DataLayer.DTOs.Store.RegisterStoreDto)">
             <summary>
              میتواند فروشگاه ثبت کند role = user در اینجا کاربر با 

@@ -22,13 +22,15 @@ namespace SellerWebService.WebApi.Controllers.Product
             _productService = productService;
         }
         #endregion
+
         /// <summary>
         /// ساخت یک گروه از ویژگی ها برای یک محصول
         /// </summary>
         /// <remarks>get a CreateGroupProductFeatureDto and create a emtiy group for product feature </remarks>
         /// <param name="group"></param>
         /// <response code="200">return 200 operation response by non data</response>
-        /// <response code="400">return 400 operation response by non data</response>   
+        /// <response code="400">return 400 operation response by non data</response>
+        [HttpPost("group")]
         public async Task<ActionResult<OperationResponse>> CreateGroup([FromBody] CreateGroupProductFeatureDto group)
         {
             try

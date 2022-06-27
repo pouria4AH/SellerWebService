@@ -11,8 +11,7 @@ namespace SellerWebService.WebApi.Controllers.Account
 {
     [Route("api/Account/[controller]")]
     [ApiController]
-    //[AllowAnonymous]
-    [Authorize]
+    [AllowAnonymous]
     public class UserAuthController : ControllerBase
     {
         private readonly IUserService _userService;
