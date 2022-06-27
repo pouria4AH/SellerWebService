@@ -1,4 +1,37 @@
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using Microsoft.EntityFrameworkCore;
+using SellerWebService.Application.Implementations;
+using SellerWebService.Application.interfaces;
+using SellerWebService.DataLayer.Context;
+using SellerWebService.DataLayer.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
+#region config database
+builder.Services.AddDbContext<SellerContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Context")));
+#endregion
+#region html encoder
+
+builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[]
+{
+    UnicodeRanges.BasicLatin , UnicodeRanges.Arabic
+}));
+
+#endregion
+#region services
+builder.Services.AddControllers();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
+builder.Services.AddScoped<IFactorService, FactorService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IPresellService, PresellService>();
+#endregion
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
