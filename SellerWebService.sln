@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SellerWebService.DataLayer", "SellerWebService.DataLayer\SellerWebService.DataLayer.csproj", "{A5B578D5-2F61-47A0-BD77-4A19AE618266}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SellerWebService.DataLayer", "SellerWebService.DataLayer\SellerWebService.DataLayer.csproj", "{A5B578D5-2F61-47A0-BD77-4A19AE618266}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SellerWebService.Application", "SellerWebService.Application\SellerWebService.Application.csproj", "{E54235C0-41D4-4F2B-898E-7B2DC2EB0832}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SellerWebService.Application", "SellerWebService.Application\SellerWebService.Application.csproj", "{E54235C0-41D4-4F2B-898E-7B2DC2EB0832}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SellerWebService.WebApi", "SellerWebService.WebApi\SellerWebService.WebApi.csproj", "{CF78495E-E3F5-4AAE-BC61-A17C43475EBD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0-framework", "0-framework\0-framework.csproj", "{C69B9706-22C6-49C5-B97A-07552A271837}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "0-framework", "0-framework\0-framework.csproj", "{C69B9706-22C6-49C5-B97A-07552A271837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{E54235C0-41D4-4F2B-898E-7B2DC2EB0832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E54235C0-41D4-4F2B-898E-7B2DC2EB0832}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E54235C0-41D4-4F2B-898E-7B2DC2EB0832}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF78495E-E3F5-4AAE-BC61-A17C43475EBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF78495E-E3F5-4AAE-BC61-A17C43475EBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF78495E-E3F5-4AAE-BC61-A17C43475EBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF78495E-E3F5-4AAE-BC61-A17C43475EBD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C69B9706-22C6-49C5-B97A-07552A271837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C69B9706-22C6-49C5-B97A-07552A271837}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C69B9706-22C6-49C5-B97A-07552A271837}.Release|Any CPU.ActiveCfg = Release|Any CPU
