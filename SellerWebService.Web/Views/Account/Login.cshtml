@@ -3,54 +3,52 @@
     ViewData["Title"] = "ورود";
 }
 @section Scripts{
-    <partial name="_jqueryValidatord" />
-    <partial name="_CaptchaScripts" />
+<partial name="_jqueryValidatord" />
+<partial name="_CaptchaScripts" />
 }
 <div class="form">
-<div class="form-container outer">
-    <div class="form-form">
-        <div class="form-form-wrap">
-            <div class="form-container">
-                <div class="form-content">
-                    <div class="div-logo">
-                        <img  src="assets/img/logo1.png" width="100" >
+    <div class="form-container outer">
+        <div class="form-form">
+            <div class="form-form-wrap">
+                <div class="form-container">
+                    <div class="form-content">
+                        <div class="div-logo">
+                            <img src="assets/img/logo1.png" width="100">
+                        </div>
+
+                        <form method="post" asp-area="" asp-controller="Account" asp-action="Login" class="text-left">
+                            <h1 class="blue">ورود کاربران</h1>
+                            <partial name="_CaptchaInput" />
+                            <div class="form">
+                                <div class="field-wrapper input">
+                                    <input asp-for="Mobile" type="text" class="form-control" placeholder="شماره همراه">
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                                </div>
+
+                                <div id="password-field" class="field-wrapper input mb-2">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="رمزعبور">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="d-sm-flex justify-content-between">
+                                    <div class="field-wrapper">
+                                        <button type="submit" class="btn btn-primary" value="">ورود</button>
+                                        <a href="auth_pass_recovery_boxed.html" class="forgot-pass-link mt-4">فراموشی رمز یا کلمه عبور؟</a>
+
+                                    </div>
+                                </div>
+                                @* <div class="alert alert-danger mt-4" role="alert">
+                                    <strong>نام فروشگاه، نام کاربری و رمز عبور با هم مطابقت ندارند</strong>
+                                    </div> *@
+
+                                <p class="signup-link">حساب ندارید؟ <a href="auth_register_boxed.html"> یک حساب کاربری ایجاد کنید</a></p>
+
+                            </div>
+                        </form>
 
                     </div>
-
-                   @* <form method="post" asp-area="" asp-controller="Account" asp-action="Login" class="text-left">
-                        <h1 class="blue">ورود کاربران</h1>
-
-                        <div class="form">
-                            <div  class="field-wrapper input">
-                                <input required  name="username" type="text" class="form-control" placeholder="نام فروشگاه">
-                            </div>
-                            <div  class="field-wrapper input">
-                                <input required name="username" type="text" class="form-control" placeholder="نام کاربری">
-                            </div>
-
-                            <div id="password-field" class="field-wrapper input mb-2">
-                                 <input required id="password" name="password" type="password" class="form-control" placeholder="رمزعبور">
-                                </div>
-                            <div class="d-sm-flex justify-content-between">
-                                <div class="field-wrapper">
-                                    <button type="submit" class="btn btn-primary" value="">ورود</button>
-                                    <a href="auth_pass_recovery_boxed.html" class="forgot-pass-link mt-4">فراموشی رمز یا کلمه عبور؟</a>
-
-                                </div>
-                            </div>
-                            <div class="alert alert-danger mt-4" role="alert">
-                                <strong>نام فروشگاه، نام کاربری و رمز عبور با هم مطابقت ندارند!</strong>
-                            </div>
-
-                            <p class="signup-link">حساب ندارید؟ <a href="auth_register_boxed.html"> یک حساب کاربری ایجاد کنید</a></p>
-
-                        </div>
-                    </form>*@
-
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </div>
