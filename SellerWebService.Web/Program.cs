@@ -38,13 +38,13 @@ builder.Services.AddScoped<IPresellService, PresellService>();
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
 #endregion
-#region data proteion
+//#region data proteion
 
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
-    .SetApplicationName("MarketPlaceProject")
-    .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
-#endregion
+//builder.Services.AddDataProtection()
+//    .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
+//    .SetApplicationName("MarketPlaceProject")
+//    .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+//#endregion
 #region Authenticate
 
 builder.Services.AddAuthentication(options =>
@@ -78,6 +78,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
