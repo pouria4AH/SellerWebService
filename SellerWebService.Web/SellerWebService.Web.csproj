@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\0-framework\0-framework.csproj" />
     <ProjectReference Include="..\SellerWebService.Application\SellerWebService.Application.csproj" />
     <ProjectReference Include="..\SellerWebService.DataLayer\SellerWebService.DataLayer.csproj" />
   </ItemGroup>

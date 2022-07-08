@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SellerWebService.Web.Models;
 using System.Diagnostics;
 
 namespace SellerWebService.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SiteBaseController
     {
 
         public IActionResult Index()
