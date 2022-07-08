@@ -1,5 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using SellerWebService.Application.Implementations;
 using SellerWebService.Application.interfaces;
@@ -32,7 +34,28 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IPresellService, PresellService>();
 #endregion
+#region data proteion
 
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
+    .SetApplicationName("MarketPlaceProject")
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+#endregion
+#region Authenticate
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.LogoutPath = "/log-out";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
+});
+
+#endregion
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

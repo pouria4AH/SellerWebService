@@ -1455,3 +1455,123 @@ code {
 .styleimage{
   width: 150px;
 }
+.mrjadid{
+  margin-right: 140px;
+}
+@media (max-width: 575px) {
+  .mrjadid {
+    margin-right: 30px;
+  }
+}
+
+
+.col {
+  position: relative;
+  width: auto;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  color: white;
+  display: block;
+  /*top: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  /*right: 0;*/
+  height: auto;
+  width: auto;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: green;
+}
+
+.col:hover .overlay {
+  opacity: 0.5;
+}
+
+
+
+
+.add-rating {
+  direction: rtl;
+}
+
+.add-rating input {
+  display: none;
+}
+
+.add-rating input:checked ~ label::before,
+.add-rating input:checked ~ label ~ label::before {
+  color: #ffeb3b;
+}
+
+.add-rating input:not(:checked) ~ label:hover,
+.add-rating input:not(:checked) ~ label:hover ~ label::before {
+  color: #ffeb3b;
+}
+
+.add-rating label {
+  margin-bottom: 0;
+}
+
+.add-rating label:before {
+  content: "\f005";
+  font-family: "FontAwesome";
+  font-size: 26px;
+  color: #979797;
+  cursor: pointer;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+/*------------------------------------
+    Rating
+------------------------------------*/
+.ratings-container {
+  direction: ltr;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 15px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ratings-container .ratings,
+.ratings-container .ratings-val {
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  font-family: "Ionicons";
+}
+
+.ratings-container .ratings {
+  position: relative;
+  color: #ccc;
+}
+
+.ratings-container .ratings:before {
+  content: "☆" "☆" "☆" "☆" "☆";
+}
+
+.ratings-container .ratings-val {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fcb941;
+}
+
+.ratings-container .ratings-val:before {
+  content: "★" "★" "★" "★" "★";
+}

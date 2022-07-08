@@ -77,7 +77,8 @@ table.dataTable {
   letter-spacing: 1px; }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: transparent !important; }
+  /*background-color: transparent !important;*/
+}
 
 .table > tfoot > tr > th {
   border: none; }
