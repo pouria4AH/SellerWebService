@@ -28,6 +28,7 @@ namespace SellerWebService.Application.interfaces
         Task<bool> CreateBankData(BankDataDto bankData, Guid storeCode);
         Task<bool> EditBankData(BankDataDto bankData, Guid storeCode);
         Task<BankDataDto> GetBankData(Guid storeCode);
+        Task<bool> HaveAnyBankData(Guid storeCode);
 
         #endregion
     }

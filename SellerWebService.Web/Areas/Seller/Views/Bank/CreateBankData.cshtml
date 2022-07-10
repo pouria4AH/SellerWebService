@@ -1,0 +1,62 @@
+﻿ @model SellerWebService.DataLayer.DTOs.Store.BankDataDto
+ @{
+     ViewData["body"] = "sidebar-noneoverflow";
+ }
+<div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-top-spacing">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                    <div class="widget widget-table-one text-center">
+                        امروز دوشنبه 1401/02/26 ساعت 15:47
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                    <div class="widget widget-table-one">
+                        <div class="widget-content widget-content-area">
+                            <div class="row">
+                                <div class="col-lg-6 col-12 mx-auto">
+                                    <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">اطلاعات حساب </h4></p>
+                                    <form method="post" asp-area="Seller" asp-controller="Bank" asp-action="CreateBankData">
+                                        <div class="form-group">
+                                            <div class="input-group mb-4">
+                                                <input type="text" asp-for="AccountNumber" class="form-control" placeholder="شماره حساب   " aria-label="Username">
+                                                <span class="text-danger input-group" asp-validation-for="AccountNumber"></span>
+                                            </div>
+                                            <div class="input-group mb-4">
+                                                <input type="text" asp-for="BankName" class="form-control" placeholder="نام بانک  " aria-label="Username">
+                                                <span class="text-danger input-group" asp-validation-for="BankName"></span>
+                                            </div>
+                                            <div class="input-group mb-4">
+                                                <input type="text" asp-for="CardNumber" class="form-control" placeholder=" شماره کارت  " aria-label="Username">
+                                                <span class="text-danger input-group" asp-validation-for="CardNumber"></span>
+                                            </div>
+                                            <div class="input-group mb-4">
+                                                <input type="text" asp-for="ShabaNumber" class="form-control" placeholder=" شماره شبا " aria-label="Username">
+                                                <span class="text-danger input-group" asp-validation-for="ShabaNumber"></span>
+                                            </div>
+                                            <div class="input-group mb-4">
+                                                <input type="text" asp-for="Owner" class="form-control" placeholder=" نام دارنده حساب  " aria-label="Username">
+                                                <span class="text-danger input-group" asp-validation-for="Owner"></span>
+                                            </div>
+                                            <input type="submit" value="اعمال تغییر" name="txt" class="form-control btn btn-primary mb-3">
+                                            <h6>با ثبت تغییر در این قسمت تغییرات در فاکتور اعمال می شود</h6>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class=""> © کپی رایت</p>
+            </div>
+
+        </div>
+    </div>

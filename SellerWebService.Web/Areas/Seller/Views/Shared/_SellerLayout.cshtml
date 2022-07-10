@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>Hi Green </title>
+    <link href="~/assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/js/loader.js"></script>
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/switches.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/fontawesome/css/all.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="~/Custome/notifications.css">
+
+</head>
+<body class=@ViewData["body"]>
+<section class="sidebar-noneoverflow" data-spy="scroll" data-target="#navSection" data-offset="100">
+<div class="header-container fixed-top">
+    <header class="header navbar navbar-expand-sm">
+
+        <ul class="navbar-nav theme-brand flex-row  text-center">
+            <li class="nav-item toggle-sidebar">
+                <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></a>
+            </li>
+        </ul>
+
+        <ul class="navbar-item flex-row ">
+            <li> <img src="~/assets/img/logo1.png" class="img-logo"  alt="avatar"></li>
+            <li class="nav-item theme-text">
+                <a href="index.html" class="nav-link" style="color: white"> پنل مدیریت های گرین </a>
+            </li>
+
+        </ul>
+
+        <ul class="navbar-item flex-row search-ul">
+            <li class="nav-item align-self-center search-animated">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search toggle-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <form class="form-inline search-full form-inline search" role="search">
+                    <div class="search-bar">
+                        <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="جستجو کنید...">
+                    </div>
+                </form>
+            </li>
+        </ul>
+
+    </header>
+</div>
+     <div class="main-container" id="container">
+        <div class="sidebar-wrapper sidebar-theme">
+            <nav id="sidebar">
+                <div class="profile-info">
+                    <figure class="user-cover-image"></figure>
+                    <div class="user-info">
+                        <img  src="~/assets/img/user.png" alt="avatar">
+                        <h6 class="username">محمد حسین علی پور</h6>
+                        <p class="">نوین سازه </p>
+                    </div>
+                </div>
+
+                <ul class="list-unstyled menu-categories" id="accordionExample">
+                    <li class="menu active">
+                        <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-home" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>داشبورد</span>
+                            </div>
+
+                        </a>
+                    </li>
+
+
+
+
+                    <li class="menu">
+                        <a href="#"  aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-add" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>افزودن</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+
+
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-list" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>فاکتور و مالی</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-list" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>محصولات و ویژگی ها</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-users" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>مشتریان و کارمندان</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-arrow-pointer" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>مشاهده صفحه فروشگاه</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-envelope" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>صندوق پستی</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-gear" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>تنضیمات</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu">
+                        <a href="#" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <i class="fa fa-power-off" width="30" height="30" style="padding-left: 20px;"></i>
+                                <span>خروج</span>
+                            </div>
+
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+        </div>
+        <!--  BEGIN CONTENT AREA  -->
+        @RenderBody()
+    </div>
+</section>
+</body>
+<script src="~/assets/js/libs/jquery-3.1.1.min.js"></script>
+<script src="~/bootstrap/js/popper.min.js"></script>
+<script src="~/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="~/assets/js/app.js"></script>
+<script src="~/assets/js/custom.js"></script>
+<script src="~/Custome/notifications.js"></script>
+<script>
+    const junk = document.querySelector(".fixed-button");
+    junk.remove();
+    function ShowMessage(title, text, theme) {
+        window.createNotification({
+            closeOnClick: true,
+            displayCloseButton: false,
+            positionClass: 'nfc-bottom-right',
+            showDuration: 4000,
+            theme: theme !== '' ? theme : 'success'
+        })({
+            title: title !== '' ? title : 'اعلان',
+            message: decodeURI(text)
+        });
+    }
+</script>
+@RenderSection("Scripts", false)
+<partial name="_SiteMessages"/>
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+</script>
+</html>

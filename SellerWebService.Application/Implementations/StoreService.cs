@@ -333,7 +333,7 @@ namespace SellerWebService.Application.Implementations
                     Include(x=>x.BankDatas)
                     .AsQueryable()
                     .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
-                if (store == null || store.BankDatas.Any(x=>!x.IsDelete) || store.BankDatas != null) return false;
+                if (store == null || store.BankDatas.Any(x=>!x.IsDelete) || store.BankDatas == null) return false;
                 var newBank = new BankData
                 {
                     StoreCode = store.UniqueCode,
@@ -389,6 +389,11 @@ namespace SellerWebService.Application.Implementations
                 Owner = data.Owner,
                 ShabaNumber = data.ShabaNumber,
             };
+        }
+
+        public async Task<bool> HaveAnyBankData(Guid storeCode)
+        {
+            return await _bankRepository.GetQuery().AsQueryable().AnyAsync(x=>!x.IsDelete && x.StoreCode == storeCode);
         }
 
         #endregion
