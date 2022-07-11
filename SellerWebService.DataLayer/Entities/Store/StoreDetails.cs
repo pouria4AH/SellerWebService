@@ -52,6 +52,9 @@ namespace SellerWebService.DataLayer.Entities.Store
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [DataType(DataType.Url)]
         public string? Website { get; set; }
+        [Display(Name = "آدرس")]
+        [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string? Address { get; set; }
 
         [Display(Name = "کد فروشگاه")]
         public Guid StoreCode { get; set; }

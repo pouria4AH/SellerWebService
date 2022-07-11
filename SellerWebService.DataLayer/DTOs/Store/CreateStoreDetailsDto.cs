@@ -22,6 +22,10 @@
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Description { get; set; }
 
+        [Display(Name = "آدرس")]
+        [MaxLength(250, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string? Address { get; set; }
+
         [Display(Name = "ایمیل")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نمی باشد")]

@@ -28,6 +28,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Seller\Views\Bank\CreateBankData.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Seller\Views\StoreDetails\CreateDetails.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Seller\Views\StoreDetails\CreateDetails.cshtml" />
   </ItemGroup>
 
 </Project>

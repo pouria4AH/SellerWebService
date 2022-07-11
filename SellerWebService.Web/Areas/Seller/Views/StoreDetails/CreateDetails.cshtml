@@ -1,0 +1,76 @@
+﻿@model SellerWebService.DataLayer.DTOs.Store.CreateStoreDetailsDto
+@{
+    ViewData["body"] = "sidebar-noneoverflow";
+}
+@section Scripts
+{
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+</script>
+}
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    امروز دوشنبه 1401/02/26 ساعت 15:47
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">اطلاعات فروشگاه </h4></p>
+                                <form method="post" asp-area="Seller" asp-controller="StoreDetails" asp-action="CreateDetails">
+                                    <div class="widget widget-table-one text-center form-group">
+                                        <img src="~/assets/img/user.png" width="100px">
+                                        <input name="image" type="file" placeholder="عکس را انتخاب نمایید" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                            <input asp-for="Phone" type="text" class="form-control" placeholder="شماره ثابت" aria-label="Username">
+                                            <span asp-validation-for="Phone" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="Mobile" type="text" class="form-control" placeholder="شماره تماس " aria-label="Username">
+                                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="Address" type="text" class="form-control" placeholder=" آدرس  " aria-label="Username">
+                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="TelegramNumber" type="text" class="form-control" placeholder=" شماره تلگرام  " aria-label="Username">
+                                            <span asp-validation-for="TelegramNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="Instagram" type="text" class="form-control" placeholder=" اینستاگرام  " aria-label="Username">
+                                            <span asp-validation-for="Instagram" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="WhatsappNumber" type="text" class="form-control" placeholder=" شماره واتس آپ  " aria-label="Username">
+                                            <span asp-validation-for="WhatsappNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input asp-for="Website" type="text" class="form-control" placeholder=" آدرس سایت " aria-label="Username">
+                                            <span asp-validation-for="Website" class="text-danger"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <textarea asp-for="Description" rows="5" style="resize: none" type="text" class="form-control" placeholder="توضیحات کوتاه" aria-label="Username"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                        </div>
+                                        <input type="submit" value="اعمال تغییر" name="txt" class="form-control btn btn-primary mb-3">
+                                        <h6>با ثبت تغییر در این قسمت تغییرات در فاکتور اعمال می شود</h6>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

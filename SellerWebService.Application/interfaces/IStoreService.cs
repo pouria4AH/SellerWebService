@@ -14,14 +14,14 @@ namespace SellerWebService.Application.interfaces
 
         #region store details
         Task<bool> IsHaveStoreDetails(Guid storeCode);
-        Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, Guid storeCode);
+        Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, IFormFile image, Guid storeCode);
         Task<bool> CreateSignature(IFormFile image, Guid storeCode);
         Task<bool> CreateStamp(IFormFile image, Guid storeCode);
-        Task<bool> CreateLogo(IFormFile image, Guid storeCode);
-        Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, Guid storeCode);
+        //Task<bool> CreateLogo(IFormFile image, Guid storeCode);
+        Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, IFormFile image, Guid storeCode);
         Task<bool> EditSignature(IFormFile image, Guid storeCode);
         Task<bool> EditStamp(IFormFile image, Guid storeCode);
-        Task<bool> EditLogo(IFormFile image, Guid storeCode);
+        //Task<bool> EditLogo(IFormFile image, Guid storeCode);
         #endregion
 
         #region bank data

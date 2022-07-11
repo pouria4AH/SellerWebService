@@ -100,7 +100,7 @@ namespace SellerWebService.Application.Implementations
             return await _storeDetailsRepository.GetQuery().AsQueryable().AnyAsync(x => x.StoreCode == storeCode && x.IsActive && !x.IsDelete);
         }
 
-        public async Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, Guid storeCode)
+        public async Task<CreateStoreDetailsResult> CreateStoreDetails(CreateStoreDetailsDto createStoreDetails, IFormFile image, Guid storeCode)
 
         {
             try
@@ -122,6 +122,15 @@ namespace SellerWebService.Application.Implementations
                 if (createStoreDetails.Phone != null) newDetails.Phone = createStoreDetails.Phone;
                 if (createStoreDetails.Instagram != null) newDetails.Instagram = createStoreDetails.Instagram;
                 if (createStoreDetails.Website != null) newDetails.Website = createStoreDetails.Website;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsLogoImageServer, null, null);
+                    newDetails.LogoImage = imageName;
+
+                }
                 await _storeDetailsRepository.AddEntity(newDetails);
                 await _storeDetailsRepository.SaveChanges();
                 return CreateStoreDetailsResult.Success;
@@ -188,35 +197,35 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-        public async Task<bool> CreateLogo(IFormFile image, Guid storeCode)
-        {
-            try
-            {
-                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
-                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
-                if (storeDetails == null) return false;
-                if (image != null && image.IsImage())
-                {
-                    var imageName = Guid.NewGuid().ToString("N") +
-                                    Path.GetExtension(image.FileName);
-                    image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsLogoImageServer, null, null);
-                    storeDetails.LogoImage = imageName;
+        //public async Task<bool> CreateLogo(IFormFile image, Guid storeCode)
+        //{
+        //    try
+        //    {
+        //        var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+        //            .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+        //        if (storeDetails == null) return false;
+        //        if (image != null && image.IsImage())
+        //        {
+        //            var imageName = Guid.NewGuid().ToString("N") +
+        //                            Path.GetExtension(image.FileName);
+        //            image.AddImageToServer(imageName,
+        //                PathExtension.StoreDetailsLogoImageServer, null, null);
+        //            storeDetails.LogoImage = imageName;
 
-                    _storeDetailsRepository.EditEntity(storeDetails);
-                    await _storeDetailsRepository.SaveChanges();
+        //            _storeDetailsRepository.EditEntity(storeDetails);
+        //            await _storeDetailsRepository.SaveChanges();
 
-                }
+        //        }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return false;
+        //    }
+        //}
 
-        public async Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, Guid storeCode)
+        public async Task<CreateStoreDetailsResult> EditStoreDetails(CreateStoreDetailsDto storeDetails, IFormFile image, Guid storeCode)
         {
             try
             {
@@ -231,6 +240,15 @@ namespace SellerWebService.Application.Implementations
                 store.TelegramNumber = storeDetails.TelegramNumber;
                 store.Phone = storeDetails.Phone;
                 store.Website = storeDetails.Website;
+                if (store == null || store.LogoImage == null) return CreateStoreDetailsResult.Error;
+                if (image != null && image.IsImage())
+                {
+                    var imageName = Guid.NewGuid().ToString("N") +
+                                    Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName,
+                        PathExtension.StoreDetailsLogoImageServer, null, null, null, store.LogoImage);
+                    store.LogoImage = imageName;
+                }
                 _storeDetailsRepository.EditEntity(store);
                 await _storeDetailsRepository.SaveChanges();
                 return CreateStoreDetailsResult.Success;
@@ -296,32 +314,32 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
-        public async Task<bool> EditLogo(IFormFile image, Guid storeCode)
-        {
-            try
-            {
-                var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
-                    .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
-                if (storeDetails == null || storeDetails.StampImage == null) return false;
-                if (image != null && image.IsImage())
-                {
-                    var imageName = Guid.NewGuid().ToString("N") +
-                                    Path.GetExtension(image.FileName);
-                    image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsLogoImageServer, null, null, null, storeDetails.LogoImage);
-                    storeDetails.LogoImage = imageName;
-                    _storeDetailsRepository.EditEntity(storeDetails);
-                    await _storeDetailsRepository.SaveChanges();
+        //public async Task<bool> EditLogo(IFormFile image, Guid storeCode)
+        //{
+        //    try
+        //    {
+        //        var storeDetails = await _storeDetailsRepository.GetQuery().AsQueryable()
+        //            .SingleOrDefaultAsync(x => x.StoreCode == storeCode);
+        //        if (storeDetails == null || storeDetails.StampImage == null) return false;
+        //        if (image != null && image.IsImage())
+        //        {
+        //            var imageName = Guid.NewGuid().ToString("N") +
+        //                            Path.GetExtension(image.FileName);
+        //            image.AddImageToServer(imageName,
+        //                PathExtension.StoreDetailsLogoImageServer, null, null, null, storeDetails.LogoImage);
+        //            storeDetails.LogoImage = imageName;
+        //            _storeDetailsRepository.EditEntity(storeDetails);
+        //            await _storeDetailsRepository.SaveChanges();
 
-                }
+        //        }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return false;
+        //    }
+        //}
 
         #endregion
 
