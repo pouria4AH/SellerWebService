@@ -27,6 +27,11 @@
         [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نمی باشد")]
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
+
+        [Display(Name = "ادرس سایت")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [DataType(DataType.Url)]
+        public string? Website { get; set; }
     }
 
     public enum CreateStoreDetailsResult

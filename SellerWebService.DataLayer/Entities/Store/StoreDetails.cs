@@ -38,7 +38,7 @@ namespace SellerWebService.DataLayer.Entities.Store
 
         [Display(Name = "نام تصویر مهر")]
         public string? StampImage { get; set; }
-        
+
         [Display(Name = "نام تصویر لوگو")]
         public string? LogoImage { get; set; }
 
@@ -47,6 +47,11 @@ namespace SellerWebService.DataLayer.Entities.Store
         [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نمی باشد")]
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
+
+        [Display(Name = "ادرس سایت")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [DataType(DataType.Url)]
+        public string? Website { get; set; }
 
         [Display(Name = "کد فروشگاه")]
         public Guid StoreCode { get; set; }

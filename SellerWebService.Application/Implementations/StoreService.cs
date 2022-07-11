@@ -121,6 +121,7 @@ namespace SellerWebService.Application.Implementations
                 if (createStoreDetails.Email != null) newDetails.Email = createStoreDetails.Email;
                 if (createStoreDetails.Phone != null) newDetails.Phone = createStoreDetails.Phone;
                 if (createStoreDetails.Instagram != null) newDetails.Instagram = createStoreDetails.Instagram;
+                if (createStoreDetails.Website != null) newDetails.Website = createStoreDetails.Website;
                 await _storeDetailsRepository.AddEntity(newDetails);
                 await _storeDetailsRepository.SaveChanges();
                 return CreateStoreDetailsResult.Success;
@@ -229,6 +230,7 @@ namespace SellerWebService.Application.Implementations
                 store.Mobile = storeDetails.Mobile;
                 store.TelegramNumber = storeDetails.TelegramNumber;
                 store.Phone = storeDetails.Phone;
+                store.Website = storeDetails.Website;
                 _storeDetailsRepository.EditEntity(store);
                 await _storeDetailsRepository.SaveChanges();
                 return CreateStoreDetailsResult.Success;
@@ -330,10 +332,10 @@ namespace SellerWebService.Application.Implementations
             {
                 var store = await _storeRepository
                     .GetQuery().
-                    Include(x=>x.BankDatas)
+                    Include(x => x.BankDatas)
                     .AsQueryable()
                     .SingleOrDefaultAsync(x => x.UniqueCode == storeCode && !x.IsDelete);
-                if (store == null || store.BankDatas.Any(x=>!x.IsDelete) || store.BankDatas == null) return false;
+                if (store == null || store.BankDatas.Any(x => !x.IsDelete) || store.BankDatas == null) return false;
                 var newBank = new BankData
                 {
                     StoreCode = store.UniqueCode,
@@ -393,7 +395,7 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<bool> HaveAnyBankData(Guid storeCode)
         {
-            return await _bankRepository.GetQuery().AsQueryable().AnyAsync(x=>!x.IsDelete && x.StoreCode == storeCode);
+            return await _bankRepository.GetQuery().AsQueryable().AnyAsync(x => !x.IsDelete && x.StoreCode == storeCode);
         }
 
         #endregion
