@@ -21,8 +21,9 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
         #endregion
 
         [HttpGet("create-bank-data")]
-        public IActionResult CreateBankData()
+        public async Task<IActionResult> CreateBankData()
         {
+            if (await _storeService.HaveAnyBankData(User.GetStoreCode())) return RedirectToAction("EditBankData");
             return View();
         }
 
@@ -34,6 +35,44 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
                 if (ModelState.IsValid)
                 {
                     var res = await _storeService.CreateBankData(data, User.GetStoreCode());
+                    if (res)
+                    {
+                        TempData[SuccessMessage] = ApplicationMessages.Success;
+                        return RedirectToAction("Index", "Home");
+                    }
+                    TempData[ErrorMessage] = ApplicationMessages.Error;
+                    return View();
+                }
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+        } 
+        [HttpGet("edit-bank-data")]
+        public async Task<IActionResult> EditBankData()
+        {
+            if (!(await _storeService.HaveAnyBankData(User.GetStoreCode()))) return RedirectToAction("CreateBankData");
+          var data =  await _storeService.GetBankData(User.GetStoreCode());
+            return View(data);
+        }
+
+        [HttpPost("edit-bank-data"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBankData(BankDataDto data)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //if (data == await _storeService.GetBankData(User.GetStoreCode()))
+                    //{
+                    //    TempData[WarningMessage] = ApplicationMessages.IsExist;
+                    //    return View();
+                    //}
+                    var res = await _storeService.EditBankData(data, User.GetStoreCode());
                     if (res)
                     {
                         TempData[SuccessMessage] = ApplicationMessages.Success;
