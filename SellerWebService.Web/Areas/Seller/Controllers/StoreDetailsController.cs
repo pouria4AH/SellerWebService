@@ -25,7 +25,7 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
             if (await _storeService.IsHaveStoreDetails(User.GetStoreCode())) return RedirectToAction("EditDetails");
             return View();
         }
-        [HttpPost("create-details")]
+        [HttpPost("create-details"),ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDetails(CreateStoreDetailsDto StoreDetails, IFormFile image)
         {
             try
@@ -41,21 +41,25 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
                         case CreateStoreDetailsResult.StoreIsNull:
                             TempData[WarningMessage] = ApplicationMessages.NotFound;
                             break;
-
+                        case CreateStoreDetailsResult.Success:
+                            TempData[SuccessMessage] = ApplicationMessages.Success;
+                            return RedirectToAction("Index", "Home");
                     }
-                    return View();
                 }
+                return View();
             }
             catch (Exception e)
             {
                 TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+
             }
         }
         [HttpGet("edit-details")]
         public async Task<IActionResult> EditDetails()
         {
             if (await _storeService.IsHaveStoreDetails(User.GetStoreCode())) return RedirectToAction("CreateDetails");
-            return RedirectToAction("CreateDetails");
+            return View();
         }
     }
 }

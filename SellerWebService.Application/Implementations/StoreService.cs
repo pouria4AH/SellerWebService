@@ -127,7 +127,7 @@ namespace SellerWebService.Application.Implementations
                     var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsLogoImageServer, null, null);
+                        PathExtension.StoreDetailsLogoImageServer, 150, 150,PathExtension.StoreDetailsThumbLogoImageServer);
                     newDetails.LogoImage = imageName;
 
                 }
@@ -246,7 +246,7 @@ namespace SellerWebService.Application.Implementations
                     var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsLogoImageServer, null, null, null, store.LogoImage);
+                        PathExtension.StoreDetailsLogoImageServer, 150, 150, PathExtension.StoreDetailsThumbLogoImageServer, store.LogoImage);
                     store.LogoImage = imageName;
                 }
                 _storeDetailsRepository.EditEntity(store);
