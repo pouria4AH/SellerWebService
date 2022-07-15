@@ -25,7 +25,7 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
             if (await _storeService.IsHaveStoreDetails(User.GetStoreCode())) return RedirectToAction("EditDetails");
             return View();
         }
-        [HttpPost("create-details"),ValidateAntiForgeryToken]
+        [HttpPost("create-details"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDetails(CreateStoreDetailsDto StoreDetails, IFormFile image)
         {
             try
@@ -58,8 +58,39 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
         [HttpGet("edit-details")]
         public async Task<IActionResult> EditDetails()
         {
-            if (await _storeService.IsHaveStoreDetails(User.GetStoreCode())) return RedirectToAction("CreateDetails");
-            return View();
+            if (!(await _storeService.IsHaveStoreDetails(User.GetStoreCode()))) return RedirectToAction("CreateDetails");
+            ViewBag.logo = await _storeService.GetLogo(User.GetStoreCode());
+            return View(await _storeService.GetDetailsForEdit(User.GetStoreCode()));
+        }
+        [HttpPost("edit-details"),ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDetails(CreateStoreDetailsDto StoreDetails, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = await _storeService.EditStoreDetails(StoreDetails, image, User.GetStoreCode());
+                    switch (res)
+                    {
+                        case CreateStoreDetailsResult.Error:
+                            TempData[ErrorMessage] = ApplicationMessages.Error;
+                            break;
+                        case CreateStoreDetailsResult.StoreIsNull:
+                            TempData[WarningMessage] = ApplicationMessages.NotFound;
+                            break;
+                        case CreateStoreDetailsResult.Success:
+                            TempData[SuccessMessage] = ApplicationMessages.Success;
+                            return RedirectToAction("Index", "Home");
+                    }
+                }
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+
+            }
         }
     }
 }

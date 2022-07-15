@@ -70,16 +70,16 @@
         #endregion
         #region store details gallery
 
-        public static string StoreDetailsSignatureImage = "ImageUploader/Content/Store/Images/StoreDetails/SignatureImage/";
+        public static string StoreDetailsSignatureImage = "/ImageUploader/Content/Store/Images/StoreDetails/SignatureImage/";
         public static string StoreDetailsSignatureImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/SignatureImage/");
 
-        public static string StoreDetailsStampImage = "ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
+        public static string StoreDetailsStampImage = "/ImageUploader/Content/Store/Images/StoreDetails/StampImage/";
         public static string StoreDetailsStampImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/StampImage/");
 
-        public static string StoreDetailsLogoImage = "ImageUploader/Content/Store/Images/StoreDetails/LogoImage/origin/";
+        public static string StoreDetailsLogoImage = "/ImageUploader/Content/Store/Images/StoreDetails/LogoImage/origin/";
         public static string StoreDetailsLogoImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/LogoImage/origin/");
         
-        public static string StoreDetailsThumbLogoImage = "ImageUploader/Content/Store/Images/StoreDetails/LogoImage/Thumb/";
+        public static string StoreDetailsThumbLogoImage = "/ImageUploader/Content/Store/Images/StoreDetails/LogoImage/Thumb/";
         public static string StoreDetailsThumbLogoImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ImageUploader/Content/Store/Images/StoreDetails/LogoImage/Thumb/");
         #endregion
     }

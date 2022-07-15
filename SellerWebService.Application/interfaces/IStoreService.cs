@@ -22,6 +22,9 @@ namespace SellerWebService.Application.interfaces
         Task<bool> EditSignature(IFormFile image, Guid storeCode);
         Task<bool> EditStamp(IFormFile image, Guid storeCode);
         //Task<bool> EditLogo(IFormFile image, Guid storeCode);
+        Task<ReadStoreDetailsDto> GetStoreDetails(Guid storeCode);
+        Task<string> GetLogo(Guid storeCode);
+        Task<CreateStoreDetailsDto> GetDetailsForEdit(Guid storeCode);
         #endregion
 
         #region bank data

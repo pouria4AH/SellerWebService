@@ -1,4 +1,6 @@
-﻿using _0_framework.Account;
+﻿using System.Formats.Asn1;
+using System.Xml;
+using _0_framework.Account;
 using _0_framework.Extensions;
 using _0_framework.Utils;
 using Microsoft.AspNetCore.Http;
@@ -122,12 +124,13 @@ namespace SellerWebService.Application.Implementations
                 if (createStoreDetails.Phone != null) newDetails.Phone = createStoreDetails.Phone;
                 if (createStoreDetails.Instagram != null) newDetails.Instagram = createStoreDetails.Instagram;
                 if (createStoreDetails.Website != null) newDetails.Website = createStoreDetails.Website;
+                if (createStoreDetails.Address != null) newDetails.Address = createStoreDetails.Website;
                 if (image != null && image.IsImage())
                 {
                     var imageName = Guid.NewGuid().ToString("N") +
                                     Path.GetExtension(image.FileName);
                     image.AddImageToServer(imageName,
-                        PathExtension.StoreDetailsLogoImageServer, 150, 150,PathExtension.StoreDetailsThumbLogoImageServer);
+                        PathExtension.StoreDetailsLogoImageServer, 150, 150, PathExtension.StoreDetailsThumbLogoImageServer);
                     newDetails.LogoImage = imageName;
 
                 }
@@ -240,6 +243,7 @@ namespace SellerWebService.Application.Implementations
                 store.TelegramNumber = storeDetails.TelegramNumber;
                 store.Phone = storeDetails.Phone;
                 store.Website = storeDetails.Website;
+                store.Address = storeDetails.Address;
                 if (store == null || store.LogoImage == null) return CreateStoreDetailsResult.Error;
                 if (image != null && image.IsImage())
                 {
@@ -312,6 +316,55 @@ namespace SellerWebService.Application.Implementations
             {
                 return false;
             }
+        }
+
+        public async Task<ReadStoreDetailsDto> GetStoreDetails(Guid storeCode)
+        {
+            var data = await _storeDetailsRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.IsActive && x.StoreCode == storeCode);
+            if (data == null) return null;
+            return new ReadStoreDetailsDto
+            {
+                Mobile = data.Mobile,
+                Website = data.Website,
+                LogoImage = data.LogoImage,
+                Email = data.Email,
+                Description = data.Description,
+                Address = data.Address,
+                Instagram = data.Instagram,
+                Phone = data.Phone,
+                TelegramNumber = data.Phone,
+                WhatsappNumber = data.WhatsappNumber
+            };
+
+
+        }
+
+        public async Task<string> GetLogo(Guid storeCode)
+        {
+            var data = await _storeDetailsRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.IsActive && x.StoreCode == storeCode);
+            if (data != null) return data.LogoImage;
+            return null;
+        }
+
+        public async Task<CreateStoreDetailsDto> GetDetailsForEdit(Guid storeCode)
+        {
+            var data = await _storeDetailsRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.IsActive && x.StoreCode == storeCode);
+            if (data == null) return null;
+            return new CreateStoreDetailsDto
+            {
+                Description = data.Description,
+                Mobile = data.Mobile,
+                Website = data.Website,
+                Email = data.Email,
+                Address = data.Address,
+                Instagram = data.Instagram,
+                Phone = data.Phone,
+                TelegramNumber = data.TelegramNumber,
+                WhatsappNumber = data.WhatsappNumber
+            };
         }
 
         //public async Task<bool> EditLogo(IFormFile image, Guid storeCode)

@@ -1,6 +1,8 @@
-﻿@model SellerWebService.DataLayer.DTOs.Store.CreateStoreDetailsDto
+﻿@using _0_framework.Utils
+@model SellerWebService.DataLayer.DTOs.Store.CreateStoreDetailsDto
 @{
     ViewData["body"] = "sidebar-noneoverflow";
+    var logo = ViewBag.logo as string;
 }
 @section Scripts
 {
@@ -24,9 +26,9 @@
                         <div class="row">
                             <div class="col-lg-6 col-12 mx-auto">
                                 <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">اطلاعات فروشگاه </h4></p>
-                                <form method="post" enctype="multipart/form-data" asp-area="Seller" asp-controller="StoreDetails" asp-action="CreateDetails">
+                                <form method="post" enctype="multipart/form-data" asp-area="Seller" asp-controller="StoreDetails" asp-action="EditDetails">
                                     <div class="widget widget-table-one text-center form-group">
-                                        <img src="~/assets/img/user.png" width="100px">
+                                        <img src="@(PathExtension.StoreDetailsThumbLogoImage + logo )" width="100px">
                                         <input name="image" type="file" placeholder="عکس را انتخاب نمایید" class="form-control">
                                     </div>
                                     <div class="form-group">
