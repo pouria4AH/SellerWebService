@@ -92,5 +92,33 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
 
             }
         }
+
+        [HttpGet("create-signature")]
+        public async Task<IActionResult> CreateSignature()
+        {
+            return View();
+        }
+
+        [HttpPost("create-signature")]
+        public async Task<IActionResult> CreateSignature(IFormFile signature)
+        {
+            try
+            {
+                var res = await _storeService.CreateSignature(signature, User.GetStoreCode());
+                if (res)
+                {
+                    TempData[SuccessMessage] = ApplicationMessages.Success;
+                    return RedirectToAction("Index", "Home");
+                }
+
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+        }
     }
 }
