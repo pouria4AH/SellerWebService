@@ -367,6 +367,20 @@ namespace SellerWebService.Application.Implementations
             };
         }
 
+        public async Task<(bool, string?)> GetSignature(Guid storeCode)
+        {
+            var data = await _storeDetailsRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.IsActive && !x.IsDelete && x.StoreCode == storeCode);
+            if (data == null || data.SigntureImage == null) return (false, null);
+            return (true, data.SigntureImage);
+        }
+        public async Task<(bool, string?)> GetStamp(Guid storeCode)
+        {
+            var data = await _storeDetailsRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.IsActive && !x.IsDelete && x.StoreCode == storeCode);
+            if (data == null || data.StampImage == null) return (false, null);
+            return (true, data.StampImage);
+        }
+
+
         //public async Task<bool> EditLogo(IFormFile image, Guid storeCode)
         //{
         //    try

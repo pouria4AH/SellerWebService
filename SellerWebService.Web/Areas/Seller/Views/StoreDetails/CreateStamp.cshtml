@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["body"] = "sidebar-noneoverflow";
+}
+
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    امروز دوشنبه 1401/02/26 ساعت 15:47
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    <h3>تصویر مهر</h3>
+                </div>
+                <form method="post" enctype="multipart/form-data" asp-area="Seller" asp-controller="StoreDetails" asp-action="CreateStamp">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <div class="widget widget-table-two text-center form-group">
+                                    <img src="~/assets/img/icon-pic.png" style="width: 40%;">
+                                    <input name="stamp" type="file" placeholder="عکس مهر را انتخاب نمایید" class="form-control">
+                                    <div class="widget widget-table-one text-center">
+                                    </div>
+                                    <div class="widget widget-table-one text-center">
+                                        <button class="form-control btn btn-primary text-center" style="border-radius: 20px; padding: 10px;">ذخیره</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

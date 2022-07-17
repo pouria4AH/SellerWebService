@@ -1,0 +1,41 @@
+﻿@using _0_framework.Utils
+@{
+    ViewData["body"] = "sidebar-noneoverflow";
+    var image = ViewBag.ImageName as string;
+}
+
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    امروز دوشنبه 1401/02/26 ساعت 15:47
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    <h3>تصویر امضا</h3>
+                </div>
+                <form method="post" enctype="multipart/form-data" asp-area="Seller" asp-controller="StoreDetails" asp-action="EditSignature">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <div class="widget widget-table-two text-center form-group">
+                                    <img src="@(PathExtension.StoreDetailsSignatureImage + image )" style="width: 40%;">
+                                    <input name="signature" type="file" placeholder="عکس امضا را انتخاب نمایید" class="form-control">
+                                    <div class="widget widget-table-one text-center">
+                                    </div>
+                                    <div class="widget widget-table-one text-center">
+                                        <button class="form-control btn btn-primary text-center" style="border-radius: 20px; padding: 10px;">تغیر</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

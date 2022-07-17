@@ -62,7 +62,7 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
             ViewBag.logo = await _storeService.GetLogo(User.GetStoreCode());
             return View(await _storeService.GetDetailsForEdit(User.GetStoreCode()));
         }
-        [HttpPost("edit-details"),ValidateAntiForgeryToken]
+        [HttpPost("edit-details"), ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDetails(CreateStoreDetailsDto StoreDetails, IFormFile image)
         {
             try
@@ -96,6 +96,8 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
         [HttpGet("create-signature")]
         public async Task<IActionResult> CreateSignature()
         {
+            var (res, data) = await _storeService.GetSignature(User.GetStoreCode());
+            if (res) return RedirectToAction("EditSignature");
             return View();
         }
 
@@ -105,6 +107,95 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
             try
             {
                 var res = await _storeService.CreateSignature(signature, User.GetStoreCode());
+                if (res)
+                {
+                    TempData[SuccessMessage] = ApplicationMessages.Success;
+                    return RedirectToAction("Index", "Home");
+                }
+
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+        }
+        [HttpGet("edit-signature")]
+        public async Task<IActionResult> EditSignature()
+        {
+            var (res, data) = await _storeService.GetSignature(User.GetStoreCode());
+            if (!res) return RedirectToAction("CreateSignature");
+            ViewBag.ImageName = data;
+            return View();
+        }
+
+        [HttpPost("edit-signature")]
+        public async Task<IActionResult> EditSignature(IFormFile signature)
+        {
+            try
+            {
+                var res = await _storeService.EditSignature(signature, User.GetStoreCode());
+                if (res)
+                {
+                    TempData[SuccessMessage] = ApplicationMessages.Success;
+                    return RedirectToAction("Index", "Home");
+                }
+
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+        }
+        [HttpGet("create-stamp")]
+        public async Task<IActionResult> CreateStamp()
+        {
+            var (res, data) = await _storeService.GetStamp(User.GetStoreCode());
+            if (res || data == null) return RedirectToAction("EditStamp");
+            return View();
+        }
+
+        [HttpPost("create-stamp")]
+        public async Task<IActionResult> CreateStamp(IFormFile stamp)
+        {
+            try
+            {
+                var res = await _storeService.CreateStamp(stamp, User.GetStoreCode());
+                if (res)
+                {
+                    TempData[SuccessMessage] = ApplicationMessages.Success;
+                    return RedirectToAction("Index", "Home");
+                }
+
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
+        }
+        [HttpGet("edit-stamp")]
+        public async Task<IActionResult> EditStamp()
+        {
+            var (res, data) = await _storeService.GetStamp(User.GetStoreCode());
+            if (!res || data == null) return RedirectToAction("CreateStamp");
+            ViewBag.ImageName = data;
+            return View();
+        }
+
+        [HttpPost("edit-stamp")]
+        public async Task<IActionResult> EditStamp(IFormFile stamp)
+        {
+            try
+            {
+                var res = await _storeService.EditStamp(stamp, User.GetStoreCode());
                 if (res)
                 {
                     TempData[SuccessMessage] = ApplicationMessages.Success;

@@ -25,6 +25,8 @@ namespace SellerWebService.Application.interfaces
         Task<ReadStoreDetailsDto> GetStoreDetails(Guid storeCode);
         Task<string> GetLogo(Guid storeCode);
         Task<CreateStoreDetailsDto> GetDetailsForEdit(Guid storeCode);
+        Task<(bool,string?)> GetSignature(Guid storeCode);
+        Task<(bool,string?)> GetStamp(Guid storeCode);
         #endregion
 
         #region bank data
