@@ -68,6 +68,15 @@ namespace SellerWebService.Application.Implementations
                     .SingleOrDefaultAsync(x =>
                         x.UniqueCode == customer.CustomerCode && x.StoreCode == storeCode && !x.IsDelete);
                 if (mainCustomer == null) return CreateOurEditCustomerResult.NotFound;
+                if (mainCustomer.Mobile != customer.Mobile)
+                {
+                    if (
+                        await _coustomerRepository.GetQuery().AsQueryable().AnyAsync(x =>
+                            x.Mobile == customer.Mobile && x.UniqueCode != mainCustomer.UniqueCode)
+                        ) return CreateOurEditCustomerResult.IsExist;
+
+                }
+
                 if (customer.CompanyName != null) mainCustomer.CompanyName = customer.CompanyName;
                 if (customer.Email != null) mainCustomer.Email = customer.Email;
                 if (customer.Address != null) mainCustomer.Address = customer.Address;
@@ -110,6 +119,23 @@ namespace SellerWebService.Application.Implementations
             {
                 StoreCode = storeCode,
                 UniqueCode = customer.UniqueCode,
+                Mobile = customer.Mobile,
+                FirstName = customer.FirstName,
+                Address = customer.Address,
+                LastName = customer.LastName,
+                CompanyName = customer.CompanyName,
+                Email = customer.Email,
+                ZipCode = customer.ZipCode
+            };
+        }
+        public async Task<EditCustomerDto> GetCustomerForEdit(Guid customerCode, Guid storeCode)
+        {
+            var customer = await _coustomerRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.UniqueCode == customerCode && x.StoreCode == storeCode);
+            if (customer == null) return null;
+            return new EditCustomerDto
+            {
+                CustomerCode = customer.UniqueCode,
                 Mobile = customer.Mobile,
                 FirstName = customer.FirstName,
                 Address = customer.Address,

@@ -14,7 +14,7 @@
         [Display(Name = "نام خانوادگی")]
         public string LastName { get; set; }
 
-        [Display(Name = "نام خانوادگی")]
+        [Display(Name = "نام شرکت ")]
         public string? CompanyName { get; set; }
 
         [Display(Name = "آدرس")]

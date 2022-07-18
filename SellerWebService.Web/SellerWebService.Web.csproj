@@ -40,8 +40,4 @@
     <UpToDateCheckInput Remove="Areas\Seller\Views\StoreDetails\CreateSignature.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Seller\Views\Customer\" />
-  </ItemGroup>
-
 </Project>
