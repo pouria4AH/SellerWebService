@@ -1,0 +1,81 @@
+﻿@model SellerWebService.DataLayer.DTOs.Customer.CreateCustomerDto
+
+@{
+    ViewData["body"] = "sidebar-noneoverflow";
+}
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    امروز دوشنبه 1401/02/26 ساعت 15:47
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">افزودن مشتری</h4></p>
+                                <form method="post" asp-area="Seller" asp-controller="Customer" asp-action="CreateCustomer">
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text red" id="basic-addon5">*</span>
+                                            </div>
+                                            <input asp-for="FirstName" type="text" class="form-control" placeholder="نام" aria-label="Username">
+                                            <span asp-validation-for="FirstName" class="text-danger col-12 mt-2 col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text red" id="basic-addon5">*</span>
+                                            </div>
+                                            <input asp-for="LastName" type="text" class="form-control" placeholder="نام خوانوادگی" aria-label="Username">
+                                            <span asp-validation-for="LastName" class="text-danger col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text red" id="basic-addon5">*</span>
+                                            </div>
+                                            <input asp-for="Mobile" type="text" class="form-control" placeholder="شماره همراه " aria-label="Username">
+                                            <span asp-validation-for="Mobile" class="text-danger col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon5"></span>
+                                            </div>
+                                            <input asp-for="CompanyName" type="text" class="form-control" placeholder="نام شرکت" aria-label="Username">
+                                            <span asp-validation-for="CompanyName" class="text-danger col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon5"></span>
+                                            </div>
+                                            <input asp-for="Email" type="text" class="form-control" placeholder="ایمیل" aria-label="Username">
+                                            <span asp-validation-for="Email" class="text-danger col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon5"></span>
+                                            </div>
+                                            <input asp-for="Address" type="text" class="form-control" placeholder="آدرس " aria-label="Username">
+                                            <span asp-validation-for="CompanyName" class="text-danger col-12 mt-2"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon5"></span>
+                                            </div>
+                                            <input asp-for="ZipCode" type="text" class="form-control" placeholder="کدپستی " aria-label="Username">
+                                            <span asp-validation-for="ZipCode"></span>
+                                        </div>
+                                        <input type="submit" value="ثبت" name="txt" class="form-control btn btn-primary">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
