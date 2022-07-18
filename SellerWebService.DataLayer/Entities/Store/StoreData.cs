@@ -51,6 +51,17 @@ namespace SellerWebService.DataLayer.Entities.Store
         [Display(Name = "کد ")]
         public Guid UniqueCode { get; set; }
 
+        [Display(Name = "اسلاگ")]
+        public string LinkSlug { get; set; }
+        
+        [Display(Name = "کد ")]
+        public string UserNameId { get; set; }
+
+        public PanelModel PanelModel { get; set; }
+
+        [Display(Name = "تاریخ پایان پنل")]
+        public DateTime ExpirePanel { get; set; }
+
         #endregion
 
         #region relations
@@ -65,5 +76,14 @@ namespace SellerWebService.DataLayer.Entities.Store
         public ICollection<ProductFeatureCategory> ProductFeatureCategories { get; set; }
         public ICollection<GroupForProductFeature> GroupForProductFeatures { get; set; }
         #endregion
+    }
+
+    public enum PanelModel
+    {
+        Free,
+        Bronze,
+        Silver,
+        Gold,
+        Diamond
     }
 }
