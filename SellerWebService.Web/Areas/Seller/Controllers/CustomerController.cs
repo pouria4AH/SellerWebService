@@ -60,7 +60,7 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
             return View(customer);
         }
         [HttpPost("edit-customer/{customerCode}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditCustomer(EditCustomerDto customer, Guid customerCode)
+        public async Task<IActionResult> EditCustomer(EditCustomerDto customer)
         {
             try
             {

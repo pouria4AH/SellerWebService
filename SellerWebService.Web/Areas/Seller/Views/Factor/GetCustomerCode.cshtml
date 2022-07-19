@@ -1,0 +1,56 @@
+﻿@using SellerWebService.DataLayer.DTOs.Customer
+@model SellerWebService.DataLayer.DTOs.Customer.SearchCustomerDto
+
+@{
+    ViewData["body"] = "sidebar-noneoverflow";
+    var customers = ViewBag.Customers as List<ReadCustomerDto>;
+}
+
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    <h3 class="text-black-50">ثبت فاکتور</h3>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <partial name="_SearchCustomer" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget widget-table-two">
+            <div class="widget-heading">
+                <h5> مشتریان</h5>
+            </div>
+            <div class="widget-content">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tbody>
+                            @if (customers.Any() && customers != null)
+                            {
+                                @foreach (var item in customers)
+                                {
+                                    <tr>
+                                        <td><div class="td-content">@item.FirstName</div></td>
+                                        <td><div class="td-content">@item.LastName</div></td>
+                                        <td><div class="td-content">@item.Mobile</div></td>
+                                        <td><div class="td-content">@(item.CompanyName ?? "---")</div></td>
+                                    </tr>
+                                }
+                            }
+                            <p>رکوردی وجود ندارد</p>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

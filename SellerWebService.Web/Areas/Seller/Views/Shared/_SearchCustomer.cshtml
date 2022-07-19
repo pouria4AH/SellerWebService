@@ -1,0 +1,13 @@
+﻿@model SellerWebService.DataLayer.DTOs.Customer.SearchCustomerDto
+<form method="get" asp-area="Seller" asp-controller="Factor" asp-action="GetCustomerCode">
+    <div class="form-group">
+        <div class="input-group mb-4">
+            <form class="form-inline my-2 my-lg-0 col-12">
+                <input asp-for="Mobile" class="form-control mr-sm-2" type="number" placeholder="شماره" aria-label="Search">
+                <input asp-for="firstName" class="form-control mr-sm-2" type="text" placeholder="نام" aria-label="Search">
+                <input asp-for="lastName" class="form-control mr-sm-2" type="text" placeholder="نام خانوادگی" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">جست و جو</button>
+            </form>
+        </div>
+    </div>
+</form>

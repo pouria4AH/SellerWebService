@@ -110,6 +110,24 @@ namespace SellerWebService.Application.Implementations
                 return false;
             }
         }
+        public async Task<ReadCustomerDto> GetCustomer(string customerMobile, Guid storeCode)
+        {
+            var customer = await _coustomerRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => !x.IsDelete && x.Mobile == customerMobile && x.StoreCode == storeCode);
+            if (customer == null) return null;
+            return new ReadCustomerDto
+            {
+                StoreCode = storeCode,
+                UniqueCode = customer.UniqueCode,
+                Mobile = customer.Mobile,
+                FirstName = customer.FirstName,
+                Address = customer.Address,
+                LastName = customer.LastName,
+                CompanyName = customer.CompanyName,
+                Email = customer.Email,
+                ZipCode = customer.ZipCode
+            };
+        } 
         public async Task<ReadCustomerDto> GetCustomer(Guid customerCode, Guid storeCode)
         {
             var customer = await _coustomerRepository.GetQuery().AsQueryable()
@@ -128,6 +146,7 @@ namespace SellerWebService.Application.Implementations
                 ZipCode = customer.ZipCode
             };
         }
+
         public async Task<EditCustomerDto> GetCustomerForEdit(Guid customerCode, Guid storeCode)
         {
             var customer = await _coustomerRepository.GetQuery().AsQueryable()
