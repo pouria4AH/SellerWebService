@@ -1,0 +1,62 @@
+﻿@model SellerWebService.DataLayer.DTOs.Factor.CreateFactorDto
+@{
+    ViewData["body"] = "sidebar-noneoverflow";
+
+}
+
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    <h3 class="text-black-50">ثبت فاکتور</h3>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">ساخت فاکتور</h4></p>
+                                <form method="post" asp-area="Seller" asp-controller="Factor" asp-action="CreateFactor">
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                            <input type="text" asp-for="CustomerCode" class="form-control" placeholder="کد مشتری" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="CustomerCode"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input type="text" asp-for="Name" class="form-control" placeholder="نام فاکتور" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Name"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input type="number" asp-for="DeliveryDate" class="form-control" placeholder="تاریخ نحویل (به روز)" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="DeliveryDate"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input type="number" asp-for="longDayToExpired" class="form-control" placeholder="تاریخ انقضا (به روز)" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="longDayToExpired"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <input type="number" asp-for="Prepayment" class="form-control" placeholder="پیش پرداخت" value="100" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Prepayment"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">مالیات به درصد</label>
+                                            <input type="number" asp-for="taxation" class="form-control" placeholder="مالیت" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="taxation"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <textarea asp-for="Description" rows="5" style="resize: none" type="text" class="form-control" placeholder="توضیحات کوتاه" aria-label="Username"></textarea>
+                                            <span class="text-danger input-group" asp-validation-for="Description"></span>
+                                        </div>
+                                        <input type="submit" value="اعمال تغییر" name="txt" class="form-control btn btn-primary mb-3">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

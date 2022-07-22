@@ -127,7 +127,7 @@ namespace SellerWebService.Application.Implementations
                 Email = customer.Email,
                 ZipCode = customer.ZipCode
             };
-        } 
+        }
         public async Task<ReadCustomerDto> GetCustomer(Guid customerCode, Guid storeCode)
         {
             var customer = await _coustomerRepository.GetQuery().AsQueryable()
@@ -171,6 +171,8 @@ namespace SellerWebService.Application.Implementations
 
         public async Task<List<ReadCustomerDto>> SearchForCustomer(SearchCustomerDto search, Guid storeCode)
         {
+            //if (search == null || (search.Mobile == null && search.firstName == null && search.lastName == null)) return new List<ReadCustomerDto>().;
+
             var query = _coustomerRepository.GetQuery().AsQueryable().Where(x => !x.IsDelete && x.StoreCode == storeCode);
             if (!string.IsNullOrEmpty(search.Mobile))
                 query = query.Where(x => EF.Functions.Like(x.Mobile, $"%{search.Mobile}%"));

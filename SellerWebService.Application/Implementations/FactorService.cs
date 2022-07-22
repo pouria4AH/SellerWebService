@@ -61,7 +61,7 @@ namespace SellerWebService.Application.Implementations
             {
                 var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails)
                     .AsQueryable()
-                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete);
+                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete && x.FactorStatus == FactorStatus.Open);
                 if (factor == null) return false;
 
                 if (factor.FactorDetails.Any() || factor.FactorDetails != null)
