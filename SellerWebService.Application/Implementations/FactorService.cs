@@ -55,6 +55,34 @@ namespace SellerWebService.Application.Implementations
             }
         }
 
+        public async Task<bool> CreateFactorDetails(CreateFactorDetailsDto factorDetails, Guid storeCode, Guid factorCode)
+        {
+            try
+            {
+                var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails)
+                    .AsQueryable()
+                    .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode && !x.IsDelete && x.FactorStatus == FactorStatus.Open);
+                if (factor == null) return false;
+
+                var newDetails = new FactorDetails
+                {
+                    FactorId = factor.Id,
+                    Name = factorDetails.Name,
+                    Description = factorDetails.Description,
+                    Count = factorDetails.Count,
+                    Discount = factorDetails.Discount,
+                    Packaging = factorDetails.Packaging,
+                    Price = factorDetails.Price
+                };
+                await _factorDetailsRepository.AddEntity(newDetails);
+                await _factorDetailsRepository.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         public async Task<bool> CreateFactorDetails(List<CreateFactorDetailsDto> factorDetails, Guid storeCode, Guid factorCode)
         {
             try
@@ -97,7 +125,7 @@ namespace SellerWebService.Application.Implementations
             var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).Include(x => x.Customer).AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode && x.StoreCode == storeCode);
 
-            if (factor == null || !factor.FactorDetails.Any()) return null;
+            if (factor == null) return null;
 
             await CalculateFactor(factorCode);
             return new ReadMainFactorDto
@@ -198,7 +226,7 @@ namespace SellerWebService.Application.Implementations
         {
             var factor = await _factorRepository.GetQuery().Include(x => x.FactorDetails).AsQueryable()
                 .SingleOrDefaultAsync(x => x.Code == factorCode);
-
+            factor.TotalPrice = 0; factor.FinalPrice = 0; factor.TotalDiscount = 0;
             foreach (var factorDetails in factor.FactorDetails)
             {
                 factor.TotalPrice += factorDetails.Price * factorDetails.Count;
@@ -378,7 +406,7 @@ namespace SellerWebService.Application.Implementations
                     break;
 
             }
-            
+
             switch (filter.FirstFilterFactorPaymentState)
             {
                 case FilterFactorPaymentState.All:

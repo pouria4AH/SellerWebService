@@ -33,7 +33,7 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
         {
             return View();
         }
-        [HttpPost("create-factor"),ValidateAntiForgeryToken]
+        [HttpPost("create-factor"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFactor(CreateFactorDto factor)
         {
             try
@@ -56,9 +56,41 @@ namespace SellerWebService.Web.Areas.Seller.Controllers
         }
 
         [HttpGet("create-details/{factorCode}")]
-        public IActionResult CreateFactorDetails(Guid factorCode)
+        public async Task<IActionResult> CreateFactorDetails(Guid factorCode)
         {
+            var listOfDetails = await _factorService.GetFinialFactorToConfirm(factorCode, User.GetStoreCode());
+            if (listOfDetails == null)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.MainFactor = listOfDetails;
             return View();
+        }
+        [HttpPost("create-details/{factorCode}"),ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFactorDetails(Guid factorCode, CreateFactorDetailsDto details)
+        {
+            try
+            {
+                
+                if (ModelState.IsValid)
+                {
+                    var res = await _factorService.CreateFactorDetails(details, User.GetStoreCode(), factorCode);
+                    if (res)
+                    {
+                        TempData[SuccessMessage] = ApplicationMessages.Success;
+                        return RedirectToAction("CreateFactorDetails",factorCode);
+                    }
+                }
+                TempData[WarningMessage] = ApplicationMessages.Error;
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData[ErrorMessage] = ApplicationMessages.Error;
+                return View();
+            }
         }
     }
 

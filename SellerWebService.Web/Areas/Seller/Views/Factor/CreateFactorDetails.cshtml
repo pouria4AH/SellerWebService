@@ -1,18 +1,132 @@
-﻿@model dynamic
-
+﻿@using SellerWebService.DataLayer.DTOs.Factor
+@model SellerWebService.DataLayer.DTOs.Factor.CreateFactorDetailsDto
 @{
-    Layout = null;
+    ViewData["body"] = "sidebar-noneoverflow";
+    var mainFactor = ViewBag.MainFactor as ReadMainFactorDto;
+
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one text-center">
+                    <h3 class="text-black-50">ثبت جزیات فاکتور</h3>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-table-one">
+                    <div class="widget-content widget-content-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 mx-auto">
+                                <p> <h4 class="text-center text-black font-weight-bolder" style="text-align: center;">جزیات فاکتور</h4></p>
+                                <table border="3px" class="mb-3">
+                                    <thead>
+                                        <tr class="table-primary" style="margin-bottom: 10px;">
+                                            <th colspan="7" class="text-center" style="padding: 20px;">کد مشتری : @mainFactor.CustomerCode</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="border-radius: 10px;">
+                                            <td style="padding: 10px; ">نام </td>
+                                            <td style="padding: 10px; "> نام خانوادگی</td>
+                                            <td style="padding: 10px;">شماره</td>
+                                            <td style="padding: 10px;">مبلغ تخفیف</td>
+                                            <td style="padding: 10px;">مبلغ کل</td>
+                                            <td style="padding: 10px;">مبلغ کل با کسر  تخفیف </td>
+                                            <td style="padding: 10px;">پیش پرداخت</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px;">@mainFactor.FirstName</td>
+                                            <td style="padding: 10px;">@mainFactor.LastName</td>
+                                            <td style="padding: 10px;">@mainFactor.Mobile</td>
+                                            <td style="padding: 10px;">@mainFactor.TotalDiscount</td>
+                                            <td style="padding: 10px;">@mainFactor.TotalPrice</td>
+                                            <td style="padding: 10px;">@mainFactor.FinalPrice</td>
+                                            <td style="padding: 10px;">@mainFactor.Prepayment</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <form method="post" asp-area="Seller" asp-controller="Factor" asp-action="CreateFactorDetails">
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">نام</label>
+                                            <input type="text" asp-for="Name" class="form-control" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Name"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">قیمت</label>
+                                            <input type="number" asp-for="Price" class="form-control" placeholder="به ریال " aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Price"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">تعداد</label>
+                                            <input type="number" asp-for="Count" class="form-control" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Count"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">نوع بسنه بندی</label>
+                                            <input type="text" asp-for="Packaging" class="form-control" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Packaging"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">درصد تخفیف</label>
+                                            <input type="number" asp-for="Discount" class="form-control" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Discount"></span>
+                                        </div>
+                                        <div class="input-group mb-4">
+                                            <label class="col-12">توضیحات</label>
+                                            <input type="text" asp-for="Description" class="form-control" aria-label="Username">
+                                            <span class="text-danger input-group" asp-validation-for="Description"></span>
+                                        </div>
+                                        <input type="submit" value="ثبت این محصول" name="txt" class="form-control btn btn-primary mb-3">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="widget widget-table-two">
+        <div class="widget-heading">
+            <h5>لیست جزیات </h5>
+        </div>
+        <div class="widget-content">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">عنوان کالا</th>
+                            <th scope="col">تعداد</th>
+                            <th scope="col">واحد اندازه گیری</th>
+                            <th scope="col">قیمت </th>
+                            <th scope="col">تخفیف</th>
+                            <th scope="col">توضیحات</th>
+                            <th scope="col" class="pr-0 mr-0">قیمت کل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (mainFactor != null && mainFactor.CreateFactorDetailsDtos.Any() && mainFactor.CreateFactorDetailsDtos != null)
+                        {
+                            @foreach (var item in mainFactor.CreateFactorDetailsDtos)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Count</td>
+                                    <td>@item.Packaging</td>
+                                    <td>@item.Price</td>
+                                    <td>@item.Discount%</td>
+                                    <td>@item.Description.Substring(0, Math.Min(item.Description.Length, 45))</td>
+                                    <td>@(item.Price * item.Count * item.Discount / 100)</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+</div>
